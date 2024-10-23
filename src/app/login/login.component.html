@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio</title>
+</head>
+
+<body >
+  <div class="row">
+  <div class="col-4 fondo"></div>
+  <div class="col-8 bg-derecho">
+      <div class=" container d-flex justify-content-center align-items-center " style="height: 100vh;">
+      <div class="card p-5 " style="width: 400px;">
+
+          <form (submit)="login()">
+              <h3 class="text-center mb-4">Inicio</h3>
+              <div class="mb-3">
+                  <label for="exampleDropdownFormEmail1" class="form-label">Usuario</label>
+                  <input type="text" class="form-control" id="usuario" placeholder="Ingrese su nombre de usuario" name="usuario" [(ngModel)]="usuario">
+              </div>
+              <div class="mb-3">
+                  <label for="exampleDropdownFormPassword1" class="form-label">Contraseña</label>
+                  <input type="password" class="form-control" id="password" placeholder="Ingrese la contraseña" name="password" [(ngModel)]="password">
+              </div >
+                <a class="dropdown-item mb-3" href="#"><em>Olvidaste la contraseña?</em></a>
+                <button type="submit" class="btn btn-outline-dark w-100">Ingresar</button>
+              </form>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
