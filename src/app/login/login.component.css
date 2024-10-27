@@ -1,7 +1,7 @@
 .card{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.155); 
   border-radius: 20px;
-  background-color: ©rgba(248, 184, 101, 0.47);
+  background-color: rgba(248, 184, 101, 0.47);
 }
 .fondo{
   background-image: url("../../assets/img/image.png");
