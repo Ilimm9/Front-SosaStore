@@ -27,13 +27,13 @@ export class LoginComponent {
         const rol = response.id_Rol; // Asumiendo que id_Rol es el campo que contiene el rol del usuario
 
         if (rol === 1) {
-          // this.router.navigate(['/admin']);
+          this.router.navigate(['cajero']);
           console.log("administrador");
         } else if (rol === 2) {
-          // this.router.navigate(['/inventario']); 
+          this.router.navigate(['inventario']); 
           console.log("inventario");
         } else if (rol == 3){
-          // this.router.navigate(['/caja']); 
+          this.router.navigate(['administrador']); 
           console.log("caja");
         } else {
           console.log('Verifica tus datos');
