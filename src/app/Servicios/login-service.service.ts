@@ -18,5 +18,10 @@ login(username: string, password: string): Observable<any> {
 
   return this.http.post(`${this.apiUrl}login_check.php`, body, { headers });  }
 
-
+  recuperarContrasenia(email: string): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = JSON.stringify({ email: email });
+    return this.http.post(`${this.apiUrl}recuperar_contrasenia.php`, body, { headers });
+  }
+  
 }
