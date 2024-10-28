@@ -80,6 +80,23 @@ export class LoginComponent {
         console.log('Solicitud de recuperación enviada:', response);
         this.mostrarRecuperacion = false;
         this.errorMessage = 'Solicitud de recuperación enviada, revisa tu correo.';
+        console.log('Servicio aplicado:', response);
+
+        // Redirigir según el rol del usuario
+        const rol = response.id_Rol; // Asumiendo que id_Rol es el campo que contiene el rol del usuario
+
+        if (rol === 1) {
+          this.router.navigate(['gestor/administrador']);
+          console.log("administrador");
+        } else if (rol === 2) {
+          this.router.navigate(['inventario']); 
+          console.log("inventario");
+        } else if (rol == 3){
+          this.router.navigate(['administrador']); 
+          console.log("caja");
+        } else {
+          console.log('Verifica tus datos');
+        }
       },
       error => {
         this.errorMessage = 'Error al intentar recuperar la contraseña';
