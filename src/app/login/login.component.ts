@@ -33,7 +33,7 @@ export class LoginComponent {
           this.router.navigate(['inventario']); 
           console.log("inventario");
         } else if (rol == 3){
-          this.router.navigate(['administrador']); 
+          this.router.navigate(['gestor/administrador']); 
           console.log("caja");
         } else {
           console.log('Verifica tus datos');
