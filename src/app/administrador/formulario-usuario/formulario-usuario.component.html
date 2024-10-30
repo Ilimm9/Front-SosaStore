@@ -1,4 +1,150 @@
-<p>formulario-usuario works!</p>
+<div class="row">
+  <div class="col-xl-8 col-md-10 mx-auto">
+    <form #usuarioForm="ngForm" (ngSubmit)="guardar()" novalidate>
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          id="nombre"
+          name="nombre"
+          [(ngModel)]="usuario.nombre"
+          placeholder=""
+          required
+          minlength="2"
+          #nombre="ngModel"
+        />
+        <div *ngIf="nombre.invalid && nombre.touched" class="text-danger">
+          <small *ngIf="nombre.errors?.['required']">El nombre es requerido.</small>
+          <small *ngIf="nombre.errors?.['minlength']">Debe tener al menos 2 caracteres.</small>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="primer-apellido" class="form-label">Primer Apellido</label>
+        <input
+          type="text"
+          class="form-control"
+          id="primer-apellido"
+          name="primer-apellido"
+          [(ngModel)]="usuario.primerApellido"
+          placeholder=""
+          required
+          minlength="2"
+          #primerApellido="ngModel"
+        />
+        <div *ngIf="primerApellido.invalid && primerApellido.touched" class="text-danger">
+          <small *ngIf="primerApellido.errors?.['required']">El primer apellido es requerido.</small>
+          <small *ngIf="primerApellido.errors?.['minlength']">Debe tener al menos 2 caracteres.</small>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="segundo-apellido" class="form-label">Segundo Apellido</label>
+        <input 
+        type="text" 
+        class="form-control" 
+        id="segundo-apellido" 
+        name="segundo-apellido" 
+        [(ngModel)]="usuario.segundoApellido"
+        required
+        minlength="2"
+        #segundoApellido="ngModel"
+        placeholder="">
+        <div *ngIf="segundoApellido.invalid && segundoApellido.touched" class="text-danger">
+          <small *ngIf="segundoApellido.errors?.['required']">El segundo apellido es requerido.</small>
+          <small *ngIf="segundoApellido.errors?.['minlength']">Debe tener al menos 2 caracteres.</small>
+        </div>
+    </div>
+
+      <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input
+          type="text"
+          class="form-control"
+          id="telefono"
+          name="telefono"
+          [(ngModel)]="usuario.telefono"
+          placeholder=""
+          required
+          pattern="^[0-9]{10}$"
+          #telefono="ngModel"
+        />
+        <div *ngIf="telefono.invalid && telefono.touched" class="text-danger">
+          <small *ngIf="telefono.errors?.['required']">El teléfono es requerido.</small>
+          <small *ngIf="telefono.errors?.['pattern']">Debe tener exactamente 10 dígitos numéricos.</small>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="usuario" class="form-label">Usuario</label>
+        <input 
+        type="text" 
+        class="form-control" 
+        id="usuario" 
+        name="usuario" 
+        [(ngModel)]="usuario.nombreUsuario"
+        required
+        minlength="3"
+        #nombreusuario="ngModel"
+        placeholder="">
+        <div *ngIf="nombreusuario.invalid && nombreusuario.touched" class="text-danger">
+          <small *ngIf="nombreusuario.errors?.['required']">El nombre de usuario es requerido.</small>
+          <small *ngIf="nombreusuario.errors?.['pattern']">Debe tener minimo 3 caracteres.</small>
+        </div>
+    </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          [(ngModel)]="usuario.password"
+          placeholder=""
+          required
+          minlength="8"
+          #password="ngModel"
+        />
+        <div *ngIf="password.invalid && password.touched" class="text-danger">
+          <small *ngIf="password.errors?.['required']">La contraseña es requerida.</small>
+          <small *ngIf="password.errors?.['minlength']">Debe tener al menos 8 caracteres.</small>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="cliente" class="form-label">Cliente</label>
+        <select
+          id="cliente"
+          name="cliente"
+          class="form-control"
+          [(ngModel)]="usuario.rol"
+          required
+          #cliente="ngModel"
+        >
+          <option value="" disabled selected>Seleccione un cliente</option>
+          <option *ngFor="let rol of roles" [ngValue]="rol">{{ rol.nombreRol }}</option>
+        </select>
+        <div *ngIf="cliente.invalid && cliente.touched" class="text-danger">
+          <small>El cliente es requerido.</small>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-evenly">
+        <button type="submit" class="btn btn-primary" [disabled]="usuarioForm.invalid">Agregar</button>
+        <button type="button" class="btn btn-primary">Editar</button>
+        <button type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+<!-- <p>formulario-usuario works!</p>
 <div class="row">
     <div class="col-xl-8 col-md-10 mx-auto">
         <form #usuarioForm="ngForm" (ngSubmit)="guardar()">
@@ -86,4 +232,4 @@
             </div>
           </form>
     </div>
-</div>
+</div> -->
