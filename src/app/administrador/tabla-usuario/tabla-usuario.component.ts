@@ -17,34 +17,36 @@ export class TablaUsuarioComponent {
   @ViewChild('datatablesSimple') datatablesSimple!: ElementRef;
 
 
-  rolCajero = new Rol(1, 'Cajero');
-  rolAdministrador = new Rol(2, 'Administrador');
+  rolCajero = new Rol();
+  rolAdministrador = new Rol();
 
-  usuarios: Usuario[] = [
-    new Usuario(31, 'Pedro', 'Lopez', 'Hernandez', '5551234567', 'cgarcial', 'pass1234', this.rolCajero),
-    new Usuario(32, 'Ilian', 'Martínez', 'Morales', '5552345678', 'amartinezh', 'securePass1', this.rolAdministrador),
-    new Usuario(33, 'Franco Steven', 'Sosa', '', '5553456789', 'lramirezg', 'password123', this.rolAdministrador),
-    new Usuario(4, 'Juan Jose', 'Lopez', 'Rosado', '5554567890', 'mdiazs', 'martad123', this.rolAdministrador),
-    new Usuario(5, 'Jorge Alberto', 'Cortez', 'Cuevas', '5555678901', 'fperezm', 'fernandoPass', this.rolAdministrador),
-    new Usuario(6, 'Eduardo', 'Villavicencio', 'Ruiz', '5556789012', 'sgomezf', 'sofiaGF12', this.rolAdministrador),
-    new Usuario(7, 'Andrés', 'López', 'Núñez', '5557890123', 'alopezn', 'andres2024', this.rolAdministrador),
-    new Usuario(8, 'Laura', 'Jiménez', 'Hernández', '5558901234', 'ljimenezh', 'jimenezL99', this.rolAdministrador),
-    new Usuario(9, 'Diego', 'Ortiz', 'Rojas', '5559012345', 'dortizr', 'dortizPass', this.rolAdministrador),
-    new Usuario(10, 'Paula', 'Silva', 'García', '5550123456', 'psilvag', 'pSG2024', this.rolAdministrador),
-    new Usuario(11, 'Jorge', 'Castro', 'Martín', '5552345670', 'jcastrom', 'castroJ123', this.rolCajero),
-    new Usuario(12, 'Valeria', 'Ruiz', 'Salinas', '5553456781', 'vruizs', 'valeria2024', this.rolAdministrador),
-    new Usuario(13, 'Gabriel', 'Medina', 'Pardo', '5554567892', 'gmedinap', 'gMedina@23', this.rolCajero),
-    new Usuario(14, 'Daniela', 'Soto', 'Lara', '5555678903', 'dsotol', 'danielaPass', this.rolCajero),
-    new Usuario(15, 'Iván', 'Flores', 'Montoya', '5556789014', 'ifloresm', 'ivanflores1', this.rolCajero),
-    new Usuario(16, 'Carmen', 'Vega', 'Delgado', '5557890125', 'cvegad', 'carmenV22', this.rolCajero),
-    new Usuario(17, 'Ricardo', 'Morales', 'Camacho', '5558901236', 'rmoralesc', 'ricardoMC19', this.rolCajero),
-    new Usuario(18, 'Luz', 'Hernández', 'Jiménez', '5559012347', 'lhernandezj', 'luzhern20', this.rolCajero),
-    new Usuario(19, 'Mario', 'Navarro', 'Ortiz', '5550123458', 'mnavarroo', 'mnavarro99', this.rolAdministrador),
-    new Usuario(20, 'Teresa', 'Pineda', 'Romero', '5551234569', 'tpinedar', 'teresaPR', this.rolCajero),
-  ];
+  usuarios: Usuario[];
+
+  // usuarios: Usuario[] = [
+  //   new Usuario(31, 'Pedro', 'Lopez', 'Hernandez', '5551234567', 'cgarcial', 'pass1234', this.rolCajero),
+  //   new Usuario(32, 'Ilian', 'Martínez', 'Morales', '5552345678', 'amartinezh', 'securePass1', this.rolAdministrador),
+  //   new Usuario(33, 'Franco Steven', 'Sosa', '', '5553456789', 'lramirezg', 'password123', this.rolAdministrador),
+  //   new Usuario(4, 'Juan Jose', 'Lopez', 'Rosado', '5554567890', 'mdiazs', 'martad123', this.rolAdministrador),
+  //   new Usuario(5, 'Jorge Alberto', 'Cortez', 'Cuevas', '5555678901', 'fperezm', 'fernandoPass', this.rolAdministrador),
+  //   new Usuario(6, 'Eduardo', 'Villavicencio', 'Ruiz', '5556789012', 'sgomezf', 'sofiaGF12', this.rolAdministrador),
+  //   new Usuario(7, 'Andrés', 'López', 'Núñez', '5557890123', 'alopezn', 'andres2024', this.rolAdministrador),
+  //   new Usuario(8, 'Laura', 'Jiménez', 'Hernández', '5558901234', 'ljimenezh', 'jimenezL99', this.rolAdministrador),
+  //   new Usuario(9, 'Diego', 'Ortiz', 'Rojas', '5559012345', 'dortizr', 'dortizPass', this.rolAdministrador),
+  //   new Usuario(10, 'Paula', 'Silva', 'García', '5550123456', 'psilvag', 'pSG2024', this.rolAdministrador),
+  //   new Usuario(11, 'Jorge', 'Castro', 'Martín', '5552345670', 'jcastrom', 'castroJ123', this.rolCajero),
+  //   new Usuario(12, 'Valeria', 'Ruiz', 'Salinas', '5553456781', 'vruizs', 'valeria2024', this.rolAdministrador),
+  //   new Usuario(13, 'Gabriel', 'Medina', 'Pardo', '5554567892', 'gmedinap', 'gMedina@23', this.rolCajero),
+  //   new Usuario(14, 'Daniela', 'Soto', 'Lara', '5555678903', 'dsotol', 'danielaPass', this.rolCajero),
+  //   new Usuario(15, 'Iván', 'Flores', 'Montoya', '5556789014', 'ifloresm', 'ivanflores1', this.rolCajero),
+  //   new Usuario(16, 'Carmen', 'Vega', 'Delgado', '5557890125', 'cvegad', 'carmenV22', this.rolCajero),
+  //   new Usuario(17, 'Ricardo', 'Morales', 'Camacho', '5558901236', 'rmoralesc', 'ricardoMC19', this.rolCajero),
+  //   new Usuario(18, 'Luz', 'Hernández', 'Jiménez', '5559012347', 'lhernandezj', 'luzhern20', this.rolCajero),
+  //   new Usuario(19, 'Mario', 'Navarro', 'Ortiz', '5550123458', 'mnavarroo', 'mnavarro99', this.rolAdministrador),
+  //   new Usuario(20, 'Teresa', 'Pineda', 'Romero', '5551234569', 'tpinedar', 'teresaPR', this.rolCajero),
+  // ];
 
   constructor(private usuarioEditarService: UsuarioEditarService) { }
-  // usuarios = [
+
   //   {
   //     nombre: "Pedro",
   //     primerApellido: "Lopez",
@@ -239,11 +241,11 @@ export class TablaUsuarioComponent {
       return;
     }
     let id = parseInt(dataId);
-    const usuario = this.usuarios.find(u => u.idUsuario === id);
-    if (usuario) {
-      console.log(usuario)
-      this.usuarioEditarService.seleccionarUsuario(usuario)
-    }
+    // const usuario = this.usuarios.find(u => u.idUsuario === id);
+    // if (usuario) {
+    //   console.log(usuario)
+    //   this.usuarioEditarService.seleccionarUsuario(usuario)
+    // }
   }
 
 }

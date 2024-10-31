@@ -17,7 +17,7 @@ export class FormularioUsuarioComponent implements OnInit {
 
   @ViewChild("usuarioForm") usuarioForm: NgForm;
 
-  usuario: Usuario = new Usuario(0, "", "", "", "", "", "", new Rol(0, ""));
+  usuario: Usuario = new Usuario();
   roles = [
     { idRol: 1, nombreRol: "Administrador" },
     { idRol: 2, nombreRol: "Cajero" },

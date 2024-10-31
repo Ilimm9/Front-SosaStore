@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, output, Output } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { UsuarioLoggedService } from '../Servicios/usuario-logged.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,6 +12,10 @@ import { RouterLink } from '@angular/router';
 export class NavbarComponent implements OnInit{
 
   @Output() toggleSidebarEvent: EventEmitter<boolean> = new  EventEmitter();
+
+  constructor(private usuarioLoggedService : UsuarioLoggedService,
+    private router: Router
+  ){}
 
   isSidebarToggled: boolean = false;
 
@@ -35,6 +40,13 @@ export class NavbarComponent implements OnInit{
 
   onDropdownClick(event: Event): void {
     event.preventDefault();
+  }
+
+  cerrarSession(){
+    this.usuarioLoggedService.setIsLogin(false);
+    this.usuarioLoggedService.clearUsuario()
+    this.router.navigate(['/login'])
+
   }
 
 }

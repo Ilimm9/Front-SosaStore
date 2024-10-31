@@ -8125,7 +8125,7 @@ textarea.form-control-lg {
 
 .bg-dark {
   --bs-bg-opacity: 1;
-  background-color: rgb(65, 165, 141, 1) !important; /*Aqui va el color de la barra superior*/
+  background-color: rgb(64, 161, 147, 1) !important; /*Aqui va el color de la barra superior*/
 }
 
 .bg-black {
