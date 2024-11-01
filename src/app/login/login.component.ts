@@ -13,11 +13,6 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
 
-  // usuario:string
-  // password:string
-  // errorMessage: string;
-  // mostrarRecuperacion: boolean = false;
-  // emailRecuperacion: string; 
   usuario: string = '';
   password: string = '';
   errorMessage: string = '';
@@ -30,10 +25,6 @@ export class LoginComponent {
   constructor(private authService: LoginService, private router: Router) { }
   
   login() {
-       // Reiniciar msj de error
-       this.errorUsuario = '';
-       this.errorPassword = '';
-       this.errorMessage = '';
    
        let isValid = true;
        if (!this.usuario) {
@@ -70,8 +61,15 @@ export class LoginComponent {
        );
      }
 
+  onInputChange() { 
+      this.errorUsuario = ''; 
+      this.errorPassword = ''; 
+      this.errorMessage = '';
+  }  
+
   mostrarRecuperacionContrasenia() {
     this.mostrarRecuperacion = true;
+    this.onInputChange();
   }
 
   recuperarContrasenia() {
@@ -83,7 +81,7 @@ export class LoginComponent {
         console.log('Servicio aplicado:', response);
 
         // Redirigir según el rol del usuario
-        const rol = response.id_Rol; // Asumiendo que id_Rol es el campo que contiene el rol del usuario
+        const rol = response.id_Rol; 
 
         if (rol === 1) {
           this.router.navigate(['gestor/administrador']);
