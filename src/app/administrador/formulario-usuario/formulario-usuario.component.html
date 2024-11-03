@@ -1,3 +1,239 @@
+<<<<<<< HEAD
+=======
+<div class="row">
+  <div class="col-xl-8 col-md-10 mx-auto">
+    <form #usuarioForm="ngForm" (ngSubmit)="guardar()" novalidate>
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          id="nombre"
+          name="nombre"
+          [(ngModel)]="usuario.nombre"
+          placeholder="Ingrese el nombre del usuario"
+          required
+          minlength="2"
+          pattern="^[a-zA-ZÀ-ÿ\s]+$"
+          #nombre="ngModel"
+        />
+        @if(nombre.invalid && nombre.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(nombre.errors?.['required']){
+              <small>El nombre es requerido</small>
+            } @else if (nombre.errors?.['minlength']){
+              <small>Debe tener al menos 2 caracteres</small>
+            } @else if (nombre.errors?.['pattern']){
+              <small>Solo se permiten letras y espacios</small>
+            }
+          </div>
+        }
+
+      </div>
+
+      <div class="mb-3">
+        <label for="primerApellido" class="form-label">Primer Apellido</label>
+        <input
+          type="text"
+          class="form-control"
+          id="primerApellido"
+          name="primerApellido"
+          [(ngModel)]="usuario.primerApellido"
+          placeholder="Ingrese el primer apellido del usuario"
+          required
+          minlength="2"
+          pattern="^[a-zA-ZÀ-ÿ\s]+$"
+          #primerApellido="ngModel"
+        />
+        @if(primerApellido.invalid && primerApellido.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(primerApellido.errors?.['required']){
+              <small>El primer apellido es requerido</small>
+            } @else if (primerApellido.errors?.['minlength']){
+              <small>Debe tener al menos 2 caracteres</small>
+            } @else if (primerApellido.errors?.['pattern']){
+              <small>Solo se permiten letras y espacios</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="segundoApellido" class="form-label">Segundo Apellido</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="segundoApellido" 
+          name="segundoApellido" 
+          [(ngModel)]="usuario.segundoApellido"
+          placeholder="Ingrese el segundo apellido del usuario"
+          required
+          minlength="2"
+          pattern="^[a-zA-ZÀ-ÿ\s]+$"
+          #segundoApellido="ngModel"
+        >
+        @if(segundoApellido.invalid && segundoApellido.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(segundoApellido.errors?.['required']){
+              <small>El segundo apellido es requerido</small>
+            } @else if (segundoApellido.errors?.['minlength']){
+              <small>Debe tener al menos 2 caracteres</small>
+            } @else if (segundoApellido.errors?.['pattern']){
+              <small>Solo se permiten letras y espacios</small>
+            }
+          </div>
+        }
+    </div>
+
+      <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input
+          type="text"
+          class="form-control"
+          id="telefono"
+          name="telefono"
+          [(ngModel)]="usuario.telefono"
+          placeholder="Ingrese el telefono del usuario"
+          required
+          pattern="^\d{10}$"
+          #telefono="ngModel"
+        />
+        @if(telefono.invalid && telefono.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(telefono.errors?.['required']){
+              <small>El Telefono es requerido</small>
+            } @else if (telefono.errors?.['pattern']){
+              <small>Solo se permiten 10 digitos numericos</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="nombreUsuario" class="form-label">Usuario</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="nombreUsuario" 
+          name="nombreUsuario" 
+          [(ngModel)]="usuario.nombreUsuario"
+          placeholder="Ingrese el usuario asignado"
+          required
+          minlength="2"
+          pattern="^[a-zA-Z0-9]+$"
+          #nombreusuario="ngModel"
+        >
+        @if(nombreusuario.invalid && nombreusuario.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(nombreusuario.errors?.['required']){
+              <small>El nombre de usuario es requerido</small>
+            } @else if (nombreusuario.errors?.['minlength']){
+              <small>Debe tener al menos 2 caracteres</small>
+            } @else if (nombreusuario.errors?.['pattern']){
+              <small>Solo se permiten letras y numeros sin espacios</small>
+            }
+          </div>
+        }
+    </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          [(ngModel)]="usuario.password"
+          placeholder=""
+          placeholder="Ingrese la contraseña"
+          required
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&]{8,}$"
+          #password="ngModel"
+        />
+        @if(password.invalid && password.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(password.errors?.['required']){
+              <small>La contraseña es requerida</small>
+            } @else if (password.errors?.['pattern']){
+              <small>Formato no valido</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="correo" class="form-label">Correo Electronico</label>
+        <input
+          type="text"
+          class="form-control"
+          id="correo"
+          name="correo"
+          [(ngModel)]="usuario.correo"
+          placeholder=""
+          placeholder="Ingrese el correo Electronico"
+          required
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          #correo="ngModel"
+        />
+        @if(correo.invalid && correo.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(correo.errors?.['required']){
+              <small>El correo es requerido</small>
+            } @else if (correo.errors?.['pattern']){
+              <small>Formato no valido</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="rol" class="form-label">Cliente</label>
+        <select
+          id="rol"
+          name="rol"
+          class="form-control"
+          [(ngModel)]="usuario.rol"
+          required
+          #rol="ngModel"
+        >
+          <option value="" disabled selected>Seleccione un cliente</option>
+          <option *ngFor="let rol of roles" [ngValue]="rol">{{ rol.nombreRol }}</option>
+        </select>
+        @if(rol.invalid && rol.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(rol.errors?.['required']){
+              <small>El rol es requerido</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="mb-3 form-check">
+        <input
+            type="checkbox"
+            class="form-check-input"
+            id="activo"
+            name="activo"
+            [(ngModel)]="usuario.activo" 
+        />
+        <label class="form-check-label" for="activo">Empleado Activo</label>
+    </div>
+
+      <div class="d-flex justify-content-evenly">
+        <button type="submit" class="btn btn-primary" [disabled]="usuarioForm.invalid">Agregar</button>
+        <button type="button" class="btn btn-primary">Editar</button>
+        <button type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+<!-- <p>formulario-usuario works!</p>
+>>>>>>> thrs-pedro
 <div class="row">
     <div class="col-xl-8 col-md-10 mx-auto">
         <form #usuarioForm="ngForm" (ngSubmit)="guardar()">
@@ -94,4 +330,4 @@
             </div>
           </form>
     </div>
-</div>
+</div> -->

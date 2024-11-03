@@ -12,7 +12,6 @@ export const routes: Routes = [
     {path:'',component:LoginComponent},
     {path:'login',component:LoginComponent},
     {path: 'gestor', component: GestorComponent, children: [
-        {path:'', redirectTo: 'administrador', pathMatch: 'full' },
         {path:'administrador',component:AdministradorComponent, children: [
             {path:'', redirectTo: 'home', pathMatch: 'full' },
             {path: 'home', component: HomeAdminComponent},

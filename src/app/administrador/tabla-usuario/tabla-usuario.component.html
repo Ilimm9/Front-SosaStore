@@ -5,46 +5,52 @@
       Personal Activo
     </div>
     <div class="card-body">
-      <table id="datatablesSimple" #datatablesSimple>
-        <thead class="table-dark">
-          <tr>
-            <th>Nombre</th>
-            <th>Telefono</th>
-            <th>Usuario</th>
-            <th>Cargo</th>
-            <th></th>
-          </tr>
-        </thead>
-        <!-- <tfoot>
-          <tr>
-            <th>Nombre</th>
-            <th>Telefono</th>
-            <th>Usuario</th>
-          </tr>
-        </tfoot> -->
-        <tbody>
-          @for (usuario of usuarios; track usuario.idUsuario) {
+      @if(usuarios.length > 0){
+        <table id="datatablesSimple" #datatablesSimple>
+          <thead class="table-dark">
             <tr>
-              <td> {{usuario.nombre}}  
-                {{usuario.primerApellido}} 
-                {{usuario.segundoApellido}}
-              </td>
-              <td> {{usuario.telefono}} </td>
-              <td> {{usuario.nombreUsuario}} </td>
-              <td>{{usuario.rol.nombreRol}}</td>
-              <td class="text-center" >
-                <button 
-                (click)="enviarUsuario($event)"
-                [attr.data-id]="usuario.idUsuario"
-                routerLink="../formulario-usuario" 
-                type="button" 
-                class="btn btn-primary btn-sm" >Editar</button>
-              </td>
+              <th>Nombre</th>
+              <th>Telefono</th>
+              <th>Usuario</th>
+              <th>Cargo</th>
+              <th>Correo</th>
+              <th></th>
             </tr>
-          }
-          
-        </tbody>
-      </table>
+          </thead>
+          <!-- <tfoot>
+            <tr>
+              <th>Nombre</th>
+              <th>Telefono</th>
+              <th>Usuario</th>
+            </tr>
+          </tfoot> -->
+          <tbody>
+            @for (usuario of usuarios; track usuario.idUsuario) {
+              <tr>
+                <td> {{usuario.nombre}}  
+                  {{usuario.primerApellido}} 
+                  {{usuario.segundoApellido}}
+                </td>
+                <td> {{usuario.telefono}} </td>
+                <td> {{usuario.nombreUsuario}} </td>
+                <td>{{usuario.rol.nombreRol}}</td>
+                <td>{{usuario.correo}}</td>
+                <td class="text-center" >
+                  <button 
+                  (click)="enviarUsuario($event)"
+                  [attr.data-id]="usuario.idUsuario"
+                  routerLink="../formulario-usuario" 
+                  type="button" 
+                  class="btn btn-primary btn-sm" >Editar</button>
+                </td>
+              </tr>
+            }
+            
+          </tbody>
+        </table>
+      }
+      
     </div>
   </div>
+
 
