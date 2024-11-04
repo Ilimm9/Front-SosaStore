@@ -7,17 +7,18 @@ import { GestorComponent } from './gestor/gestor.component';
 import { TablaUsuarioComponent } from './administrador/tabla-usuario/tabla-usuario.component';
 import { FormularioUsuarioComponent } from './administrador/formulario-usuario/formulario-usuario.component';
 import { HomeAdminComponent } from './administrador/home-admin/home-admin.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 export const routes: Routes = [
     {path:'',component:LoginComponent},
     {path:'login',component:LoginComponent},
     {path: 'gestor', component: GestorComponent, children: [
-        {path:'', redirectTo: 'administrador', pathMatch: 'full' },
         {path:'administrador',component:AdministradorComponent, children: [
             {path:'', redirectTo: 'home', pathMatch: 'full' },
             {path: 'home', component: HomeAdminComponent},
             {path: 'tabla-usuario', component: TablaUsuarioComponent},
-            {path: 'formulario-usuario', component: FormularioUsuarioComponent}
+            {path: 'formulario-usuario', component: FormularioUsuarioComponent},
+            {path: 'perfil', component: PerfilComponent}
         ]},
         {path:'inventario',component:InventarioComponent},
         {path:'cajero',component:CajeroComponent}

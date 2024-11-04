@@ -1,0 +1,48 @@
+.dataTable-table tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+.dataTable-table tr:hover {
+    background-color: #f7f7f7;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dataTable-table .btn-editar {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.dataTable-table .btn-editar:hover {
+    background-color: #0056b3;
+}
+
+.dataTable-table thead th {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: bold;
+    padding: 10px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.dataTable-pagination .dataTable-pagination-list a {
+    padding: 8px 12px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+}
+.dataTable-pagination .dataTable-pagination-list a:hover {
+    background-color: #0056b3;
+}
+
+
+.dataTable-table {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+}

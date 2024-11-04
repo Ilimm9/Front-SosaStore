@@ -8125,7 +8125,7 @@ textarea.form-control-lg {
 
 .bg-dark {
   --bs-bg-opacity: 1;
-  background-color: rgb(65, 165, 141, 1) !important; /*Aqui va el color de la barra superior*/
+  background-color: rgb(64, 161, 147, 1) !important; /*Aqui va el color de la barra superior*/
 }
 
 .bg-black {
@@ -11156,4 +11156,25 @@ body {
   width: 20px !important;
   font-size: 0.75rem;
   border-radius: 0.375rem !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4CBEA4, #3fb9b9  );
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #fff;
+}
+.btn-primary:hover{
+  background: white;
+  color: #297866;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #297866;
+}
+
+body {
+  background: linear-gradient(135deg, #f7f9fc, #e9eff5);
+
+
 }

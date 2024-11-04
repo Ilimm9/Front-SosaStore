@@ -7,16 +7,22 @@ import { Observable } from 'rxjs';
 })
 export class LoginService {
 
-// private apiUrl = "http://localhost:8000/";
-private apiUrl = "http://localhost/backend-punto_de_venta/";
 
-constructor(private http: HttpClient) {}
+//  private apiUrl = "http://localhost:8000/";
+// private apiUrl = "http://localhost/backend-punto_de_venta/";
 
-login(username: string, password: string): Observable<any> {
-  const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  const body = JSON.stringify({ nombre_Usuario: username, contrasenia: password });
+  // private apiUrl = "http://localhost:8000/";
+  private apiUrl = "http://localhost/backend-punto_de_venta/";
 
-  return this.http.post(`${this.apiUrl}login_check.php`, body, { headers });  }
+
+  constructor(private http: HttpClient) { }
+
+  login(username: string, password: string): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = JSON.stringify({ nombre_Usuario: username, contrasenia: password });
+
+    return this.http.post(`${this.apiUrl}login_check.php`, body, { headers });
+  }
 
   recuperarContrasenia(email: string): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
