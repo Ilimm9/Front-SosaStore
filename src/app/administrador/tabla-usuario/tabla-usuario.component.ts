@@ -24,7 +24,6 @@ export class TablaUsuarioComponent implements OnInit {
 
   constructor(private usuarioEditarService: UsuarioEditarService,
     private usuarioService: UsuarioService,
-    private rolService: RolService
   ) { }
 
   ngOnInit(): void {
@@ -32,57 +31,13 @@ export class TablaUsuarioComponent implements OnInit {
 
   }
 
-  consultarRoles() {
-    this.rolService
-      .obtenerRoles()
-      .pipe(
-        map(
-          (
-            roles: any[]
-          ) =>
-            roles.map((rolData: any) => {
-              // rolData es de tipo any
-              const rol = new Rol();
-              rol.idRol = rolData.id_rol;
-              rol.nombreRol = rolData.nombre;
-              return rol;
-            })
-        )
-      )
-      .subscribe((transformedRoles) => {
-        this.roles = transformedRoles;
-        console.log(this.roles)
-        setTimeout(() => {
-          this.usuarios = this.usuarios.map((user) => {
-            const rolEncontrado = this.roles.find((rol) => rol.idRol === user.rol.idRol); // Busca el rol usando idRol
-
-            if (rolEncontrado) {
-              // Si el rol fue encontrado, lo asignamos al usuario
-              user.rol = rolEncontrado;
-            }
-            return user; // Retorna el usuario actualizado
-          });
-
-          console.log(this.usuarios)
-        }, 0);
-      });
-  }
-
   consultarUsuarios() {
-    this.usuarioService.getUsuarios().subscribe(transformedUsuarios => {
-      this.usuarios = transformedUsuarios; // Asigna los usuarios
-
-      this.consultarRoles();
-
-
-
-      // Espera un momento para asegurarte de que el DOM se haya actualizado
+    this.usuarioService.getUsuariosCompletos().subscribe((usuariosCompletos) => {
+      console.log("Usuarios completos con roles:", usuariosCompletos);
+      this.usuarios = usuariosCompletos;
       setTimeout(() => {
         this.initDataTable(); // Inicializa la DataTable después de que el DOM se haya actualizado
       }, 0);
-
-    }, error => {
-      console.error('Error al obtener usuarios:', error); // Manejo de errores
     });
   }
 

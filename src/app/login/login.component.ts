@@ -69,8 +69,9 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.usuario, this.password).subscribe(
       response => {
         console.log('Servicio aplicado:', response);
-
+        console.log(response)
         this.usuarioLogged.nombre = response.nombre;
+        this.usuarioLogged.idUsuario = response.id_usuario;
         this.usuarioLogged.rol = new Rol();
         this.usuarioLogged.rol.idRol = response.id_Rol;
 

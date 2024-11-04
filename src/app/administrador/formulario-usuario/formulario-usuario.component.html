@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 <div class="row">
   <div class="col-xl-8 col-md-10 mx-auto">
     <form #usuarioForm="ngForm" (ngSubmit)="guardar()" novalidate>
@@ -136,30 +135,33 @@
         }
     </div>
 
-      <div class="mb-3">
-        <label for="password" class="form-label">Contraseña</label>
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          name="password"
-          [(ngModel)]="usuario.password"
-          placeholder=""
-          placeholder="Ingrese la contraseña"
-          required
-          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&]{8,}$"
-          #password="ngModel"
-        />
-        @if(password.invalid && password.touched){
-          <div class="alert alert-danger mt-2 text-center">
-            @if(password.errors?.['required']){
-              <small>La contraseña es requerida</small>
-            } @else if (password.errors?.['pattern']){
-              <small>Formato no valido</small>
-            }
-          </div>
-        }
-      </div>
+      @if(!modoEdicion){
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            [(ngModel)]="usuario.password"
+            placeholder=""
+            placeholder="Ingrese la contraseña"
+            required
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&]{8,}$"
+            #password="ngModel"
+          />
+          @if(password.invalid && password.touched){
+            <div class="alert alert-danger mt-2 text-center">
+              @if(password.errors?.['required']){
+                <small>La contraseña es requerida</small>
+              } @else if (password.errors?.['pattern']){
+                <small>Formato no valido</small>
+              }
+            </div>
+          }
+        </div>
+      }
+      
 
       <div class="mb-3">
         <label for="correo" class="form-label">Correo Electronico</label>
@@ -187,7 +189,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="rol" class="form-label">Cliente</label>
+        <label for="rol" class="form-label">Rol</label>
         <select
           id="rol"
           name="rol"
@@ -196,7 +198,11 @@
           required
           #rol="ngModel"
         >
-          <option value="" disabled selected>Seleccione un cliente</option>
+          @if(modoEdicion){
+            <option [ngValue]="usuario.rol" disabled selected>{{usuario.rol.nombreRol}}</option>
+          } @else {
+            <option value="" disabled selected>Seleccione un rol</option>
+          }
           <option *ngFor="let rol of roles" [ngValue]="rol">{{ rol.nombreRol }}</option>
         </select>
         @if(rol.invalid && rol.touched){
@@ -220,9 +226,31 @@
     </div>
 
       <div class="d-flex justify-content-evenly">
-        <button type="submit" class="btn btn-primary" [disabled]="usuarioForm.invalid">Agregar</button>
-        <button type="button" class="btn btn-primary">Editar</button>
-        <button type="button" class="btn btn-danger">Eliminar</button>
+        
+        @if(modoEdicion){
+          <button 
+          type="button" 
+          class="btn btn-primary" 
+          [disabled]="usuarioForm.invalid"
+          (click)="actualizarUsuario()"
+          >Editar</button>
+          @if(usuario.activo){
+            <button 
+            type="button" 
+            class="btn btn-danger"
+            [disabled]="usuarioForm.invalid"
+            (click)="desactivarUsuario()"
+            >Desactivar</button>
+          }
+          
+        } @else {
+          <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="usuarioForm.invalid"
+          >Agregar</button>
+        }
+        
       </div>
     </form>
   </div>
@@ -233,7 +261,7 @@
 
 
 <!-- <p>formulario-usuario works!</p>
->>>>>>> thrs-pedro
+
 <div class="row">
     <div class="col-xl-8 col-md-10 mx-auto">
         <form #usuarioForm="ngForm" (ngSubmit)="guardar()">

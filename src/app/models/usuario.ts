@@ -7,7 +7,7 @@ export class Usuario {
   segundoApellido: string
   telefono: string
   correo: string
-  activo: boolean
+  activo: number
   nombreUsuario: string
   password: string
   rol: Rol
