@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { RolService } from '../../Servicios/rol.service';
 import { map } from 'rxjs';
 import { UsuarioService } from '../../Servicios/usuario.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-formulario-usuario',
@@ -85,9 +86,24 @@ export class FormularioUsuarioComponent implements OnInit {
     //console.log(this.usuario);
     //console.log(datos);
 
-    this.usuarioService.insertarUsuario({ datos }).subscribe((result) => {
-      //console.log(result);
-      this.usuarioForm.resetForm();
+    this.usuarioService.insertarUsuario({ datos }).subscribe({
+      next: (result) => {
+        //console.log(result);
+        this.usuarioForm.resetForm();
+        Swal.fire({
+          title: "Usuario Insertado!",
+          text: "Registro Exitoso!",
+          icon: "success"
+        });
+      },
+      error: (errores) => {
+        Swal.fire({
+          title: "Usuario No Insertado!",
+          text: errores.toString(),
+          icon: "error"
+        });
+      }
+
     });
   }
 
@@ -116,19 +132,35 @@ export class FormularioUsuarioComponent implements OnInit {
     console.log(this.usuario);
     console.log(datos);
 
-    this.usuarioService.actualizarUsuario({ datos }).subscribe((result) => {
-      console.log(result);
-      // Limpiar el campo de contraseña en el modelo
-      this.usuario.password = "";
-      this.usuarioForm.reset();
-      this.modoEdicion = false;
-      setTimeout(() => {
-        this.usuario.password = ""; // Refuerza que el campo de contraseña esté vacío
-      });
+    this.usuarioService.actualizarUsuario({ datos }).subscribe({
+
+      next: (result) => {
+        console.log(result);
+        Swal.fire({
+          title: "Usuario Actualizado!",
+          text: "Actualizacion Exitosa!",
+          icon: "success"
+        });
+        // Limpiar el campo de contraseña en el modelo
+        this.usuario.password = "";
+        this.usuarioForm.reset();
+        this.modoEdicion = false;
+        setTimeout(() => {
+          this.usuario.password = ""; // Refuerza que el campo de contraseña esté vacío
+        });
+      },
+      error: (errores) => {
+        Swal.fire({
+          title: "Usuario No Actualizado!",
+          text: errores.toString(),
+          icon: "error"
+        });
+      }
+
     });
   }
 
-  desactivarUsuario(){
+  desactivarUsuario() {
     console.log('editar usuario')
     if (this.usuarioForm.invalid) {
       this.usuarioForm.form.markAllAsTouched();
@@ -138,9 +170,24 @@ export class FormularioUsuarioComponent implements OnInit {
       id_usuario: this.usuario.idUsuario
     };
 
-    this.usuarioService.desactivarUsuario(dato).subscribe((result) => {
-      this.usuario.activo = 0;
-      console.log(result);
+    this.usuarioService.desactivarUsuario(dato).subscribe({
+      next: (result) => {
+        this.usuario.activo = 0;
+        console.log(result);
+        Swal.fire({
+          title: "Usuario Desactivado!",
+          text: "Accion aplicada",
+          icon: "success"
+        });
+      },
+      error: (errores) => {
+        Swal.fire({
+          title: "Errror!",
+          text: errores.toString(),
+          icon: "error"
+        });
+      }
+
     });
 
   }
