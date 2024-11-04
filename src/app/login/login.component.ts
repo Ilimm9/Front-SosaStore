@@ -100,7 +100,7 @@ export class LoginComponent implements OnInit {
           this.usuarioLoggedService.setIsLogin(true);
 
         } else {
-          console.log('Verifica tus datos');
+          this.errorMessage = 'Credenciales no validas.';
         }
       },
       error => {
