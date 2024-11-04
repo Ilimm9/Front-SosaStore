@@ -1,6 +1,9 @@
 
-<div class="row">
+<div class="row my-5">
   <div class="col-xl-8 col-md-10 mx-auto">
+    <div class="card shadow p-4">
+      <h3 class="card-title text-center mb-4">Formulario para Usuarios</h3>
+      <hr class="divider">
     <form #usuarioForm="ngForm" (ngSubmit)="guardar()" novalidate>
       <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
@@ -253,6 +256,7 @@
         
       </div>
     </form>
+    </div>
   </div>
 </div>
 

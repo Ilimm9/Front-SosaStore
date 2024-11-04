@@ -45,7 +45,16 @@ export class TablaUsuarioComponent implements OnInit {
     // Asegúrate de que hay datos en la tabla antes de inicializarla
     if (this.datatablesSimple && this.usuarios.length > 0) {
       // Inicializa la DataTable
-      new DataTable(this.datatablesSimple.nativeElement);
+      new DataTable(this.datatablesSimple.nativeElement, {
+        labels: {
+          placeholder: "Buscar...",
+          perPage: "registros por página",
+          noRows: "No se encontraron registros",
+          info: "Mostrando {start} a {end} de {rows} registros",
+          noResults: "No se encontraron coincidencias"
+      }
+      });
+    
     }
   }
 
