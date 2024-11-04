@@ -11172,3 +11172,9 @@ body {
   text-align: center;
   border: 1px solid #297866;
 }
+
+body {
+  background: linear-gradient(135deg, #f7f9fc, #e9eff5);
+
+
+}
