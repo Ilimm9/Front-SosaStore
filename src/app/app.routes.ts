@@ -8,6 +8,9 @@ import { TablaUsuarioComponent } from './administrador/tabla-usuario/tabla-usuar
 import { FormularioUsuarioComponent } from './administrador/formulario-usuario/formulario-usuario.component';
 import { HomeAdminComponent } from './administrador/home-admin/home-admin.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { HomeInventarioComponent } from './inventario/home-inventario/home-inventario.component';
+import { TablaProductoComponent } from './inventario/tabla-producto/tabla-producto.component';
+import { AgregarProductoComponent } from './inventario/agregar-producto/agregar-producto.component';
 
 export const routes: Routes = [
     {path:'',component:LoginComponent},
@@ -20,7 +23,13 @@ export const routes: Routes = [
             {path: 'formulario-usuario', component: FormularioUsuarioComponent},
             {path: 'perfil', component: PerfilComponent}
         ]},
-        {path:'inventario',component:InventarioComponent},
+        {path:'inventario',component:InventarioComponent,children:[
+            {path:'',redirectTo: 'homeInventario', pathMatch: 'full'},
+            {path:'homeInventario',component:HomeInventarioComponent},
+            {path:'tablaProducto',component:TablaProductoComponent},
+            {path:'agregarProducto',component:AgregarProductoComponent},
+            {path: 'perfil', component: PerfilComponent}
+        ]},
         {path:'cajero',component:CajeroComponent}
     ]},
 
