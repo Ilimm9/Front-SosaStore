@@ -1,0 +1,59 @@
+
+<div class="card mb-4 my-5">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Productos
+    </div>
+    <div class="card-body">
+      @if(productList.length > 0){
+        <table id="datatablesSimple" #datatablesSimple>
+          <thead class="table-dark">
+            <tr>
+              <th style="display: none;">ID</th>
+              <th>Producto</th>
+              <!-- <th>Categoria</th> -->
+              <th>Codigo</th>
+              <th>Stock</th>
+              <th>Stock Mínimo</th>
+              <th>Stock Máximo</th>
+              <th>Precio Compra</th>
+              <th>Precio Venta</th>
+              <th></th>
+            </tr>
+          </thead>
+          <!-- <tfoot>
+            <tr>
+              <th>Nombre</th>
+              <th>Telefono</th>
+              <th>Usuario</th>
+            </tr>
+          </tfoot> -->
+          <tbody>
+            @for (producto of productList; track producto.id_producto) {
+              <tr>
+                <td style="display: none;">{{producto.id_producto}}</td>
+                <td> {{producto.nombre}}  </td>
+                <td> {{producto.codigo}} </td>
+                <td> {{producto.stock}} </td>
+                <td>{{producto.stock_min}}</td>
+                <td>{{producto.stock_max}}</td>
+                <td>{{producto.precio_compra}}</td>
+                <td>{{producto.precio_venta}}</td>
+                <td class="text-center" >
+                  <!-- <button 
+                  (click)="enviarUsuario($event)"
+                  [attr.data-id]="usuario.idUsuario"
+                  routerLink="../formulario-usuario" 
+                  type="button" 
+                  class="btn btn-primary btn-sm" 
+                  >Editar</button> -->
+                </td>
+              </tr>
+            }
+            
+          </tbody>
+        </table>
+      }
+      
+    </div>
+  </div>
