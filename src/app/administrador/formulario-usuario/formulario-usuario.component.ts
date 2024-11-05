@@ -83,12 +83,12 @@ export class FormularioUsuarioComponent implements OnInit {
       activo: this.usuario.activo,
       id_Rol: this.usuario.id_Rol,
     };
-    //console.log(this.usuario);
-    //console.log(datos);
+    console.log(this.usuario);
+    console.log(datos);
 
     this.usuarioService.insertarUsuario({ datos }).subscribe({
       next: (result) => {
-        //console.log(result);
+        console.log(result);
         this.usuarioForm.resetForm();
         Swal.fire({
           title: "Usuario Insertado!",

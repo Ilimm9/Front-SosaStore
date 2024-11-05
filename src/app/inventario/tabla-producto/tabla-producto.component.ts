@@ -23,7 +23,7 @@ export class TablaProductoComponent implements OnInit {
   }
 
   loadProducts() {
-    this._productoServicio.getProductos2().subscribe((result) => {
+    this._productoServicio.getProductos().subscribe((result) => {
       this.productList = Object.values(result);
       // this.imprimirItems();
       setTimeout(() => {
@@ -32,21 +32,21 @@ export class TablaProductoComponent implements OnInit {
     });
   }
 
-  imprimirItems() {
-    console.log("Imprimimos items");
-    this.productList.forEach((item) => {
-      console.log('ID:', item.id_producto);
-      console.log('Nombre:', item.id_categoria);
-      console.log('Rol:', item.codigo);
-      console.log('Cuenta:', item.nombre);
-      console.log('Teléfono:', item.stock);
-      console.log('Fecha de Nacimiento:', item.stock_min);
-      console.log('Área:', item.stock_max);
-      console.log('Género:', item.precio_venta);
-      console.log('Género:', item.precio_compra);
-      console.log('---------------------------------');
-    });
-  }
+  // imprimirItems() {
+  //   console.log("Imprimimos items");
+  //   this.productList.forEach((item) => {
+  //     console.log('ID:', item.id_producto);
+  //     console.log('Nombre:', item.id_categoria);
+  //     console.log('Rol:', item.codigo);
+  //     console.log('Cuenta:', item.nombre);
+  //     console.log('Teléfono:', item.stock);
+  //     console.log('Fecha de Nacimiento:', item.stock_min);
+  //     console.log('Área:', item.stock_max);
+  //     console.log('Género:', item.precio_venta);
+  //     console.log('Género:', item.precio_compra);
+  //     console.log('---------------------------------');
+  //   });
+  // }
 
   initDataTable() {
     // Asegúrate de que hay datos en la tabla antes de inicializarla

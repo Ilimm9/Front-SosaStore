@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-home-inventario',
@@ -7,6 +7,18 @@ import { Component } from '@angular/core';
   templateUrl: './home-inventario.component.html',
   styleUrl: './home-inventario.component.css'
 })
-export class HomeInventarioComponent {
+export class HomeInventarioComponent implements OnInit{
 
+  ngOnInit(): void {
+    const carouselElement = document.getElementById('carouselExample');
+
+    if (carouselElement) {
+      // Accedemos a la instancia del carrusel directamente usando la API de Bootstrap
+      const carousel = new (window as any).bootstrap.Carousel(carouselElement, {
+        interval: 800,
+        ride: 'carousel'
+      });
+      carousel.cycle();
+    }
+  }
 }
