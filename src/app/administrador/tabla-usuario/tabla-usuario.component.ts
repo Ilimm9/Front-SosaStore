@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { DataTable } from 'simple-datatables';
 import { Usuario } from '../../models/usuario';
 import { Rol } from '../../models/rol';
-import { UsuarioEditarService } from '../../Servicios/usuario-editar.service';
+import { EditarService } from '../../Servicios/editar.service';
 import { UsuarioService } from '../../Servicios/usuario.service';
 import { map } from 'rxjs';
 import { RolService } from '../../Servicios/rol.service';
@@ -20,30 +20,41 @@ export class TablaUsuarioComponent implements OnInit {
   @ViewChild('datatablesSimple') datatablesSimple!: ElementRef;
 
   roles: Rol[] = [];
-  usuarios: Usuario[] = []
+  // usuarios: Usuario[] = []
+  usuarios2: Array<Usuario> = [];
 
-  constructor(private usuarioEditarService: UsuarioEditarService,
+  constructor(private editarService: EditarService,
     private usuarioService: UsuarioService,
   ) { }
 
   ngOnInit(): void {
-    this.consultarUsuarios();
-
+    // this.consultarUsuarios();
+    this.loadUsers();
   }
 
-  consultarUsuarios() {
-    this.usuarioService.getUsuariosCompletos().subscribe((usuariosCompletos) => {
-      console.log("Usuarios completos con roles:", usuariosCompletos);
-      this.usuarios = usuariosCompletos;
+  loadUsers(){
+    this.usuarioService.getUsuarios().subscribe((result) => {
+      this.usuarios2 = Object.values(result);
+      console.log("Usuarios completos con roles:", this.usuarios2);
       setTimeout(() => {
         this.initDataTable(); // Inicializa la DataTable después de que el DOM se haya actualizado
       }, 0);
     });
   }
 
+  // consultarUsuarios() {
+  //   this.usuarioService.getUsuariosCompletos().subscribe((usuariosCompletos) => {
+  //     console.log("Usuarios completos con roles:", usuariosCompletos);
+  //     this.usuarios = usuariosCompletos;
+  //     setTimeout(() => {
+  //       this.initDataTable(); // Inicializa la DataTable después de que el DOM se haya actualizado
+  //     }, 0);
+  //   });
+  // }
+
   initDataTable() {
     // Asegúrate de que hay datos en la tabla antes de inicializarla
-    if (this.datatablesSimple && this.usuarios.length > 0) {
+    if (this.datatablesSimple && this.usuarios2.length > 0) {
       // Inicializa la DataTable
       new DataTable(this.datatablesSimple.nativeElement, {
         labels: {
@@ -65,10 +76,10 @@ export class TablaUsuarioComponent implements OnInit {
       return;
     }
     let id = parseInt(dataId);
-    const usuario = this.usuarios.find(u => u.idUsuario === id);
+    const usuario = this.usuarios2.find(u => u.idUsuario === id);
     if (usuario) {
       console.log(usuario)
-      this.usuarioEditarService.seleccionarUsuario(usuario)
+      this.editarService.seleccionarUsuario(usuario)
     }
   }
 

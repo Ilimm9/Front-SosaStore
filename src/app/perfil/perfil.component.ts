@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../models/usuario';
 import { UsuarioLoggedService } from '../Servicios/usuario-logged.service';
 import { UsuarioService } from '../Servicios/usuario.service';
-import { UsuarioEditarService } from '../Servicios/usuario-editar.service';
+import { EditarService } from '../Servicios/editar.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,14 +18,31 @@ export class PerfilComponent implements OnInit{
 
   constructor(private usuariologgedService: UsuarioLoggedService,
     private usuarioService: UsuarioService,
-    private usuarioEditarService: UsuarioEditarService,
+    private editarService: EditarService,
     private router: Router
    ){}
 
+  //  ngOnInit(): void {
+  //   let usuario = this.usuariologgedService.getUsuario();
+  //   this.usuarioService.getUsuariosCompletos().subscribe((usuariosCompletos)=> {
+  //     for(let user of usuariosCompletos){
+  //       if(user.idUsuario === usuario.idUsuario){
+  //         this.usuario = user;
+  //         console.log(this.usuario)
+  //         break;
+  //       }
+  //     }
+  //   })
+  //   setTimeout(() => {},0)
+    
+  // }
+
   ngOnInit(): void {
     let usuario = this.usuariologgedService.getUsuario();
-    this.usuarioService.getUsuariosCompletos().subscribe((usuariosCompletos)=> {
-      for(let user of usuariosCompletos){
+    let usuarios: Array<Usuario> = [];
+    this.usuarioService.getUsuarios().subscribe((usuariosCompletos)=> {
+      usuarios = Object.values(usuariosCompletos);
+      for(let user of usuarios){
         if(user.idUsuario === usuario.idUsuario){
           this.usuario = user;
           console.log(this.usuario)
@@ -38,7 +55,7 @@ export class PerfilComponent implements OnInit{
   }
   
   editar(){
-    this.usuarioEditarService.seleccionarUsuario(this.usuario);
+    this.editarService.seleccionarUsuario(this.usuario);
     this.router.navigate(['gestor/administrador/formulario-usuario'])
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Usuario } from '../../models/usuario';
-import { UsuarioEditarService } from '../../Servicios/usuario-editar.service';
+import { EditarService } from '../../Servicios/editar.service';
 import { Rol } from '../../models/rol';
 import { CommonModule } from '@angular/common';
 import { RolService } from '../../Servicios/rol.service';
@@ -24,13 +24,13 @@ export class FormularioUsuarioComponent implements OnInit {
   modoEdicion: boolean = false;
 
   constructor(
-    private usuarioEditarService: UsuarioEditarService,
+    private editarService: EditarService,
     private usuarioService: UsuarioService,
     private rolService: RolService
   ) { }
 
   ngOnInit() {
-    this.usuarioEditarService.usuarioSeleccionado$.subscribe((usuario) => {
+    this.editarService.usuarioSeleccionado$.subscribe((usuario) => {
       if (usuario) {
         this.usuario = usuario;
         this.modoEdicion = true;
@@ -59,7 +59,7 @@ export class FormularioUsuarioComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.usuarioEditarService.seleccionarUsuario(null);
+    this.editarService.seleccionarUsuario(null);
     // this.usuario = new Usuario();
   }
 
@@ -81,7 +81,7 @@ export class FormularioUsuarioComponent implements OnInit {
       contrasenia: this.usuario.password,
       correo: this.usuario.correo,
       activo: this.usuario.activo,
-      id_Rol: this.usuario.rol.idRol,
+      id_Rol: this.usuario.id_Rol,
     };
     //console.log(this.usuario);
     //console.log(datos);
@@ -126,7 +126,7 @@ export class FormularioUsuarioComponent implements OnInit {
       contrasenia: this.usuario.password,
       correo: this.usuario.correo,
       activo: this.usuario.activo,
-      id_Rol: this.usuario.rol.idRol,
+      id_Rol: this.usuario.id_Rol,
     };
 
     console.log(this.usuario);

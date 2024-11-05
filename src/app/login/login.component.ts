@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.usuarioLoggedService.getIsLogin()) {
-      const rol = this.usuarioLoggedService.getUsuario().rol.idRol;
+      const rol = this.usuarioLoggedService.getUsuario().id_Rol;
       if (rol === 1) {
         this.router.navigate(['gestor/cajero']);
 
@@ -72,8 +72,8 @@ export class LoginComponent implements OnInit {
         console.log(response)
         this.usuarioLogged.nombre = response.nombre;
         this.usuarioLogged.idUsuario = response.id_usuario;
-        this.usuarioLogged.rol = new Rol();
-        this.usuarioLogged.rol.idRol = response.id_Rol;
+        // this.usuarioLogged.rol = new Rol();
+        this.usuarioLogged.id_Rol = response.id_Rol;
 
         // Redirigir según el rol del usuario
 
