@@ -23,8 +23,4 @@ export class ProductosServicioService {
   public getProductos2(){
     return this._httpClient.get(`${this.apiURL}getProduct.php`);
   }
-
-  public getCategorias() {
-    return this._httpClient.get(`${this.apiURL}getOccupiedLocalsDetails.php`);
-  }
 }
