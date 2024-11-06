@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
 
+export class LoginService {
 
 //  private apiUrl = "http://localhost:8000/";
 // private apiUrl = "http://localhost/backend-punto_de_venta/";
