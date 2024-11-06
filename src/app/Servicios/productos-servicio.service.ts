@@ -20,7 +20,22 @@ export class ProductosServicioService {
     return this._httpClient.get(`${this.apiURL}getProduct.php`);
   }
 
-  public getCategorias() {
-    return this._httpClient.get(`${this.apiURL}getOccupiedLocalsDetails.php`);
-  }
+  insertarProducto({
+    datos
+  }: {
+    datos: {
+      
+      id_categoria:  number,
+      codigo:        string,
+      nombre:        string,
+      stock:         number,
+      stock_min:     number,
+      stock_max:     number,
+      precio_venta:  number,
+      precio_compra: number
+    };
+  }) {
+    return this._httpClient.post(`${this.apiURL}insertProduct.php`, JSON.stringify(datos));
+
+  } 
 }

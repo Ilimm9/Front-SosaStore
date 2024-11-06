@@ -202,11 +202,11 @@
           #rol="ngModel"
         >
           @if(modoEdicion){
-            <option [ngValue]="usuario.rol" disabled selected>{{usuario.rol}}</option>
+            <option [ngValue]="usuario.id_Rol" disabled selected>{{usuario.id_Rol}}</option>
           } @else {
             <option value="" disabled selected>Seleccione un rol</option>
           }
-          <option *ngFor="let rol of roles" [ngValue]="rol">{{ rol.nombreRol }}</option>
+          <option *ngFor="let rol of roles" [ngValue]="rol.id_rol">{{ rol.nombre }}</option>
         </select>
         @if(rol.invalid && rol.touched){
           <div class="alert alert-danger mt-2 text-center">

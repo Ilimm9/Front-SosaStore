@@ -5,7 +5,7 @@
       Personal Activo
     </div>
     <div class="card-body">
-      @if(usuarios2.length > 0){
+      @if(usuarios.length > 0){
         <table id="datatablesSimple" #datatablesSimple>
           <thead class="table-dark">
             <tr>
@@ -25,7 +25,7 @@
             </tr>
           </tfoot> -->
           <tbody>
-            @for (usuario of usuarios2; track usuario.idUsuario) {
+            @for (usuario of usuarios; track usuario.idUsuario) {
               <tr>
                 <td> {{usuario.nombre}}  
                   {{usuario.primerApellido}} 

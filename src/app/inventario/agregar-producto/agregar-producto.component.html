@@ -2,7 +2,7 @@
 <div class="row my-5">
   <div class="col-xl-8 col-md-10 mx-auto">
     <div class="card shadow p-4">
-      <h3 class="card-title text-center mb-4">Formulario para Usuarios</h3>
+      <h3 class="card-title text-center mb-4">Formulario para Productos</h3>
       <hr class="divider">
     <form #productoForm="ngForm" (ngSubmit)="guardar()" novalidate>
       <div class="mb-3">
@@ -88,7 +88,7 @@
        
     </div>
 
-      @if(!modoEdicion){
+      <!-- @if(!modoEdicion){
         <div class="mb-3">
           <label for="password" class="form-label">Contraseña</label>
           <input
@@ -113,7 +113,7 @@
             </div>
           }
         </div>
-      }
+      } -->
       
 
       <div class="mb-3">
@@ -162,12 +162,12 @@
         >
           
             <option value="" disabled selected>Seleccione una categoria</option>
-            <option *ngFor="let rol of roles" [ngValue]="rol">{{ rol.nombreRol }}</option>
+            <option *ngFor="let categoria of categorias" [ngValue]="categoria">{{ categoria.nombre }}</option>
         </select>
-        @if(rol.invalid && rol.touched){
+        @if(categoria.invalid && categoria.touched){
           <div class="alert alert-danger mt-2 text-center">
-            @if(rol.errors?.['required']){
-              <small>El rol es requerido</small>
+            @if(categoria.errors?.['required']){
+              <small>La categoria es requerida</small>
             }
           </div>
         }

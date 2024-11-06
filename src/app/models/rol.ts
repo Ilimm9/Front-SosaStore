@@ -1,5 +1,5 @@
 export class Rol {
-    idRol: number
-    nombreRol: string
+    id_rol: number
+    nombre: string
 
 }

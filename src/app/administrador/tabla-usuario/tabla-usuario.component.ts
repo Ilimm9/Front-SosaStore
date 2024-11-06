@@ -19,9 +19,7 @@ export class TablaUsuarioComponent implements OnInit {
 
   @ViewChild('datatablesSimple') datatablesSimple!: ElementRef;
 
-  roles: Rol[] = [];
-  // usuarios: Usuario[] = []
-  usuarios2: Array<Usuario> = [];
+  usuarios: Array<Usuario> = [];
 
   constructor(private editarService: EditarService,
     private usuarioService: UsuarioService,
@@ -34,8 +32,8 @@ export class TablaUsuarioComponent implements OnInit {
 
   loadUsers(){
     this.usuarioService.getUsuarios().subscribe((result) => {
-      this.usuarios2 = Object.values(result);
-      console.log("Usuarios completos con roles:", this.usuarios2);
+      this.usuarios = Object.values(result);
+      console.log("Usuarios completos con roles:", this.usuarios);
       setTimeout(() => {
         this.initDataTable(); // Inicializa la DataTable después de que el DOM se haya actualizado
       }, 0);
@@ -54,7 +52,7 @@ export class TablaUsuarioComponent implements OnInit {
 
   initDataTable() {
     // Asegúrate de que hay datos en la tabla antes de inicializarla
-    if (this.datatablesSimple && this.usuarios2.length > 0) {
+    if (this.datatablesSimple && this.usuarios.length > 0) {
       // Inicializa la DataTable
       new DataTable(this.datatablesSimple.nativeElement, {
         labels: {
@@ -76,7 +74,7 @@ export class TablaUsuarioComponent implements OnInit {
       return;
     }
     let id = parseInt(dataId);
-    const usuario = this.usuarios2.find(u => u.idUsuario === id);
+    const usuario = this.usuarios.find(u => u.idUsuario === id);
     if (usuario) {
       console.log(usuario)
       this.editarService.seleccionarUsuario(usuario)
