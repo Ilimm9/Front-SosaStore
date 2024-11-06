@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Usuario } from '../../models/usuario';
-import { UsuarioEditarService } from '../../Servicios/usuario-editar.service';
+import { EditarService } from '../../Servicios/editar.service';
 import { Rol } from '../../models/rol';
 import { CommonModule } from '@angular/common';
 import { RolService } from '../../Servicios/rol.service';
@@ -20,51 +20,36 @@ export class FormularioUsuarioComponent implements OnInit {
   @ViewChild('usuarioForm') usuarioForm: NgForm;
 
   usuario: Usuario = new Usuario();
-  roles: Rol[] = [];
+  roles: Array<Rol> = [];
   modoEdicion: boolean = false;
 
   constructor(
-    private usuarioEditarService: UsuarioEditarService,
+    private editarService: EditarService,
     private usuarioService: UsuarioService,
     private rolService: RolService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.usuarioEditarService.usuarioSeleccionado$.subscribe((usuario) => {
+    this.editarService.usuarioSeleccionado$.subscribe((usuario) => {
       if (usuario) {
         this.usuario = usuario;
         this.modoEdicion = true;
       }
     });
 
-    this.rolService
-      .obtenerRoles()
-      .pipe(
-        map(
-          (
-            roles: any[]
-          ) =>
-            roles.map((rolData: any) => {
-              // rolData es de tipo any
-              const rol = new Rol();
-              rol.idRol = rolData.id_rol;
-              rol.nombreRol = rolData.nombre;
-              return rol;
-            })
-        )
-      )
-      .subscribe((transformedRoles) => {
-        this.roles = transformedRoles;
-      });
+    this.rolService.obtenerRoles().subscribe((result) => {
+      this.roles = Object.values(result);
+      console.log("Roles:", this.roles);
+    });
   }
 
   ngOnDestroy() {
-    this.usuarioEditarService.seleccionarUsuario(null);
+    this.editarService.seleccionarUsuario(null);
     // this.usuario = new Usuario();
   }
 
   guardar() {
-    console.log("metodo guardar")
+    console.log('metodo guardar');
     if (this.usuarioForm.invalid) {
       this.usuarioForm.form.markAllAsTouched();
       return;
@@ -81,34 +66,33 @@ export class FormularioUsuarioComponent implements OnInit {
       contrasenia: this.usuario.password,
       correo: this.usuario.correo,
       activo: this.usuario.activo,
-      id_Rol: this.usuario.rol.idRol,
+      id_Rol: this.usuario.id_Rol,
     };
-    //console.log(this.usuario);
-    //console.log(datos);
+    console.log(this.usuario);
+    console.log(datos);
 
     this.usuarioService.insertarUsuario({ datos }).subscribe({
       next: (result) => {
-        //console.log(result);
+        console.log(result);
         this.usuarioForm.resetForm();
         Swal.fire({
-          title: "Usuario Insertado!",
-          text: "Registro Exitoso!",
-          icon: "success"
+          title: 'Usuario Insertado!',
+          text: 'Registro Exitoso!',
+          icon: 'success',
         });
       },
       error: (errores) => {
         Swal.fire({
-          title: "Usuario No Insertado!",
+          title: 'Usuario No Insertado!',
           text: errores.toString(),
-          icon: "error"
+          icon: 'error',
         });
-      }
-
+      },
     });
   }
 
   actualizarUsuario() {
-    console.log('editar usuario')
+    console.log('editar usuario');
     if (this.usuarioForm.invalid) {
       this.usuarioForm.form.markAllAsTouched();
       return;
@@ -126,48 +110,46 @@ export class FormularioUsuarioComponent implements OnInit {
       contrasenia: this.usuario.password,
       correo: this.usuario.correo,
       activo: this.usuario.activo,
-      id_Rol: this.usuario.rol.idRol,
+      id_Rol: this.usuario.id_Rol,
     };
 
     console.log(this.usuario);
     console.log(datos);
 
     this.usuarioService.actualizarUsuario({ datos }).subscribe({
-
       next: (result) => {
         console.log(result);
         Swal.fire({
-          title: "Usuario Actualizado!",
-          text: "Actualizacion Exitosa!",
-          icon: "success"
+          title: 'Usuario Actualizado!',
+          text: 'Actualizacion Exitosa!',
+          icon: 'success',
         });
         // Limpiar el campo de contraseña en el modelo
-        this.usuario.password = "";
+        this.usuario.password = '';
         this.usuarioForm.reset();
         this.modoEdicion = false;
         setTimeout(() => {
-          this.usuario.password = ""; // Refuerza que el campo de contraseña esté vacío
+          this.usuario.password = ''; // Refuerza que el campo de contraseña esté vacío
         });
       },
       error: (errores) => {
         Swal.fire({
-          title: "Usuario No Actualizado!",
+          title: 'Usuario No Actualizado!',
           text: errores.toString(),
-          icon: "error"
+          icon: 'error',
         });
-      }
-
+      },
     });
   }
 
   desactivarUsuario() {
-    console.log('editar usuario')
+    console.log('editar usuario');
     if (this.usuarioForm.invalid) {
       this.usuarioForm.form.markAllAsTouched();
       return;
     }
     const dato = {
-      id_usuario: this.usuario.idUsuario
+      id_usuario: this.usuario.idUsuario,
     };
 
     this.usuarioService.desactivarUsuario(dato).subscribe({
@@ -175,21 +157,18 @@ export class FormularioUsuarioComponent implements OnInit {
         this.usuario.activo = 0;
         console.log(result);
         Swal.fire({
-          title: "Usuario Desactivado!",
-          text: "Accion aplicada",
-          icon: "success"
+          title: 'Usuario Desactivado!',
+          text: 'Accion aplicada',
+          icon: 'success',
         });
       },
       error: (errores) => {
         Swal.fire({
-          title: "Errror!",
+          title: 'Errror!',
           text: errores.toString(),
-          icon: "error"
+          icon: 'error',
         });
-      }
-
+      },
     });
-
   }
-
 }

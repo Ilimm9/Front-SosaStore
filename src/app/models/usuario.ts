@@ -10,5 +10,6 @@ export class Usuario {
   activo: number
   nombreUsuario: string
   password: string
-  rol: Rol
+  id_Rol: number
+  rol: string
 }
