@@ -16,9 +16,20 @@
           placeholder="Ingrese el nombre del producto"
           required
           minlength="3"
-
+          pattern="^[a-zA-Z0-9\s-_]+$"
           #nombre="ngModel"
         />
+        @if(nombre.invalid && nombre.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(nombre.errors?.['required']){
+              <small>El nombre es requerido</small>
+            } @else if (nombre.errors?.['minlength']){
+              <small>Debe tener al menos 3 caracteres</small>
+            } @else if (nombre.errors?.['pattern']){
+              <small>Solo se permiten letras ,numeros, espacios y los caracteres - y _</small>
+            }
+          </div>
+        }
 
       </div>
 
@@ -32,7 +43,7 @@
           [(ngModel)]="producto.codigo"
           placeholder="Ingrese el código del producto"
           required
-          minlength="5"
+          minlength="4"
          
           #codigo="ngModel"
         />
@@ -150,30 +161,25 @@
        
       </div>
 
-      <div class="mb-3">
-        <label for="categoria" class="form-label">Categoria</label>
-        <select
-          id="categoria"
-          name="categoria"
-          class="form-control"
-          [(ngModel)]="producto.id_categoria"
-          required
-          #categoria="ngModel"
-        >
-          
-            <option value="" disabled selected>Seleccione una categoria</option>
-            <option *ngFor="let categoria of categorias" [ngValue]="categoria">{{ categoria.nombre }}</option>
-        </select>
-        @if(categoria.invalid && categoria.touched){
-          <div class="alert alert-danger mt-2 text-center">
-            @if(categoria.errors?.['required']){
-              <small>La categoria es requerida</small>
-            }
-          </div>
-        }
-      </div>
-
      
+
+      <mat-form-field class="form-control" appearance="fill">
+        <mat-label>Seleccione una categoría</mat-label>
+        <input
+          type="text"
+          placeholder="Buscar categoría"
+          aria-label="Buscar"
+          matInput
+          [formControl]="categoriaControl"
+          [matAutocomplete]="auto"
+          >
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCategoryName">
+          <mat-option *ngFor="let categoria of filteredCategorias | async" [value]="categoria">
+            {{ categoria.nombre }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      
 
       <div class="d-flex justify-content-evenly">
         
