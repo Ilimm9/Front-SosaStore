@@ -28,7 +28,7 @@ export class AgregarProductoComponent implements OnInit {
   producto: Producto = new Producto();
   categorias: Categoria[] = [];
   modoEdicion: boolean = false;
-  productList: Array<Producto> = []; 
+  productList: Array<Producto> = []; //Aqui
   constructor(
     private editarService: EditarService,
     private productoService: ProductosServicioService,
@@ -48,9 +48,10 @@ export class AgregarProductoComponent implements OnInit {
         })
       );
     });
+    //Aqui
     this.productoService.getProductos().subscribe((result) => {
       this.productList = Object.values(result); 
-      if(!this.modoEdicion){
+      if(!this.modoEdicion){//Aqui
       this.producto.codigo = `PRO${this.productList.length + 1}`;}
     });
     

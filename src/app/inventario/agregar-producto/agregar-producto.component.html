@@ -123,32 +123,7 @@
         }
     </div>
 
-      <!-- @if(!modoEdicion){
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            [(ngModel)]="usuario.password"
-            placeholder=""
-            placeholder="Ingrese la contraseña"
-            required
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&]{8,}$"
-            #password="ngModel"
-          />
-          @if(password.invalid && password.touched){
-            <div class="alert alert-danger mt-2 text-center">
-              @if(password.errors?.['required']){
-                <small>La contraseña es requerida</small>
-              } @else if (password.errors?.['pattern']){
-                <small>Formato no valido</small>
-              }
-            </div>
-          }
-        </div>
-      } -->
+     
       
 
       <div class="mb-3">
