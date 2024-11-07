@@ -7,8 +7,7 @@ import { Producto } from '../models/producto';
   providedIn: 'root',
 })
 export class ProductosServicioService {
-  private apiURL =
-    "http://localhost/backend-punto_de_venta/";
+  private apiURL = 'http://localhost/backend-punto_de_venta/';
 
   constructor(private _httpClient: HttpClient) {}
 
@@ -16,26 +15,61 @@ export class ProductosServicioService {
     return this._httpClient.get(`${this.apiURL}selectProducto.php`);
   }
 
-  public getProductos2(){
+  public getProductos2() {
     return this._httpClient.get(`${this.apiURL}getProduct.php`);
   }
 
   insertarProducto({
-    datos
+    datos,
   }: {
     datos: {
-      
-      id_categoria:  number,
-      codigo:        string,
-      nombre:        string,
-      stock:         number,
-      stock_min:     number,
-      stock_max:     number,
-      precio_venta:  number,
-      precio_compra: number
+      id_categoria: number;
+      codigo: string;
+      nombre: string;
+      stock: number;
+      stock_min: number;
+      stock_max: number;
+      precio_venta: number;
+      precio_compra: number;
     };
   }) {
-    return this._httpClient.post(`${this.apiURL}insertProduct.php`, JSON.stringify(datos));
+    return this._httpClient.post(
+      `${this.apiURL}insertProduct.php`,
+      JSON.stringify(datos)
+    );
+  }
 
-  } 
+  updateProduct({
+    datos,
+  }: {
+    datos: {
+      id_producto: number;
+      id_categoria: number;
+      codigo: string;
+      nombre: string;
+      stock: number;
+      stock_min: number;
+      stock_max: number;
+      precio_venta: number;
+      precio_compra: number;
+    };
+  }) {
+    return this._httpClient.post(
+      `${this.apiURL}updateProduct.php`,
+      JSON.stringify(datos)
+    );
+  }
+
+  deleteProduct({
+    datos,
+  }: {
+    datos: {
+      id_producto: number;
+    };
+  }) {
+    return this._httpClient.post(
+      `${this.apiURL}deleteProduct.php`,
+      JSON.stringify(datos)
+    );
+  }
 }

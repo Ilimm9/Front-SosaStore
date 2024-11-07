@@ -1,59 +1,82 @@
-
 <div class="card mb-4 my-5">
-    <div class="card-header">
-      <i class="fas fa-table me-1"></i>
-      Productos
-    </div>
-    <div class="card-body">
-      @if(productList.length > 0){
-        <table id="datatablesSimple" #datatablesSimple>
-          <thead class="table-dark">
-            <tr>
-              <th style="display: none;">ID</th>
-              <th>Codigo</th>
-              <th>Producto</th>
-              <!-- <th>Categoria</th> -->
-              <th>Stock</th>
-              <th>Stock Mínimo</th>
-              <th>Stock Máximo</th>
-              <th>Precio Compra</th>
-              <th>Precio Venta</th>
-              <th></th>
-            </tr>
-          </thead>
-          <!-- <tfoot>
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Productos
+  </div>
+  <div class="card-body">
+    @if(productList.length > 0){
+    <table id="datatablesSimple" #datatablesSimple>
+      <thead class="table-dark">
+        <tr>
+          <th style="display: none">ID</th>
+          <th>Codigo</th>
+          <th>Producto</th>
+          <!-- <th>Categoria</th> -->
+          <th>Stock</th>
+          <th>Stock Mínimo</th>
+          <th>Stock Máximo</th>
+          <th>Precio Compra</th>
+          <th>Precio Venta</th>
+          <th></th>
+        </tr>
+      </thead>
+      <!-- <tfoot>
             <tr>
               <th>Nombre</th>
               <th>Telefono</th>
               <th>Usuario</th>
             </tr>
           </tfoot> -->
-          <tbody>
-            @for (producto of productList; track producto.id_producto) {
-              <tr>
-                <td style="display: none;">{{producto.id_producto}}</td>
-                <td> {{producto.codigo}}  </td>
-                <td> {{producto.nombre}} </td>
-                <td> {{producto.stock}} </td>
-                <td>{{producto.stock_min}}</td>
-                <td>{{producto.stock_max}}</td>
-                <td>{{producto.precio_compra}}</td>
-                <td>{{producto.precio_venta}}</td>
-                <td class="text-center" >
-                  <button 
-                  (click)="enviarProducto($event)"
-                  [attr.data-id]="producto.id_producto"
-                  routerLink="../agregarProducto" 
-                  type="button" 
-                  class="btn btn-primary btn-sm" 
-                  >Editar</button>
-                </td>
-              </tr>
-            }
-            
-          </tbody>
-        </table>
-      }
-      
-    </div>
+      <tbody>
+        @for (producto of productList; track producto.id_producto) {
+        <tr>
+          <td style="display: none">{{ producto.id_producto }}</td>
+          <td>{{ producto.codigo }}</td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.stock }}</td>
+          <td>{{ producto.stock_min }}</td>
+          <td>{{ producto.stock_max }}</td>
+          <td>{{ producto.precio_compra }}</td>
+          <td>{{ producto.precio_venta }}</td>
+          <td class="text-center">
+            <div class="d-flex justify-content-center gap-1">
+
+
+              <td class="text-center" >
+                <button 
+                (click)="enviarProducto($event)"
+                [attr.data-id]="producto.id_producto"
+                routerLink="../agregarProducto" 
+                type="button" 
+                class="btn btn-primary btn-sm" 
+                >Editar</button>
+              </td>
+              
+
+              <!-- <button
+                (click)="enviarProducto($event)"
+                [attr.data-id]="producto.id_producto"
+                routerLink="../agregarProducto"
+                type="button"
+                class="btn btn-sm p-1 d-flex align-items-center justify-content-center"
+                style="width: 30px; height: 30px"
+              >
+                <mat-icon style="font-size: 18px">edit</mat-icon>
+              </button> -->
+              <button
+                type="button"
+                class="btn btn-sm p-1 d-flex align-items-center justify-content-center"
+                style="width: 30px; height: 30px"
+                (click)="deleteProduct(producto.id_producto)"
+              >
+                <mat-icon style="font-size: 18px">delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
   </div>
+</div>
