@@ -2,20 +2,30 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Producto } from '../../models/producto';
 import { EditarService } from '../../Servicios/editar.service';
 import { ProductosServicioService } from '../../Servicios/productos-servicio.service';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormsModule, NgForm ,ReactiveFormsModule} from '@angular/forms';
 import { CategoriaService } from '../../Servicios/categoria.service';
 import { Categoria } from '../../models/categoria';
+import { CommonModule } from '@angular/common';
+import { map, startWith } from 'rxjs/operators';
+import Swal from 'sweetalert2';
+import { Observable } from 'rxjs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-agregar-producto',
   standalone: true,
-  imports: [],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,MatFormFieldModule,MatInputModule,MatAutocompleteModule,MatOptionModule],
   templateUrl: './agregar-producto.component.html',
   styleUrl: './agregar-producto.component.css'
 })
 export class AgregarProductoComponent implements OnInit {
-  @ViewChild('usuarioForm') usuarioForm: NgForm;
+  @ViewChild('productoForm') productoForm: NgForm;
 
+  categoriaControl = new FormControl();
+  filteredCategorias: Observable<any[]>; 
   producto: Producto = new Producto();
   categorias: Categoria[] = [];
   modoEdicion: boolean = false;
@@ -27,6 +37,76 @@ export class AgregarProductoComponent implements OnInit {
   ) { }
 
   ngOnInit() { 
+    this.categoriaService.getCategorias().subscribe((result) => {
+      this.categorias = Object.values(result);
+     // this.imprimirItems();
+      this.filteredCategorias = this.categoriaControl.valueChanges.pipe(
+        startWith(''),
+        map(value => {
+          const nombre = typeof value === 'string' ? value : value?.nombre || '';
+          return nombre ? this._filter(nombre) : this.categorias.slice();
+        })
+      );
+    });
+  }
+  private _filter(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    return this.categorias.filter(categoria => categoria.nombre.toLowerCase().includes(filterValue));
+  }
+  displayCategoryName(categoria: any): string {
+    return categoria ? categoria.nombre : '';
+  }
+
+  
+  guardar() {
+    console.log('metodo guardar');
+    if (this.productoForm.invalid) {
+      this.productoForm.form.markAllAsTouched();
+      return;
+    }
+
+    // Obtiene la categoría seleccionada del control
+    const categoriaSeleccionada = this.categoriaControl.value;
     
+    // Asigna el id de la categoría a producto.id_categoria si existe una categoría seleccionada
+    if (categoriaSeleccionada && categoriaSeleccionada.id_categoria) {
+        this.producto.id_categoria = categoriaSeleccionada.id_categoria;
+    } else {
+        console.error('No se ha seleccionado una categoría válida');
+        return; // Opcional: evita guardar si la categoría no es válida
+    }
+
+    const datos = {
+      id_categoria:  this.producto.id_categoria,
+      codigo:        this.producto.codigo,
+      nombre:        this.producto.nombre,
+      stock:         this.producto.stock,
+      stock_min:     this.producto.stock_min,
+      stock_max:     this.producto.stock_max,
+      precio_venta:  this.producto.precio_venta,
+      precio_compra: this.producto.precio_compra
+    };
+    console.log(this.producto);
+    console.log(datos);
+
+    this.productoService.insertarProducto({ datos }).subscribe({
+      next: (result) => {
+        console.log(result);
+        this.productoForm.resetForm();
+        this.categoriaControl.setValue("");
+        Swal.fire({
+          title: 'Producto Insertado!',
+          text: 'Registro Exitoso!',
+          icon: 'success',
+        });
+      },
+      error: (errores) => {
+        Swal.fire({
+          title: 'Producto No Insertado!',
+          text: errores.toString(),
+          icon: 'error',
+        });
+      },
+    });
   }
 }

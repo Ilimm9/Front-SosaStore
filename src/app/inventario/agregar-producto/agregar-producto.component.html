@@ -1,1 +1,197 @@
-<p>agregar-producto works!</p>
+
+<div class="row my-5">
+  <div class="col-xl-8 col-md-10 mx-auto">
+    <div class="card shadow p-4">
+      <h3 class="card-title text-center mb-4">Formulario para Productos</h3>
+      <hr class="divider">
+    <form #productoForm="ngForm" (ngSubmit)="guardar()" novalidate>
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          id="nombre"
+          name="nombre"
+          [(ngModel)]="producto.nombre"
+          placeholder="Ingrese el nombre del producto"
+          required
+          minlength="3"
+          pattern="^[a-zA-Z0-9\s-_]+$"
+          #nombre="ngModel"
+        />
+        @if(nombre.invalid && nombre.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(nombre.errors?.['required']){
+              <small>El nombre es requerido</small>
+            } @else if (nombre.errors?.['minlength']){
+              <small>Debe tener al menos 3 caracteres</small>
+            } @else if (nombre.errors?.['pattern']){
+              <small>Solo se permiten letras ,numeros, espacios y los caracteres - y _</small>
+            }
+          </div>
+        }
+
+      </div>
+
+      <div class="mb-3">
+        <label for="codigo" class="form-label">Código</label>
+        <input
+          type="text"
+          class="form-control"
+          id="codigo"
+          name="codigo"
+          [(ngModel)]="producto.codigo"
+          placeholder="Ingrese el código del producto"
+          required
+          minlength="4"
+         
+          #codigo="ngModel"
+        />
+       
+      </div>
+
+      <div class="mb-3">
+        <label for="stock" class="form-label">Stock</label>
+        <input 
+          type="number" 
+          class="form-control" 
+          id="stock" 
+          name="stock" 
+          [(ngModel)]="producto.stock"
+          placeholder="Ingrese el stock del producto"
+          required
+         
+          
+          #stock="ngModel"
+        >
+        
+    </div>
+
+      <div class="mb-3">
+        <label for="stock_min" class="form-label">Stock Minimo</label>
+        <input
+          type="number"
+          class="form-control"
+          id="stock_min"
+          name="stock_min"
+          [(ngModel)]="producto.stock_min"
+          placeholder="Ingrese el stock minimo requerido"
+          required
+          
+          #stock_min="ngModel"
+        />
+      
+      </div>
+
+      <div class="mb-3">
+        <label for="stock_max" class="form-label">Stock Maximo</label>
+        <input 
+          type="number" 
+          class="form-control" 
+          id="stock_max" 
+          name="stock_max" 
+          [(ngModel)]="producto.stock_max"
+          placeholder="Ingrese el stock maximo requerido"
+          required
+
+          #stock_max="ngModel"
+        >
+       
+    </div>
+
+      <!-- @if(!modoEdicion){
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            [(ngModel)]="usuario.password"
+            placeholder=""
+            placeholder="Ingrese la contraseña"
+            required
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&]{8,}$"
+            #password="ngModel"
+          />
+          @if(password.invalid && password.touched){
+            <div class="alert alert-danger mt-2 text-center">
+              @if(password.errors?.['required']){
+                <small>La contraseña es requerida</small>
+              } @else if (password.errors?.['pattern']){
+                <small>Formato no valido</small>
+              }
+            </div>
+          }
+        </div>
+      } -->
+      
+
+      <div class="mb-3">
+        <label for="precio_venta" class="form-label">Precio de Venta</label>
+        <input
+          type="number"
+          class="form-control"
+          id="precio_venta"
+          name="precio_venta"
+          [(ngModel)]="producto.precio_venta"
+          placeholder=""
+          placeholder="Ingrese el precio de venta del producto"
+          required
+          
+          #precio_venta="ngModel"
+        />
+       
+      </div>
+
+      <div class="mb-3">
+        <label for="precio_compra" class="form-label">Precio de Compra</label>
+        <input
+          type="number"
+          class="form-control"
+          id="precio_compra"
+          name="precio_compra"
+          [(ngModel)]="producto.precio_compra"
+          placeholder=""
+          placeholder="Ingrese el precio de compra del producto"
+          required
+          
+          #precio_compra="ngModel"
+        />
+       
+      </div>
+
+     
+
+      <mat-form-field class="form-control" appearance="fill">
+        <mat-label>Seleccione una categoría</mat-label>
+        <input
+          type="text"
+          placeholder="Buscar categoría"
+          aria-label="Buscar"
+          matInput
+          [formControl]="categoriaControl"
+          [matAutocomplete]="auto"
+          >
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCategoryName">
+          <mat-option *ngFor="let categoria of filteredCategorias | async" [value]="categoria">
+            {{ categoria.nombre }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      
+
+      <div class="d-flex justify-content-evenly">
+        
+        
+          <button 
+          type="submit" 
+          class="btn btn-primary"
+          >Agregar</button>
+        
+        
+      </div>
+    </form>
+    </div>
+  </div>
+</div>

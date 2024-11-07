@@ -8,4 +8,5 @@ export class Producto {
     stock_max:     number;
     precio_venta:  number;
     precio_compra: number;
+    nombre_categoria:string;
 }
