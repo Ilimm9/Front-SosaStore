@@ -23,13 +23,12 @@ import { MatOptionModule } from '@angular/material/core';
 })
 export class AgregarProductoComponent implements OnInit {
   @ViewChild('productoForm') productoForm: NgForm;
-
   categoriaControl = new FormControl();
   filteredCategorias: Observable<any[]>; 
   producto: Producto = new Producto();
   categorias: Categoria[] = [];
   modoEdicion: boolean = false;
-
+  productList: Array<Producto> = []; 
   constructor(
     private editarService: EditarService,
     private productoService: ProductosServicioService,
@@ -37,6 +36,7 @@ export class AgregarProductoComponent implements OnInit {
   ) { }
 
   ngOnInit() { 
+    
     this.categoriaService.getCategorias().subscribe((result) => {
       this.categorias = Object.values(result);
      // this.imprimirItems();
@@ -48,6 +48,12 @@ export class AgregarProductoComponent implements OnInit {
         })
       );
     });
+    this.productoService.getProductos().subscribe((result) => {
+      this.productList = Object.values(result); 
+      if(!this.modoEdicion){
+      this.producto.codigo = `PRO${this.productList.length + 1}`;}
+    });
+    
   }
   private _filter(value: string): any[] {
     const filterValue = value.toLowerCase();
