@@ -38,13 +38,14 @@
           <label for="codigo" class="form-label">Código</label>
           <input
             type="text"
-            class="form-control"
+            class="form-control readonly-input"
             id="codigo"
             name="codigo"
             [(ngModel)]="producto.codigo"
-            placeholder="Ingrese el código del producto"
+            class="form-control readonly-input"
             required
-            minlength="4"
+            value=""
+            readonly
             #codigo="ngModel"
           />
         </div>
@@ -59,42 +60,74 @@
             [(ngModel)]="producto.stock"
             placeholder="Ingrese el stock del producto"
             required
+            pattern="^[1-9][0-9]*$"
             #stock="ngModel"
           />
+          @if(stock.invalid && stock.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(stock.errors?.['required']){
+            <small>El stock es requerido</small>
+            } @else if (stock.errors?.['pattern']){
+            <small>Solo se permiten numeros enteros mayores a cero</small>
+            }
+          </div>
+          }
         </div>
 
         <div class="mb-3">
           <label for="stock_min" class="form-label">Stock Minimo</label>
           <input
-            type="number"
+            type="text"
             class="form-control"
             id="stock_min"
             name="stock_min"
             [(ngModel)]="producto.stock_min"
             placeholder="Ingrese el stock minimo requerido"
             required
+            pattern="^[1-9][0-9]*$"
             #stock_min="ngModel"
           />
+          @if(stock_min.invalid && stock_min.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(stock_min.errors?.['required']){
+            <small>El stock minimo es requerido</small>
+            } @else if (stock_min.errors?.['pattern']){
+            <small>Solo se permiten numeros enteros mayores a cero</small>
+            }
+          </div>
+          }
         </div>
 
         <div class="mb-3">
           <label for="stock_max" class="form-label">Stock Maximo</label>
           <input
-            type="number"
+            type="text"
             class="form-control"
             id="stock_max"
             name="stock_max"
             [(ngModel)]="producto.stock_max"
             placeholder="Ingrese el stock maximo requerido"
             required
+            pattern="^[1-9][0-9]*$"
             #stock_max="ngModel"
           />
+          @if(stock_max.invalid && stock_max.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(stock_max.errors?.['required']){
+            <small>El stock maximo es requerido</small>
+            } @else if (stock_max.errors?.['pattern']){
+            <small>Solo se permiten numeros enteros mayores a cero</small>
+            }
+          </div>
+          }
         </div>
 
         <div class="mb-3">
           <label for="precio_venta" class="form-label">Precio de Venta</label>
           <input
             type="number"
+            min="0"
+            step="0.01"
             class="form-control"
             id="precio_venta"
             name="precio_venta"
@@ -104,12 +137,23 @@
             required
             #precio_venta="ngModel"
           />
+          @if(precio_venta.invalid && precio_venta.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(precio_venta.errors?.['required']){
+            <small>El precio de venta es requerido</small>
+            }@else{
+            <small>Formato incorrecto de precio</small>
+            }
+          </div>
+          }
         </div>
 
         <div class="mb-3">
           <label for="precio_compra" class="form-label">Precio de Compra</label>
           <input
             type="number"
+            min="0"
+            step="0.01"
             class="form-control"
             id="precio_compra"
             name="precio_compra"
@@ -119,6 +163,15 @@
             required
             #precio_compra="ngModel"
           />
+          @if(precio_compra.invalid && precio_compra.touched){
+          <div class="alert alert-danger mt-2 text-center">
+            @if(precio_compra.errors?.['required']){
+            <small>El precio de compra es requerido</small>
+            }@else {
+            <small>Formato incorrecto de precio</small>
+            }
+          </div>
+          }
         </div>
 
         <mat-form-field class="form-control" appearance="fill">
@@ -155,13 +208,7 @@
             Editar
           </button>
           } @else {
-          <button
-            type="submit"
-            class="btn btn-primary"
-            
-          >
-            Agregar
-          </button>
+          <button type="submit" class="btn btn-primary">Agregar</button>
           }
         </div>
       </form>

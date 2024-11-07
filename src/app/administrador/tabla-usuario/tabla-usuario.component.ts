@@ -67,6 +67,7 @@ export class TablaUsuarioComponent implements OnInit {
 
   enviarUsuario(event: MouseEvent) {
     let dataId = (event.target as HTMLButtonElement).getAttribute('data-id');
+    console.log('enviamos a usuario');
     console.log(dataId)
     if (dataId === null) {
       return;

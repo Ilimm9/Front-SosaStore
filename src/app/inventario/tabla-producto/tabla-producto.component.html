@@ -40,7 +40,20 @@
           <td>{{ producto.precio_venta }}</td>
           <td class="text-center">
             <div class="d-flex justify-content-center gap-1">
-              <button
+
+
+              <td class="text-center" >
+                <button 
+                (click)="enviarProducto($event)"
+                [attr.data-id]="producto.id_producto"
+                routerLink="../agregarProducto" 
+                type="button" 
+                class="btn btn-primary btn-sm" 
+                >Editar</button>
+              </td>
+              
+
+              <!-- <button
                 (click)="enviarProducto($event)"
                 [attr.data-id]="producto.id_producto"
                 routerLink="../agregarProducto"
@@ -49,7 +62,7 @@
                 style="width: 30px; height: 30px"
               >
                 <mat-icon style="font-size: 18px">edit</mat-icon>
-              </button>
+              </button> -->
               <button
                 type="button"
                 class="btn btn-sm p-1 d-flex align-items-center justify-content-center"

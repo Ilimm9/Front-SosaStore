@@ -2,7 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Producto } from '../../models/producto';
 import { EditarService } from '../../Servicios/editar.service';
 import { ProductosServicioService } from '../../Servicios/productos-servicio.service';
-import { FormControl, FormsModule, NgForm ,ReactiveFormsModule} from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CategoriaService } from '../../Servicios/categoria.service';
 import { Categoria } from '../../models/categoria';
 import { CommonModule } from '@angular/common';
@@ -17,34 +22,43 @@ import { MatOptionModule } from '@angular/material/core';
 @Component({
   selector: 'app-agregar-producto',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule,MatFormFieldModule,MatInputModule,MatAutocompleteModule,MatOptionModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+  ],
   templateUrl: './agregar-producto.component.html',
-  styleUrl: './agregar-producto.component.css'
+  styleUrl: './agregar-producto.component.css',
 })
 export class AgregarProductoComponent implements OnInit {
   @ViewChild('productoForm') productoForm: NgForm;
 
   categoriaControl = new FormControl();
-  filteredCategorias: Observable<any[]>; 
+  filteredCategorias: Observable<any[]>;
   producto: Producto = new Producto();
   categorias: Array<Categoria> = [];
-  // productList: Array<Producto> = [];
+  productList: Array<Producto> = [];
   modoEdicion: boolean = false;
 
   constructor(
     private editarService: EditarService,
     private productoService: ProductosServicioService,
     private categoriaService: CategoriaService
-  ) { }
+  ) {}
 
-  ngOnInit() { 
+  ngOnInit() {
     this.categoriaService.getCategorias().subscribe((result) => {
       this.categorias = Object.values(result);
 
       this.filteredCategorias = this.categoriaControl.valueChanges.pipe(
         startWith(''),
-        map(value => {
-          const nombre = typeof value === 'string' ? value : value?.nombre || '';
+        map((value) => {
+          const nombre =
+            typeof value === 'string' ? value : value?.nombre || '';
           return nombre ? this._filter(nombre) : this.categorias.slice();
         })
       );
@@ -53,8 +67,18 @@ export class AgregarProductoComponent implements OnInit {
         if (producto) {
           this.producto = producto;
           this.modoEdicion = true;
-          const categoriaSeleccionada = this.categorias.find(cat => cat.id_categoria === producto.id_categoria);
+          const categoriaSeleccionada = this.categorias.find(
+            (cat) => cat.id_categoria === producto.id_categoria
+          );
           this.categoriaControl.setValue(categoriaSeleccionada);
+        }
+        //Aqui
+        if (!this.modoEdicion) {
+          this.productoService.getProductos().subscribe((result) => {
+            this.productList = Object.values(result);
+            //Aqui
+            this.producto.codigo = `PRO${this.productList.length + 1}`;
+          });
         }
       });
     });
@@ -62,40 +86,41 @@ export class AgregarProductoComponent implements OnInit {
 
   private _filter(value: string): any[] {
     const filterValue = value.toLowerCase();
-    return this.categorias.filter(categoria => categoria.nombre.toLowerCase().includes(filterValue));
+    return this.categorias.filter((categoria) =>
+      categoria.nombre.toLowerCase().includes(filterValue)
+    );
   }
   displayCategoryName(categoria: any): string {
     return categoria ? categoria.nombre : '';
   }
 
-  
   guardar() {
     console.log('metodo guardar');
-    // if (this.productoForm.invalid) {
-    //   this.productoForm.form.markAllAsTouched();
-    //   return;
-    // }
+    if (this.productoForm.invalid) {
+      this.productoForm.form.markAllAsTouched();
+      return;
+    }
 
     // Obtiene la categoría seleccionada del control
     const categoriaSeleccionada = this.categoriaControl.value;
-    
+
     // Asigna el id de la categoría a producto.id_categoria si existe una categoría seleccionada
     if (categoriaSeleccionada && categoriaSeleccionada.id_categoria) {
-        this.producto.id_categoria = categoriaSeleccionada.id_categoria;
+      this.producto.id_categoria = categoriaSeleccionada.id_categoria;
     } else {
-        console.error('No se ha seleccionado una categoría válida');
-        return; // Opcional: evita guardar si la categoría no es válida
+      console.error('No se ha seleccionado una categoría válida');
+      return; // Opcional: evita guardar si la categoría no es válida
     }
 
     const datos = {
-      id_categoria:  this.producto.id_categoria,
-      codigo:        this.producto.codigo,
-      nombre:        this.producto.nombre,
-      stock:         this.producto.stock,
-      stock_min:     this.producto.stock_min,
-      stock_max:     this.producto.stock_max,
-      precio_venta:  this.producto.precio_venta,
-      precio_compra: this.producto.precio_compra
+      id_categoria: this.producto.id_categoria,
+      codigo: this.producto.codigo,
+      nombre: this.producto.nombre,
+      stock: this.producto.stock,
+      stock_min: this.producto.stock_min,
+      stock_max: this.producto.stock_max,
+      precio_venta: this.producto.precio_venta,
+      precio_compra: this.producto.precio_compra,
     };
     console.log(this.producto);
     console.log(datos);
@@ -104,7 +129,7 @@ export class AgregarProductoComponent implements OnInit {
       next: (result) => {
         console.log(result);
         this.productoForm.resetForm();
-        this.categoriaControl.setValue("");
+        this.categoriaControl.setValue('');
         Swal.fire({
           title: 'Producto Insertado!',
           text: 'Registro Exitoso!',
@@ -123,7 +148,7 @@ export class AgregarProductoComponent implements OnInit {
 
   actualizarProducto() {
     console.log('editar producto');
-    if(this.productoForm.invalid){
+    if (this.productoForm.invalid) {
       this.productoForm.form.markAllAsTouched();
       return;
     }
@@ -134,14 +159,14 @@ export class AgregarProductoComponent implements OnInit {
 
     const datos = {
       id_producto: this.producto.id_producto,
-      id_categoria:  this.producto.id_categoria,
-      codigo:        this.producto.codigo,
-      nombre:        this.producto.nombre,
-      stock:         this.producto.stock,
-      stock_min:     this.producto.stock_min,
-      stock_max:     this.producto.stock_max,
-      precio_venta:  this.producto.precio_venta,
-      precio_compra: this.producto.precio_compra
+      id_categoria: this.producto.id_categoria,
+      codigo: this.producto.codigo,
+      nombre: this.producto.nombre,
+      stock: this.producto.stock,
+      stock_min: this.producto.stock_min,
+      stock_max: this.producto.stock_max,
+      precio_venta: this.producto.precio_venta,
+      precio_compra: this.producto.precio_compra,
     };
 
     console.log(this.producto);
@@ -156,8 +181,8 @@ export class AgregarProductoComponent implements OnInit {
           icon: 'success',
         });
         this.productoForm.reset();
-        this.categoriaControl.setValue("");
-        this.modoEdicion=false;
+        this.categoriaControl.setValue('');
+        this.modoEdicion = false;
         // setTimeout(() => {
         //   this.
         // });

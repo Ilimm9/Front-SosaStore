@@ -86,3 +86,9 @@ mat-form-field {
 mat-form-field {
   margin-bottom: 1rem;
 }
+
+.readonly-input {
+  background-color: #e9ecef; /* Color gris claro */
+  color: #6c757d; /* Texto gris oscuro */
+  cursor: not-allowed;
+}
