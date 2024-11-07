@@ -43,10 +43,10 @@ export class FormularioUsuarioComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
-    this.editarService.seleccionarUsuario(null);
-    // this.usuario = new Usuario();
-  }
+  // ngOnDestroy() {
+  //   this.editarService.seleccionarUsuario(null);
+  //   // this.usuario = new Usuario();
+  // }
 
   guardar() {
     console.log('metodo guardar');
@@ -68,8 +68,8 @@ export class FormularioUsuarioComponent implements OnInit {
       activo: this.usuario.activo,
       id_Rol: this.usuario.id_Rol,
     };
-    console.log(this.usuario);
-    console.log(datos);
+    // console.log(this.usuario);
+    // console.log(datos);
 
     this.usuarioService.insertarUsuario({ datos }).subscribe({
       next: (result) => {

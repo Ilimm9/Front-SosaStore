@@ -2,16 +2,14 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DataTable } from 'simple-datatables';
 import { Usuario } from '../../models/usuario';
-import { Rol } from '../../models/rol';
 import { EditarService } from '../../Servicios/editar.service';
 import { UsuarioService } from '../../Servicios/usuario.service';
-import { map } from 'rxjs';
-import { RolService } from '../../Servicios/rol.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tabla-usuario',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, MatIconModule],
   templateUrl: './tabla-usuario.component.html',
   styleUrl: './tabla-usuario.component.css'
 })

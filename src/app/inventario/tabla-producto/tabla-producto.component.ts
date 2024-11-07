@@ -4,11 +4,13 @@ import { ProductosServicioService } from '../../Servicios/productos-servicio.ser
 import { DataTable } from 'simple-datatables';
 import { RouterLink } from '@angular/router';
 import { EditarService } from '../../Servicios/editar.service';
+import { MatIconModule } from '@angular/material/icon';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tabla-producto',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, MatIconModule],
   templateUrl: './tabla-producto.component.html',
   styleUrl: './tabla-producto.component.css',
 })
@@ -16,7 +18,10 @@ export class TablaProductoComponent implements OnInit {
   @ViewChild('datatablesSimple') datatablesSimple!: ElementRef;
   productList: Array<Producto> = [];
 
-  constructor(private _productoServicio: ProductosServicioService, private editarService: EditarService) {}
+  constructor(
+    private _productoServicio: ProductosServicioService,
+    private editarService: EditarService
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -25,6 +30,7 @@ export class TablaProductoComponent implements OnInit {
   loadProducts() {
     this._productoServicio.getProductos().subscribe((result) => {
       this.productList = Object.values(result);
+      console.log(this.productList);
       // this.imprimirItems();
       setTimeout(() => {
         this.initDataTable(); // Inicializa la DataTable después de que el DOM se haya actualizado
@@ -66,15 +72,42 @@ export class TablaProductoComponent implements OnInit {
 
   enviarProducto(event: MouseEvent) {
     let dataId = (event.target as HTMLButtonElement).getAttribute('data-id');
-    console.log(dataId)
+    console.log(dataId);
     if (dataId === null) {
       return;
     }
     let id = parseInt(dataId);
-    const producto = this.productList.find(p => p.id_producto === id);
+    const producto = this.productList.find((p) => p.id_producto === id);
     if (producto) {
-      console.log(producto)
-      this.editarService.seleccionarProducto(producto)
+      console.log(producto);
+      this.editarService.seleccionarProducto(producto);
     }
+  }
+
+  deleteProduct(id_producto: number) {
+    const datos = {
+      id_producto: id_producto,
+    };
+    this._productoServicio.deleteProduct({ datos }).subscribe({
+      next: (result) => {
+        // Mensaje de éxito
+        Swal.fire({
+          title: 'Producto eliminado!',
+          text: 'El producto se ha eliminado con éxito.',
+          icon: 'success',
+        });
+        this.loadProducts();
+      },
+      error: (error) => {
+        // Manejo del error
+        Swal.fire({
+          title: 'Error al eliminar el producto',
+          text: 'Hubo un problema al intentar eliminar el producto. Por favor, inténtalo nuevamente.',
+          icon: 'error',
+        });
+        console.error('Error al eliminar el producto:', error); // O puedes registrar el error para depuración
+      }
+    });
+    
   }
 }

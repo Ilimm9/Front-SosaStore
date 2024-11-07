@@ -27,7 +27,8 @@ export class AgregarProductoComponent implements OnInit {
   categoriaControl = new FormControl();
   filteredCategorias: Observable<any[]>; 
   producto: Producto = new Producto();
-  categorias: Categoria[] = [];
+  categorias: Array<Categoria> = [];
+  // productList: Array<Producto> = [];
   modoEdicion: boolean = false;
 
   constructor(
@@ -39,7 +40,7 @@ export class AgregarProductoComponent implements OnInit {
   ngOnInit() { 
     this.categoriaService.getCategorias().subscribe((result) => {
       this.categorias = Object.values(result);
-     // this.imprimirItems();
+
       this.filteredCategorias = this.categoriaControl.valueChanges.pipe(
         startWith(''),
         map(value => {
@@ -47,8 +48,18 @@ export class AgregarProductoComponent implements OnInit {
           return nombre ? this._filter(nombre) : this.categorias.slice();
         })
       );
+
+      this.editarService.productSeleccionado$.subscribe((producto) => {
+        if (producto) {
+          this.producto = producto;
+          this.modoEdicion = true;
+          const categoriaSeleccionada = this.categorias.find(cat => cat.id_categoria === producto.id_categoria);
+          this.categoriaControl.setValue(categoriaSeleccionada);
+        }
+      });
     });
   }
+
   private _filter(value: string): any[] {
     const filterValue = value.toLowerCase();
     return this.categorias.filter(categoria => categoria.nombre.toLowerCase().includes(filterValue));
@@ -60,10 +71,10 @@ export class AgregarProductoComponent implements OnInit {
   
   guardar() {
     console.log('metodo guardar');
-    if (this.productoForm.invalid) {
-      this.productoForm.form.markAllAsTouched();
-      return;
-    }
+    // if (this.productoForm.invalid) {
+    //   this.productoForm.form.markAllAsTouched();
+    //   return;
+    // }
 
     // Obtiene la categoría seleccionada del control
     const categoriaSeleccionada = this.categoriaControl.value;
@@ -103,6 +114,57 @@ export class AgregarProductoComponent implements OnInit {
       error: (errores) => {
         Swal.fire({
           title: 'Producto No Insertado!',
+          text: errores.toString(),
+          icon: 'error',
+        });
+      },
+    });
+  }
+
+  actualizarProducto() {
+    console.log('editar producto');
+    if(this.productoForm.invalid){
+      this.productoForm.form.markAllAsTouched();
+      return;
+    }
+
+    // Asigna la categoría seleccionada al producto antes de enviar la actualización
+    const categoriaSeleccionada = this.categoriaControl.value;
+    this.producto.id_categoria = categoriaSeleccionada.id_categoria;
+
+    const datos = {
+      id_producto: this.producto.id_producto,
+      id_categoria:  this.producto.id_categoria,
+      codigo:        this.producto.codigo,
+      nombre:        this.producto.nombre,
+      stock:         this.producto.stock,
+      stock_min:     this.producto.stock_min,
+      stock_max:     this.producto.stock_max,
+      precio_venta:  this.producto.precio_venta,
+      precio_compra: this.producto.precio_compra
+    };
+
+    console.log(this.producto);
+    console.log(datos);
+
+    this.productoService.updateProduct({ datos }).subscribe({
+      next: (result) => {
+        console.log(result);
+        Swal.fire({
+          title: 'Producto actualizado!',
+          text: 'Actualización Exitosa!',
+          icon: 'success',
+        });
+        this.productoForm.reset();
+        this.categoriaControl.setValue("");
+        this.modoEdicion=false;
+        // setTimeout(() => {
+        //   this.
+        // });
+      },
+      error: (errores) => {
+        Swal.fire({
+          title: 'Producto No Actualizado!',
           text: errores.toString(),
           icon: 'error',
         });
