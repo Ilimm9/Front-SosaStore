@@ -27,4 +27,32 @@ export class CategoriaService {
       JSON.stringify(datos)
     );
   }
+  updateCategoria({
+    datos,
+  }: {
+    datos: {
+      id_categoria:number;
+      nombre: string;
+      descripcion: string;
+    };
+  }) {
+    return this._httpClient.post(
+      `${this.apiURL}updateCategoria.php`,
+      JSON.stringify(datos)
+    );
+  }
+
+  deleteCategoria({
+    datos,
+  }: {
+    datos: {
+      id_categoria: number;
+    };
+  }) {
+    return this._httpClient.post(
+      `${this.apiURL}deleteCategoria.php`,
+      JSON.stringify(datos)
+    );
+  }
+  
 }

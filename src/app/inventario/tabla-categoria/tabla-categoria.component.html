@@ -1,0 +1,64 @@
+<div class="card mb-4 my-5">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Categorias
+    </div>
+    <div class="card-body">
+      @if(categoriaList.length > 0){
+      <table id="datatablesSimple" #datatablesSimple>
+        <thead class="table-dark">
+          <tr>
+            <th style="display: none">ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (categoria of categoriaList; track categoria.id_categoria) {
+          <tr>
+            <td style="display: none">{{ categoria.id_categoria }}</td>
+            <td>{{ categoria.nombre }}</td>
+            <td>{{ categoria.descripcion }}</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center gap-1">
+  
+  
+                <td class="text-center" >
+                  <button 
+                  (click)="enviarCategoria($event)"
+                  [attr.data-id]="categoria.id_categoria"
+                  routerLink="../formularioCategoria" 
+                  type="button" 
+                  class="btn btn-primary btn-sm" 
+                  >Editar</button>
+                </td>
+                
+  
+                <!-- <button
+                  (click)="enviarProducto($event)"
+                  [attr.data-id]="producto.id_producto"
+                  routerLink="../agregarProducto"
+                  type="button"
+                  class="btn btn-sm p-1 d-flex align-items-center justify-content-center"
+                  style="width: 30px; height: 30px"
+                >
+                  <mat-icon style="font-size: 18px">edit</mat-icon>
+                </button> -->
+                <button
+                  type="button"
+                  class="btn btn-sm p-1 d-flex align-items-center justify-content-center"
+                  style="width: 30px; height: 30px"
+                  (click)="deleteCategoria(categoria.id_categoria)"
+                >
+                  <mat-icon style="font-size: 18px">delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }
+    </div>
+  </div>
