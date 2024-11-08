@@ -36,12 +36,15 @@ import { MatOptionModule } from '@angular/material/core';
 })
 export class AgregarProductoComponent implements OnInit {
   @ViewChild('productoForm') productoForm: NgForm;
+  @ViewChild('categoriaNForm')categoriaNForm:NgForm;
   categoriaControl = new FormControl();
   filteredCategorias: Observable<any[]>;
   producto: Producto = new Producto();
   categorias: Array<Categoria> = [];
   productList: Array<Producto> = [];
   modoEdicion: boolean = false;
+  visibleModal: boolean=false;
+  nuevaCategoria:Categoria;
   constructor(
     private editarService: EditarService,
     private productoService: ProductosServicioService,
@@ -49,9 +52,13 @@ export class AgregarProductoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+   this.iniciarCategorias();
+    
+  }
+  iniciarCategorias(){
     this.categoriaService.getCategorias().subscribe((result) => {
       this.categorias = Object.values(result);
-
+      
       this.filteredCategorias = this.categoriaControl.valueChanges.pipe(
         startWith(''),
         map((value) => {
@@ -86,8 +93,51 @@ export class AgregarProductoComponent implements OnInit {
       if(!this.modoEdicion){//Aqui
       this.producto.codigo = `PRO${this.productList.length + 1}`;}
     });
-    
   }
+  abrirModal() {
+    this.visibleModal = true;
+    this.nuevaCategoria = new Categoria(); // Reinicia el formulario
+}
+
+cerrarModal() {
+    this.visibleModal = false;
+    
+} 
+
+guardarNuevaCategoria(){
+  if (this.categoriaNForm.invalid) {
+    this.categoriaNForm.form.markAllAsTouched();
+    return;
+  }
+  const datos = {
+    
+    nombre: this.nuevaCategoria.nombre,
+    descripcion : this.nuevaCategoria.descripcion
+  };
+
+  this.categoriaService.insertarCategoria({ datos }).subscribe({
+    next: (result) => {
+      console.log(result);
+      this.iniciarCategorias();
+      Swal.fire({
+        title: 'Categoria Insertada!',
+        text: 'Registro Exitoso!',
+        icon: 'success',
+      });      
+      
+      // Cierra el modal y reinicia el formulario
+      this.cerrarModal();
+    },
+    error: (errores) => {
+      Swal.fire({
+        title: 'Categoria No Insertado!',
+        text: errores.toString(),
+        icon: 'error',
+      });
+    },
+  });
+}
+
 
   private _filter(value: string): any[] {
     const filterValue = value.toLowerCase();

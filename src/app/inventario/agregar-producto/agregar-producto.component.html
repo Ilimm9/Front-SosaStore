@@ -174,28 +174,85 @@
           }
         </div>
 
-        <mat-form-field class="form-control" appearance="fill">
-          <mat-label>Seleccione una categoría</mat-label>
-          <input
-            type="text"
-            placeholder="Buscar categoría"
-            aria-label="Buscar"
-            matInput
-            [formControl]="categoriaControl"
-            [matAutocomplete]="auto"
-          />
-          <mat-autocomplete
-            #auto="matAutocomplete"
-            [displayWith]="displayCategoryName"
-          >
-            <mat-option
-              *ngFor="let categoria of filteredCategorias | async"
-              [value]="categoria"
+        <div class="mb-3 d-flex ">
+          <mat-form-field class="flex-grow-1 " appearance="fill">
+            <mat-label>Seleccione una categoría</mat-label>
+            <input
+              class="mat-form-field-grosor"
+              type="text"
+              placeholder="Buscar categoría"
+              aria-label="Buscar"
+              matInput
+              [formControl]="categoriaControl"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              [displayWith]="displayCategoryName"
             >
-              {{ categoria.nombre }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+              <mat-option
+                *ngFor="let categoria of filteredCategorias | async"
+                [value]="categoria"
+              >
+                {{ categoria.nombre }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div class=" btn-grosor">
+          <button type="button" class="btn btn-primary ms-2" 
+          (click)="abrirModal()">
+            Nueva Categoria
+          </button></div>
+        </div>
+        
+          <!-- Modal de Nueva Categoría -->
+<div *ngIf="visibleModal" class="modal-backdrop">
+  <div class="modal-content">
+      <h2>Nueva Categoría</h2>
+      <form #categoriaNForm="ngForm" (ngSubmit)="guardarNuevaCategoria()" novalidate>
+          <div class="form-group" >
+              <label for="nombre">Nombre</label>
+              <input
+                  id="nombre"
+                  type="text"
+                  [(ngModel)]="nuevaCategoria.nombre"
+                  name="nombre"
+                  required
+                  class="form-control" 
+                  pattern="^[a-zA-Z0-9\s-_]+$"
+                  #nombreNC="ngModel"/>
+                  @if(nombreNC.invalid && nombreNC.touched){
+                    <div class="alert alert-danger mt-2 text-center">
+                      @if(nombreNC.errors?.['required']){
+                      <small>El nombre es requerido</small>
+                      } @else if (nombreNC.errors?.['pattern']){
+                      <small
+                        >Solo se permiten letras ,numeros, espacios y los caracteres - y
+                        _</small
+                      >
+                      }
+                    </div>
+                    }
+          </div>
+          <div class="form-group mt-2">
+              <label for="descripcion">Descripción</label>
+              <input
+                  id="descripcion"
+                  type="text"
+                  [(ngModel)]="nuevaCategoria.descripcion"
+                  name="descripcion"
+                  class="form-control"
+                  #descripcionNC="ngModel" />
+          </div>
+          <div class="mt-3">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="button" class="btn btn-danger ms-2" (click)="cerrarModal()">Descartar</button>
+          </div>
+      </form>
+  </div>
+</div>
+
+
 
         <div class="d-flex justify-content-evenly">
           @if(modoEdicion){

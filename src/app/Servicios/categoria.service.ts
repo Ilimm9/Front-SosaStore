@@ -13,5 +13,18 @@ export class CategoriaService {
   public getCategorias() {
     return this._httpClient.get(`${this.apiURL}selectCategoria.php`);
   }
-
+  insertarCategoria({
+    datos,
+  }: {
+    datos: {
+      
+      nombre: string;
+      descripcion: string;
+    };
+  }) {
+    return this._httpClient.post(
+      `${this.apiURL}insertCategoria.php`,
+      JSON.stringify(datos)
+    );
+  }
 }
