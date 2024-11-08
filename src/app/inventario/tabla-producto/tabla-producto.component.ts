@@ -6,55 +6,64 @@ import { RouterLink } from '@angular/router';
 import { EditarService } from '../../Servicios/editar.service';
 import { MatIconModule } from '@angular/material/icon';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
+import { Categoria } from '../../models/categoria';
+import { CategoriaService } from '../../Servicios/categoria.service';
 
 @Component({
   selector: 'app-tabla-producto',
   standalone: true,
-  imports: [RouterLink, MatIconModule],
+  imports: [RouterLink, MatIconModule, CommonModule],
   templateUrl: './tabla-producto.component.html',
   styleUrl: './tabla-producto.component.css',
 })
 export class TablaProductoComponent implements OnInit {
   @ViewChild('datatablesSimple') datatablesSimple!: ElementRef;
+
+  dataTable: DataTable | null = null;
+
   productList: Array<Producto> = [];
+  productListFiltrada: Array<Producto> = [];
+  categorias: Array<Categoria> = [];
+  categoriaSeleccionada: string = '';
 
   constructor(
     private _productoServicio: ProductosServicioService,
+    private _categoriaService: CategoriaService,
     private editarService: EditarService
   ) {}
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadCategorias();
   }
 
   loadProducts() {
     this._productoServicio.getProductos().subscribe((result) => {
       this.productList = Object.values(result);
-      console.log(this.productList);
-      // this.imprimirItems();
+      this.productListFiltrada = [...this.productList]; // Asegura que la lista filtrada esté sincronizada
+      console.log(this.productListFiltrada);
+
+      // Inicializa la DataTable después de que los productos se carguen
       setTimeout(() => {
-        this.initDataTable(); // Inicializa la DataTable después de que el DOM se haya actualizado
+        this.initDataTable();
       }, 0);
     });
   }
 
-  // imprimirItems() {
-  //   console.log("Imprimimos items");
-  //   this.productList.forEach((item) => {
-  //     console.log('ID:', item.id_producto);
-  //     console.log('Nombre:', item.id_categoria);
-  //     console.log('Rol:', item.codigo);
-  //     console.log('Cuenta:', item.nombre);
-  //     console.log('Teléfono:', item.stock);
-  //     console.log('Fecha de Nacimiento:', item.stock_min);
-  //     console.log('Área:', item.stock_max);
-  //     console.log('Género:', item.precio_venta);
-  //     console.log('Género:', item.precio_compra);
-  //     console.log('---------------------------------');
-  //   });
-  // }
+  loadCategorias() {
+    this._categoriaService.getCategorias().subscribe((result) => {
+      this.categorias = Object.values(result);
+    });
+  }
 
   initDataTable() {
+    if (this.dataTable) {
+      this.dataTable.destroy();
+      this.datatablesSimple.nativeElement.innerHTML = ''; // Limpiar el contenido de la tabla
+      this.dataTable = null;
+    }
+
     // Asegúrate de que hay datos en la tabla antes de inicializarla
     if (this.datatablesSimple && this.productList.length > 0) {
       // Inicializa la DataTable
@@ -68,6 +77,28 @@ export class TablaProductoComponent implements OnInit {
         },
       });
     }
+  }
+
+  filtrarPorCategoria(event: Event) {
+    this._productoServicio.getProductos().subscribe((result) => {
+      this.productList = Object.values(result);
+      console.log('Filtrando por categoría');
+      console.log(this.productList);
+      const categoriaId = (event.target as HTMLSelectElement).value;
+      
+      if (categoriaId) {
+        this.productListFiltrada = this.productList.filter(
+          (producto) => producto.id_categoria === parseInt(categoriaId)
+        );
+      } else {
+        this.productListFiltrada = [...this.productList];
+      }
+      console.log(this.productListFiltrada);
+      // this.imprimirItems();
+      setTimeout(() => {
+        this.initDataTable();
+      }, 0);
+    });
   }
 
   enviarProducto(event: MouseEvent) {
@@ -107,8 +138,27 @@ export class TablaProductoComponent implements OnInit {
           icon: 'error',
         });
         console.error('Error al eliminar el producto:', error); // O puedes registrar el error para depuración
-      }
+      },
     });
-    
+  }
+
+  trackById(index: number, item: Producto): number {
+    return item.id_producto;
+  }
+
+   imprimirItems() {
+    console.log("Imprimimos items");
+    this.productListFiltrada.forEach((item) => {
+      console.log('ID:', item.id_producto);
+      console.log('Nombre:', item.id_categoria);
+      console.log('Rol:', item.codigo);
+      console.log('Cuenta:', item.nombre);
+      console.log('Teléfono:', item.stock);
+      console.log('Fecha de Nacimiento:', item.stock_min);
+      console.log('Área:', item.stock_max);
+      console.log('Género:', item.precio_venta);
+      console.log('Género:', item.precio_compra);
+      console.log('---------------------------------');
+    });
   }
 }
