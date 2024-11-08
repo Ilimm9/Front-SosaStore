@@ -11,6 +11,8 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { HomeInventarioComponent } from './inventario/home-inventario/home-inventario.component';
 import { TablaProductoComponent } from './inventario/tabla-producto/tabla-producto.component';
 import { AgregarProductoComponent } from './inventario/agregar-producto/agregar-producto.component';
+import { TablaCategoriaComponent } from './inventario/tabla-categoria/tabla-categoria.component';
+import { FormularioCategoriaComponent } from './inventario/formulario-categoria/formulario-categoria.component';
 
 export const routes: Routes = [
     {path:'',component:LoginComponent},
@@ -28,7 +30,9 @@ export const routes: Routes = [
             {path:'homeInventario',component:HomeInventarioComponent},
             {path:'tablaProducto',component:TablaProductoComponent},
             {path:'agregarProducto',component:AgregarProductoComponent},
-            {path: 'perfil', component: PerfilComponent}
+            {path: 'perfil', component: PerfilComponent},
+            {path: 'tablaCategoria',component:TablaCategoriaComponent},
+            {path: 'formularioCategoria',component:FormularioCategoriaComponent}
         ]},
         {path:'cajero',component:CajeroComponent}
     ]},

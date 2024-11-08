@@ -55,7 +55,7 @@ export class ProductosServicioService {
     };
   }) {
     return this._httpClient.post(
-      `${this.apiURL}updateProduct.php`,
+      `${this.apiURL}updateProducto.php`,
       JSON.stringify(datos)
     );
   }
@@ -68,7 +68,7 @@ export class ProductosServicioService {
     };
   }) {
     return this._httpClient.post(
-      `${this.apiURL}deleteProduct.php`,
+      `${this.apiURL}deleteProducto.php`,
       JSON.stringify(datos)
     );
   }
