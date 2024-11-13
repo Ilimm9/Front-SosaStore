@@ -1,1 +1,77 @@
-<p>formulario-categoria works!</p>
+<div class="row my-5">
+    <div class="col-xl-8 col-md-10 mx-auto">
+      <div class="card shadow p-4">
+        <h3 class="card-title text-center mb-4">Formulario para Categorías</h3>
+        <hr class="divider" />
+        <form #categoriaForm="ngForm" (ngSubmit)="guardar()" novalidate>
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nombre"
+              name="nombre"
+              [(ngModel)]="categoria.nombre"
+              placeholder="Ingrese el nombre de la categoría"
+              required
+              minlength="3"
+              pattern="^[a-zA-Z0-9\s-_]+$"
+              #nombre="ngModel"
+            />
+            @if(nombre.invalid && nombre.touched){
+            <div class="alert alert-danger mt-2 text-center">
+              @if(nombre.errors?.['required']){
+              <small>El nombre es requerido</small>
+              } @else if (nombre.errors?.['minlength']){
+              <small>Debe tener al menos 3 caracteres</small>
+              } @else if (nombre.errors?.['pattern']){
+              <small
+                >Solo se permiten letras ,numeros, espacios y los caracteres - y
+                _</small
+              >
+              }
+            </div>
+            }
+          </div>
+  
+          <div class="mb-3">
+            <label for="codigo" class="form-label">Descripción</label>
+            <input
+              type="text"
+              class="form-control"
+              id="descripcion"
+              name="descripcion"
+              [(ngModel)]="categoria.descripcion"
+              #descripcion="ngModel"
+            />
+            @if(descripcion.invalid && descripcion.touched){
+                <div class="alert alert-danger mt-2 text-center">
+                  @if (nombre.errors?.['pattern']){
+                  <small
+                    >Solo se permiten letras ,numeros, espacios y los caracteres - y
+                    _</small
+                  >
+                  }
+                </div>
+                }
+          </div>
+ 
+          <div class="d-flex justify-content-evenly">
+            @if(modoEdicion){
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="categoriaForm.invalid"
+              (click)="actualizarCategoria()"
+            >
+              Editar
+            </button>
+            <button type="button" class="btn btn-danger ms-2" routerLink="../tablaCategoria">Cancelar</button>
+            } @else {
+            <button type="submit" class="btn btn-primary">Agregar</button>
+            }
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
