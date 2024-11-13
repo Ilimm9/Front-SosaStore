@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 
 import { UsuarioLoggedService } from '../Servicios/usuario-logged.service';
 import { Usuario } from '../models/usuario';
-import { Rol } from '../models/rol';
 
 
 @Component({
