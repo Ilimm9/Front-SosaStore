@@ -50,6 +50,8 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    console.log(this.usuario);
+    console.log(this.password);
 
     let isValid = true;
     if (!this.usuario) {
