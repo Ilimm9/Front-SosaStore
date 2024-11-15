@@ -1,266 +1,272 @@
-
 <div class="row my-5">
   <div class="col-xl-8 col-md-10 mx-auto">
     <div class="card shadow p-4">
       <h3 class="card-title text-center mb-4">Formulario para Usuarios</h3>
       <hr class="divider">
-    <form #usuarioForm="ngForm" (ngSubmit)="guardar()" novalidate>
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
-        <input
-          type="text"
-          class="form-control"
-          id="nombre"
-          name="nombre"
-          [(ngModel)]="usuario.nombre"
-          placeholder="Ingrese el nombre del usuario"
-          required
-          minlength="2"
-          pattern="^[a-zA-ZÀ-ÿ\s]+$"
-          #nombre="ngModel"
-        />
-        @if(nombre.invalid && nombre.touched){
-          <div class="alert alert-danger mt-2 text-center">
-            @if(nombre.errors?.['required']){
-              <small>El nombre es requerido</small>
-            } @else if (nombre.errors?.['minlength']){
-              <small>Debe tener al menos 2 caracteres</small>
-            } @else if (nombre.errors?.['pattern']){
-              <small>Solo se permiten letras y espacios</small>
-            }
-          </div>
-        }
-
-      </div>
-
-      <div class="mb-3">
-        <label for="primerApellido" class="form-label">Primer Apellido</label>
-        <input
-          type="text"
-          class="form-control"
-          id="primerApellido"
-          name="primerApellido"
-          [(ngModel)]="usuario.primerApellido"
-          placeholder="Ingrese el primer apellido del usuario"
-          required
-          minlength="2"
-          pattern="^[a-zA-ZÀ-ÿ\s]+$"
-          #primerApellido="ngModel"
-        />
-        @if(primerApellido.invalid && primerApellido.touched){
-          <div class="alert alert-danger mt-2 text-center">
-            @if(primerApellido.errors?.['required']){
-              <small>El primer apellido es requerido</small>
-            } @else if (primerApellido.errors?.['minlength']){
-              <small>Debe tener al menos 2 caracteres</small>
-            } @else if (primerApellido.errors?.['pattern']){
-              <small>Solo se permiten letras y espacios</small>
-            }
-          </div>
-        }
-      </div>
-
-      <div class="mb-3">
-        <label for="segundoApellido" class="form-label">Segundo Apellido</label>
-        <input 
-          type="text" 
-          class="form-control" 
-          id="segundoApellido" 
-          name="segundoApellido" 
-          [(ngModel)]="usuario.segundoApellido"
-          placeholder="Ingrese el segundo apellido del usuario"
-          required
-          minlength="2"
-          pattern="^[a-zA-ZÀ-ÿ\s]+$"
-          #segundoApellido="ngModel"
-        >
-        @if(segundoApellido.invalid && segundoApellido.touched){
-          <div class="alert alert-danger mt-2 text-center">
-            @if(segundoApellido.errors?.['required']){
-              <small>El segundo apellido es requerido</small>
-            } @else if (segundoApellido.errors?.['minlength']){
-              <small>Debe tener al menos 2 caracteres</small>
-            } @else if (segundoApellido.errors?.['pattern']){
-              <small>Solo se permiten letras y espacios</small>
-            }
-          </div>
-        }
-    </div>
-
-      <div class="mb-3">
-        <label for="telefono" class="form-label">Teléfono</label>
-        <input
-          type="text"
-          class="form-control"
-          id="telefono"
-          name="telefono"
-          [(ngModel)]="usuario.telefono"
-          placeholder="Ingrese el telefono del usuario"
-          required
-          pattern="^\d{10}$"
-          #telefono="ngModel"
-        />
-        @if(telefono.invalid && telefono.touched){
-          <div class="alert alert-danger mt-2 text-center">
-            @if(telefono.errors?.['required']){
-              <small>El Telefono es requerido</small>
-            } @else if (telefono.errors?.['pattern']){
-              <small>Solo se permiten 10 digitos numericos</small>
-            }
-          </div>
-        }
-      </div>
-
-      <div class="mb-3">
-        <label for="nombreUsuario" class="form-label">Usuario</label>
-        <input 
-          type="text" 
-          class="form-control" 
-          id="nombreUsuario" 
-          name="nombreUsuario" 
-          [(ngModel)]="usuario.nombreUsuario"
-          placeholder="Ingrese el usuario asignado"
-          required
-          minlength="2"
-          pattern="^[a-zA-Z0-9]+$"
-          #nombreusuario="ngModel"
-        >
-        @if(nombreusuario.invalid && nombreusuario.touched){
-          <div class="alert alert-danger mt-2 text-center">
-            @if(nombreusuario.errors?.['required']){
-              <small>El nombre de usuario es requerido</small>
-            } @else if (nombreusuario.errors?.['minlength']){
-              <small>Debe tener al menos 2 caracteres</small>
-            } @else if (nombreusuario.errors?.['pattern']){
-              <small>Solo se permiten letras y numeros sin espacios</small>
-            }
-          </div>
-        }
-    </div>
-
-      @if(!modoEdicion){
+      <p><span class="required">*</span> Campos obligatorios</p>
+    <form 
+      #usuarioForm="ngForm" 
+      (ngSubmit)="guardar()" 
+      novalidate
+      class="d-flex justify-content-evenly"
+      >
+      
+      <div class="derecho">
         <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
+          <label for="nombre" class="form-label">Nombre <span class="required">*</span></label>
           <input
-            type="password"
+            type="text"
             class="form-control"
-            id="password"
-            name="password"
-            [(ngModel)]="usuario.password"
-            placeholder=""
-            placeholder="Ingrese la contraseña"
+            id="nombre"
+            name="nombre"
+            [(ngModel)]="usuario.nombre"
+            placeholder="Ingrese el nombre del usuario"
             required
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&]{8,}$"
-            #password="ngModel"
+            #nombre="ngModel"
+            (keyup)="validarNombre()"
           />
-          @if(password.invalid && password.touched){
-            <div class="alert alert-danger mt-2 text-center">
-              @if(password.errors?.['required']){
-                <small>La contraseña es requerida</small>
-              } @else if (password.errors?.['pattern']){
-                <small>Formato no valido</small>
+          @if(mensajeError){
+            <div class="mt-2 danger">
+              <small>{{ mensajeError }}</small>
+            </div>
+          }
+  
+        </div>
+  
+        <div class="mb-3">
+          <label for="primerApellido" class="form-label">Primer Apellido <span class="required">*</span></label>
+          <input
+            type="text"
+            class="form-control"
+            id="primerApellido"
+            name="primerApellido"
+            [(ngModel)]="usuario.primerApellido"
+            placeholder="Ingrese el primer apellido del usuario"
+            required
+            minlength="2"
+            pattern="^[a-zA-ZÀ-ÿ\s]+$"
+            #primerApellido="ngModel"
+          />
+          @if(primerApellido.invalid && primerApellido.touched){
+            <div class="danger mt-2">
+              @if(primerApellido.errors?.['required']){
+                <small>Campo requerido</small>
+              } @else if (primerApellido.errors?.['minlength']){
+                <small>Largo minimo: 2 caracteres</small>
+              } @else if (primerApellido.errors?.['pattern']){
+                <small>Solo se permiten letras y espacios</small>
               }
             </div>
           }
         </div>
-      }
-      
-
-      <div class="mb-3">
-        <label for="correo" class="form-label">Correo Electronico</label>
-        <input
-          type="text"
-          class="form-control"
-          id="correo"
-          name="correo"
-          [(ngModel)]="usuario.correo"
-          placeholder=""
-          placeholder="Ingrese el correo Electronico"
-          required
-          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-          #correo="ngModel"
-        />
-        @if(correo.invalid && correo.touched){
-          <div class="alert alert-danger mt-2 text-center">
-            @if(correo.errors?.['required']){
-              <small>El correo es requerido</small>
-            } @else if (correo.errors?.['pattern']){
-              <small>Formato no valido</small>
-            }
-          </div>
-        }
-      </div>
-
-      <div class="mb-3">
-        <label for="rol" class="form-label">Rol</label>
-        <select
-          id="rol"
-          name="rol"
-          class="form-control"
-          [(ngModel)]="usuario.id_Rol"
-          required
-          #rol="ngModel"
-        >
-          @if(modoEdicion){
-            <option [ngValue]="usuario.id_Rol" disabled selected>{{usuario.id_Rol}}</option>
-          } @else {
-            <option value="" disabled selected>Seleccione un rol</option>
+  
+        <div class="mb-3">
+          <label for="segundoApellido" class="form-label">Segundo Apellido</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="segundoApellido" 
+            name="segundoApellido" 
+            [(ngModel)]="usuario.segundoApellido"
+            placeholder="Ingrese el segundo apellido del usuario"
+            minlength="2"
+            pattern="^[a-zA-ZÀ-ÿ\s]+$"
+            #segundoApellido="ngModel"
+          >
+          @if(segundoApellido.invalid && segundoApellido.touched){
+            <div class="danger mt-2">
+              @if (segundoApellido.errors?.['minlength']){
+                <small>Debe tener al menos 2 caracteres</small>
+              } @else if (segundoApellido.errors?.['pattern']){
+                <small>Solo se permiten letras y espacios</small>
+              }
+            </div>
           }
-          <option *ngFor="let rol of roles" [ngValue]="rol.id_rol">{{ rol.nombre }}</option>
-        </select>
-        @if(rol.invalid && rol.touched){
-          <div class="alert alert-danger mt-2 text-center">
-            @if(rol.errors?.['required']){
-              <small>El rol es requerido</small>
+      </div>
+  
+        <div class="mb-3">
+          <label for="telefono" class="form-label">Teléfono <span class="required">*</span></label>
+          <input
+            type="text"
+            class="form-control"
+            id="telefono"
+            name="telefono"
+            [(ngModel)]="usuario.telefono"
+            placeholder="Ingrese el telefono del usuario"
+            required
+            pattern="^\d{10}$"
+            #telefono="ngModel"
+          />
+          @if(telefono.invalid && telefono.touched){
+            <div class="danger mt-2">
+              @if(telefono.errors?.['required']){
+                <small>Campo requerido</small>
+              } @else if (telefono.errors?.['pattern']){
+                <small>Solo se permiten 10 digitos numericos</small>
+              }
+            </div>
+          }
+        </div>
+  
+        <div class="mb-3">
+          <label for="correo" class="form-label">Correo Electronico <span class="required">*</span></label>
+          <input
+            type="text"
+            class="form-control"
+            id="correo"
+            name="correo"
+            [(ngModel)]="usuario.correo"
+            placeholder=""
+            placeholder="Ingrese el correo Electronico"
+            required
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+            #correo="ngModel"
+          />
+          @if(correo.invalid && correo.touched){
+            <div class="danger mt-2">
+              @if(correo.errors?.['required']){
+                <small>Campo requerido</small>
+              } @else if (correo.errors?.['pattern']){
+                <small>Se requiere &#64; y dominio</small>
+              }
+            </div>
+          }
+        </div>
+      </div>
+      <div class="izquierdo">
+        <div class="mb-3">
+          <label for="nombreUsuario" class="form-label">Usuario <span class="required">*</span></label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="nombreUsuario" 
+            name="nombreUsuario" 
+            [(ngModel)]="usuario.nombreUsuario"
+            placeholder="Ingrese el usuario asignado"
+            required
+            minlength="2"
+            pattern="^[a-zA-Z0-9]+$"
+            #nombreusuario="ngModel"
+          >
+          @if(nombreusuario.invalid && nombreusuario.touched){
+            <div class="danger mt-2">
+              @if(nombreusuario.errors?.['required']){
+                <small>Campo requerido</small>
+              } @else if (nombreusuario.errors?.['minlength']){
+                <small>Largo Minimo: 2 caracteres</small>
+              } @else if (nombreusuario.errors?.['pattern']){
+                <small>Solo se permiten letras y numeros sin espacios</small>
+              }
+            </div>
+          }
+      </div>
+  
+        @if(!modoEdicion){
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña <span class="required">*</span></label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              [(ngModel)]="usuario.password"
+              placeholder=""
+              placeholder="Ingrese la contraseña"
+              required
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&]{8,}$"
+              #password="ngModel"
+            />
+            @if(password.invalid && password.touched){
+              <div class="danger mt-2">
+                @if(password.errors?.['required']){
+                  <small>La contraseña es requerida</small>
+                } @else if (password.errors?.['pattern']){
+                  <small>Se requiere al menos:</small>
+                  <small>1 Mayuscula</small>
+                  <small>1 Minuscula</small>
+                  <small>1 Caracter Especial</small>
+                  <small>1 Numero</small>
+                }
+              </div>
             }
           </div>
         }
-      </div>
-
-      <div class="mb-3 form-check">
-        <input
-            type="checkbox"
-            class="form-check-input"
-            id="activo"
-            name="activo"
-            [(ngModel)]="usuario.activo" 
-        />
-        <label class="form-check-label" for="activo">Empleado Activo</label>
-    </div>
-
-      <div class="d-flex justify-content-evenly">
         
-        @if(modoEdicion){
-          <button 
-          type="button" 
-          class="btn btn-primary" 
-          [disabled]="usuarioForm.invalid"
-          (click)="actualizarUsuario()"
-          >Editar</button>
-          @if(usuario.activo){
+  
+        
+  
+        <div class="mb-3">
+          <label for="rol" class="form-label">Rol <span class="required">*</span></label>
+          <select
+            id="rol"
+            name="rol"
+            class="form-control"
+            [(ngModel)]="usuario.id_Rol"
+            required
+            #rol="ngModel"
+          >
+            @if(modoEdicion){
+              <option [ngValue]="usuario.id_Rol" disabled selected>{{usuario.id_Rol}}</option>
+            } @else {
+              <option value="" disabled selected>Seleccione un rol</option>
+            }
+            <option *ngFor="let rol of roles" [ngValue]="rol.id_rol">{{ rol.nombre }}</option>
+          </select>
+          @if(rol.invalid && rol.touched){
+            <div class="danger mt-2">
+              @if(rol.errors?.['required']){
+                <small>El rol es requerido</small>
+              }
+            </div>
+          }
+        </div>
+  
+        <div class="mb-3 form-check">
+          <input
+              type="checkbox"
+              class="form-check-input"
+              id="activo"
+              name="activo"
+              [(ngModel)]="usuario.activo" 
+          />
+          <label class="form-check-label" for="activo">Empleado Activo</label>
+      </div>
+  
+        <div class="d-flex justify-content-evenly">
+          
+          @if(modoEdicion){
             <button 
             type="button" 
-            class="btn btn-danger"
+            class="btn btn-primary" 
             [disabled]="usuarioForm.invalid"
-            (click)="desactivarUsuario()"
-            >Desactivar</button>
+            (click)="actualizarUsuario()"
+            >Editar</button>
+            @if(usuario.activo){
+              <button 
+              type="button" 
+              class="btn btn-danger"
+              [disabled]="usuarioForm.invalid"
+              (click)="desactivarUsuario()"
+              >Desactivar</button>
+            }
+            
+          } @else {
+            <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="usuarioForm.invalid"
+            >Agregar</button>
           }
           
-        } @else {
-          <button 
-          type="submit" 
-          class="btn btn-primary" 
-          [disabled]="usuarioForm.invalid"
-          >Agregar</button>
-        }
-        
+        </div>
       </div>
+      
+
+      
     </form>
     </div>
   </div>
 </div>
-
-
 
 
 

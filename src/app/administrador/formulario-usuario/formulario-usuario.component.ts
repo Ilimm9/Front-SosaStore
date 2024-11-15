@@ -22,6 +22,7 @@ export class FormularioUsuarioComponent implements OnInit {
   usuario: Usuario = new Usuario();
   roles: Array<Rol> = [];
   modoEdicion: boolean = false;
+  mensajeError: string = ''; 
 
   constructor(
     private editarService: EditarService,
@@ -47,6 +48,24 @@ export class FormularioUsuarioComponent implements OnInit {
   //   this.editarService.seleccionarUsuario(null);
   //   // this.usuario = new Usuario();
   // }
+
+  validarNombre(): void {
+    const nombre = this.usuario.nombre;
+
+    // Limpia el mensaje de error antes de validar
+    this.mensajeError = '';
+
+    // Validaciones
+    if (!nombre || nombre.trim() === '') {
+      this.mensajeError = 'Campo Requerido';
+    } else if (nombre.length < 2) {
+      this.mensajeError = 'Largo mínimo: 2 caracteres';
+    } else if (/^\d/.test(nombre)) {
+      this.mensajeError = 'No puede comenzar con un número';
+    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nombre)) {
+      this.mensajeError = 'Solo se permiten letras y espacios';
+    }
+  }
 
   guardar() {
     console.log('metodo guardar');
