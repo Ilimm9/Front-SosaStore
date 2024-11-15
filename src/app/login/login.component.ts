@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
         console.log('Servicio aplicado:', response);
         console.log(response)
         this.usuarioLogged.nombre = response.nombre;
-        this.usuarioLogged.idUsuario = response.id_usuario;
+        this.usuarioLogged.rfc = response.rfc;
         // this.usuarioLogged.rol = new Rol();
         this.usuarioLogged.id_Rol = response.id_Rol;
 
@@ -104,6 +104,7 @@ export class LoginComponent implements OnInit {
         }
       },
       error => {
+        console.log(error)
         this.errorMessage = 'Usuario o contraseña incorrectos';
       }
     );

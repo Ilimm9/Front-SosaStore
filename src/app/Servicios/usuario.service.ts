@@ -45,7 +45,7 @@ export class UsuarioService {
     datos
   }: {
     datos: {
-      id_usuario: number
+      rfc: string
       nombre: string,
       apellido1: string,
       apellido2: string,

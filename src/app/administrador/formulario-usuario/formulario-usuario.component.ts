@@ -43,10 +43,10 @@ export class FormularioUsuarioComponent implements OnInit {
     });
   }
 
-  // ngOnDestroy() {
-  //   this.editarService.seleccionarUsuario(null);
-  //   // this.usuario = new Usuario();
-  // }
+  ngOnDestroy() {
+    this.editarService.seleccionarUsuario(null);
+    // this.usuario = new Usuario();
+  }
 
   guardar() {
     console.log('metodo guardar');
@@ -101,7 +101,7 @@ export class FormularioUsuarioComponent implements OnInit {
     this.usuario.activo = this.usuario.activo ? 1 : 0; // 1 para true, 0 para false
 
     const datos = {
-      id_usuario: this.usuario.idUsuario,
+      rfc: this.usuario.rfc,
       nombre: this.usuario.nombre,
       apellido1: this.usuario.primerApellido,
       apellido2: this.usuario.segundoApellido,
@@ -149,7 +149,7 @@ export class FormularioUsuarioComponent implements OnInit {
       return;
     }
     const dato = {
-      id_usuario: this.usuario.idUsuario,
+      rfc: this.usuario.rfc,
     };
 
     this.usuarioService.desactivarUsuario(dato).subscribe({

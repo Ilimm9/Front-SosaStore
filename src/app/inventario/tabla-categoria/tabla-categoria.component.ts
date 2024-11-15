@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import Swal from 'sweetalert2';
 import { CategoriaService } from '../../Servicios/categoria.service';
 import { Categoria } from '../../models/categoria';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tabla-categoria',
@@ -21,7 +22,6 @@ export class TablaCategoriaComponent implements OnInit{
   categoriaList: Array<Categoria> = [];
 
   constructor(
-    private _productoServicio: ProductosServicioService,
     private editarService: EditarService,
     private categoriaService: CategoriaService
   ) {}

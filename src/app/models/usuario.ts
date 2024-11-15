@@ -1,7 +1,7 @@
 import { Rol } from "./rol"
 
 export class Usuario {
-  idUsuario: number
+  rfc: string
   nombre: string
   primerApellido: string
   segundoApellido: string

@@ -43,11 +43,11 @@ export class PerfilComponent implements OnInit{
     this.usuarioService.getUsuarios().subscribe((usuariosCompletos)=> {
       usuarios = Object.values(usuariosCompletos);
       for(let user of usuarios){
-        if(user.idUsuario === usuario.idUsuario){
-          this.usuario = user;
-          console.log(this.usuario)
-          break;
-        }
+        // if(user.idUsuario === usuario.idUsuario){
+        //   this.usuario = user;
+        //   console.log(this.usuario)
+        //   break;
+        // }
       }
     })
     setTimeout(() => {},0)

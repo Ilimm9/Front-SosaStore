@@ -1,4 +1,4 @@
-.dataTable-table tr {
+/* .dataTable-table tr {
     border-bottom: 1px solid #e0e0e0;
 }
 .dataTable-table tr:hover {
@@ -46,3 +46,16 @@
     letter-spacing: 0.5px;
     line-height: 1.5;
 }
+*/
+table {
+    width: 100%;
+  }
+  
+  .mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  td, th {
+    width: 25%;
+  } 

@@ -1,43 +1,54 @@
 .card {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-  }
-  
-  .card-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .divider {
-    height: 2px;
-    background-color: #1ea1a1;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-  }
-  
-  .form-label {
-    font-weight: bold;
-    color: #555;
-  }
-  
-  .form-control {
-    border-radius: 4px;
-  }
-  
-  .alert-danger {
-    font-size: 0.9rem;
-    padding: 5px;
-  }
-  
-  /* .btn-primary {
-    background-color: #1d7163;
-    border-color: #12aab0a3;
-    padding: 10px 20px;
-  } */
-  
-  .btn-danger {
-    padding: 10px 20px;
-  }
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.card-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.divider {
+  height: 2px;
+  background-color: #1ea1a1;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.form-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.form-control {
+  border-radius: 4px;
+}
+
+.alert-danger {
+  font-size: 0.9rem;
+  padding: 5px;
+}
+
+.derecho {
+  width: 40%;
+}
+
+.izquierdo {
+  width: 40%;
+}
+
+.btn-danger {
+  padding: 10px 20px;
+}
+
+.danger {
+  color: #f12626;
+}
+
+.required {
+  color: #f12626;
+  font-weight: bold;
+}
