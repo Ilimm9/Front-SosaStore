@@ -3,7 +3,7 @@
       <div class="row">
           <!-- Fondo izquierdo -->
           <div class="col-md-5 col-sm-12 fondo-izq">
-              <img src="../../assets/img/logo_white.png" class="imgLogo" alt="Logo">
+              <img src="../../assets/img/logo_white.png"  alt="Logo">
           </div>
           
           <div class="col-md-7 col-sm-12 fondo-derecho">
@@ -13,7 +13,14 @@
                   <div class="mb-5">
                       <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-person"></i></span>
-                            <input type="text" class="form-control" id="usuario" placeholder="Usuario" name="usuario">
+                            <input 
+                            type="text" 
+                            class="form-control" 
+                            id="usuario" 
+                            placeholder="Usuario" 
+                            name="usuario"
+                            (input)="onInputChange()" 
+                            [(ngModel)]="usuario">
                     </div> 
                                         
                       <div *ngIf="errorUsuario" class="text-danger">{{ errorUsuario }}</div> 
@@ -22,7 +29,14 @@
                   <div class="mb-3">
                       <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-key"></i></span>
-                      <input type="password" class="form-control" id="password" (input)="onInputChange()" placeholder="Contraseña" name="password" [(ngModel)]="password">
+                      <input 
+                      type="password" 
+                      class="form-control" 
+                      id="password" 
+                      (input)="onInputChange()" 
+                      placeholder="Contraseña" 
+                      name="password" 
+                      [(ngModel)]="password">
                       </div>
                       <div *ngIf="errorPassword" class="text-danger">{{ errorPassword }}</div> 
                   </div>
