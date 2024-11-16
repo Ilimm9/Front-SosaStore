@@ -22,7 +22,14 @@ export class FormularioUsuarioComponent implements OnInit {
   usuario: Usuario = new Usuario();
   roles: Array<Rol> = [];
   modoEdicion: boolean = false;
-  mensajeError: string = ''; 
+  mensajeErrorNombre: string = ''; 
+  mensajeErrorAp1: string = '';
+  errorTel: string = '';
+  mensajeErrorCorreo: string = ''; 
+  mensajeErrorUsuario: string = '';
+  mensajeErrorPassword: string = '';
+  mensajeErrorRol: string = '';
+
 
   constructor(
     private editarService: EditarService,
@@ -44,28 +51,120 @@ export class FormularioUsuarioComponent implements OnInit {
     });
   }
 
-  // ngOnDestroy() {
-  //   this.editarService.seleccionarUsuario(null);
-  //   // this.usuario = new Usuario();
-  // }
-
   validarNombre(): void {
-    const nombre = this.usuario.nombre;
-
+    const nombre = this.usuario.nombre;   
+    this.usuarioForm.controls['nombre'].setErrors({Error: true})
     // Limpia el mensaje de error antes de validar
-    this.mensajeError = '';
-
+    this.mensajeErrorNombre = '';
+    
     // Validaciones
     if (!nombre || nombre.trim() === '') {
-      this.mensajeError = 'Campo Requerido';
+      
+      this.mensajeErrorNombre = 'Campo Requerido';
     } else if (nombre.length < 2) {
-      this.mensajeError = 'Largo mínimo: 2 caracteres';
+      this.mensajeErrorNombre = 'Largo mínimo: 2 caracteres';
     } else if (/^\d/.test(nombre)) {
-      this.mensajeError = 'No puede comenzar con un número';
+      this.mensajeErrorNombre = 'No puede comenzar con un número';
     } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nombre)) {
-      this.mensajeError = 'Solo se permiten letras y espacios';
+      this.mensajeErrorNombre = 'Solo se permiten letras y espacios';
+    }else{
+      this.usuarioForm.controls['nombre'].setErrors(null)
+
+    } 
+  }
+  validarApellido(): void {
+    
+    const apellido = this.usuario.primerApellido;
+    this.usuarioForm.controls['primerApellido'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorAp1 = '';
+    // Validaciones
+    if (!apellido || apellido.trim() === '') {
+      this.mensajeErrorAp1 = 'Campo Requerido';
+    } else if (apellido.length < 2) {
+      this.mensajeErrorAp1 = 'Largo mínimo: 2 caracteres';
+    } else if (/^\d/.test(apellido)) {
+      this.mensajeErrorAp1 = 'No puede comenzar con un número';
+    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(apellido)) {
+      this.mensajeErrorAp1 = 'Solo se permiten letras y espacios';
+    }else{
+      this.usuarioForm.controls['primerApellido'].setErrors(null)
     }
   }
+  validarTelefono(): void {
+    
+    const telefono = this.usuario.telefono;
+    this.usuarioForm.controls['telefono'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.errorTel = '';
+    // Validaciones
+    if ( telefono.trim() === '') {
+      this.errorTel = 'Campo Requerido';
+    } else if (!/^\d{10}$/.test(telefono)) {
+      this.errorTel = 'Solo se permiten 10 digitos numericos';
+    }else{
+      this.usuarioForm.controls['telefono'].setErrors(null)
+  }
+}
+  
+  validarCorreo(): void {
+    
+    const correo = this.usuario.correo;
+    this.usuarioForm.controls['correo'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorCorreo = '';
+    // Validaciones
+    if (correo.trim() === '') {
+      this.mensajeErrorCorreo = 'Campo Requerido';
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(correo)) {
+      this.mensajeErrorCorreo = 'Correo incorrecto';
+    }else{
+      this.usuarioForm.controls['correo'].setErrors(null)
+    }
+  }
+
+  validarUsuario(): void {
+    
+    const usuario = this.usuario.nombreUsuario;
+    this.usuarioForm.controls['nombreUsuario'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorUsuario = '';
+    // Validaciones
+    if ( usuario.trim() === '') {
+      this.mensajeErrorUsuario = 'Campo Requerido';
+    }  else if (usuario.length < 2) {
+      this.mensajeErrorUsuario = 'Largo mínimo: 2 caracteres';
+    }else if (!/^[a-zA-Z0-9]+$/.test(usuario)) {
+      this.mensajeErrorUsuario = 'Formato invalido';
+    }else{
+      this.usuarioForm.controls['nombreUsuario'].setErrors(null)
+  }
+}
+
+  validarContrasenia(): void {
+  
+    const contrasenia = this.usuario.password;
+    this.usuarioForm.controls['password'].setErrors({Error: true})
+    this.mensajeErrorPassword = '';
+    // Validaciones
+    if ( contrasenia.trim() === '') {
+      this.mensajeErrorPassword = 'Campo Requerido';
+    } else if (contrasenia.length < 8) {
+      this.mensajeErrorPassword = 'Mínimo: 8 caracteres';
+    }else if (!/[A-Z]/.test(contrasenia)) {
+        this.mensajeErrorPassword = 'La contraseña debe contener al menos una letra mayúscula';
+    }else if (!/[a-z]/.test(contrasenia)) {
+        this.mensajeErrorPassword = 'La contraseña debe contener al menos una letra minúscula';
+    }else if (!/\d/.test(contrasenia)) {
+        this.mensajeErrorPassword = 'La contraseña debe contener al menos un número';
+    }else if (!/[@$!%*?&_]/.test(contrasenia)) {
+        this.mensajeErrorPassword = 'La contraseña debe contener al menos un carácter especial (@$!%*?&_)';
+    }else if (/(.)\1{2,}/.test(contrasenia)){
+      this.mensajeErrorPassword = 'No se permiten caracteres seguidos';
+    }else{
+      this.usuarioForm.controls['password'].setErrors(null)
+  }
+}
 
   guardar() {
     console.log('metodo guardar');

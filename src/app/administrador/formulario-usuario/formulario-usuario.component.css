@@ -52,3 +52,11 @@
   color: #f12626;
   font-weight: bold;
 }
+
+form.disabled input,
+form.disabled select,
+form.disabled textarea,
+form.disabled button {
+  pointer-events: none;
+  opacity: 0.5;
+}
