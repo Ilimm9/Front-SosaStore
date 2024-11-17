@@ -20,10 +20,10 @@ export class ProductosServicioService {
   }
 
   updateProduct(producto: Producto) {
-    return this._httpClient.post(`${this.apiURL}updateProducto.php`,producto);
+    return this._httpClient.post(`${this.apiURL}updateProduct.php`,producto);
   }
 
   deleteProduct(producto: Producto) {
-    return this._httpClient.post(`${this.apiURL}deleteProducto.php`,producto );
+    return this._httpClient.post(`${this.apiURL}deleteProduct.php`,producto );
   }
 }
