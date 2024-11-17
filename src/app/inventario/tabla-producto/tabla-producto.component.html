@@ -8,9 +8,9 @@
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" class="table-striped table-bordered " matSort>
       <!-- Position Column -->
-      <ng-container matColumnDef="codigo">
+      <ng-container matColumnDef="codigoProducto">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Codigo</th>
-        <td mat-cell *matCellDef="let producto">{{ producto.codigo }} </td>
+        <td mat-cell *matCellDef="let producto">{{ producto.codigoProducto }} </td>
       </ng-container>
 
       <!-- Symbol Column -->
@@ -26,27 +26,27 @@
       </ng-container>
 
       <!-- Symbol Column -->
-      <ng-container matColumnDef="stock-minimo">
+      <ng-container matColumnDef="stockMin">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock Minimo</th>
-        <td mat-cell *matCellDef="let producto">{{ producto.stock_min}}</td>
+        <td mat-cell *matCellDef="let producto">{{ producto.stockMin}}</td>
       </ng-container>
 
       <!-- Symbol Column -->
-      <ng-container matColumnDef="stock-maximo">
+      <ng-container matColumnDef="stockMax">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock Maximo</th>
-        <td mat-cell *matCellDef="let producto">{{ producto['stock_max'] }}</td>
+        <td mat-cell *matCellDef="let producto">{{ producto['stockMax'] }}</td>
       </ng-container>
 
       <!-- Symbol Column -->
-      <ng-container matColumnDef="precio-compra">
+      <ng-container matColumnDef="precioCompra">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio Compra</th>
-        <td mat-cell *matCellDef="let producto">{{ producto['precio_compra'] }}</td>
+        <td mat-cell *matCellDef="let producto">{{ producto['precioCompra'] }}</td>
       </ng-container>
 
       <!-- Symbol Column -->
-      <ng-container matColumnDef="precio-venta">
+      <ng-container matColumnDef="precioVenta">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio Venta</th>
-        <td mat-cell *matCellDef="let producto">{{ producto['precio_venta'] }} </td>
+        <td mat-cell *matCellDef="let producto">{{ producto['precioVenta'] }} </td>
       </ng-container>
 
       <!-- Symbol Column -->
@@ -54,7 +54,7 @@
         <th mat-header-cell *matHeaderCellDef >Acciones</th>
         <td mat-cell *matCellDef="let producto">
           <button 
-            (click)="enviarProducto($event)"
+            (click)="enviarProducto(producto)"
             [attr.data-id]="producto.id_producto"
             routerLink="../agregarProducto" 
             type="button" 
@@ -64,7 +64,7 @@
             type="button"
             class="btn btn-sm btn-danger"
             
-            (click)="deleteProduct(producto.id_producto)"
+            (click)="deleteProduct(producto)"
           >
             Eliminar
           </button>

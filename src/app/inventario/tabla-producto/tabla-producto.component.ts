@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Producto } from '../../models/producto';
 import { ProductosServicioService } from '../../Servicios/productos-servicio.service';
 import { DataTable } from 'simple-datatables';
 import { RouterLink } from '@angular/router';
@@ -14,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { Categoria } from '../../models/categoria';
 import { CategoriaService } from '../../Servicios/categoria.service';
 import { MatIconModule } from '@angular/material/icon';
+import { Producto } from '../../models/producto';
 
 @Component({
   selector: 'app-tabla-producto',
@@ -35,7 +35,7 @@ export class TablaProductoComponent implements OnInit, AfterViewInit {
 
   productList: Producto[] = [];
   categorias: Categoria[] = [];
-  displayedColumns: string[] = ['codigo', 'producto', 'stock', 'stock-minimo', 'stock-maximo', 'precio-compra', 'precio-venta', 'acciones'];
+  displayedColumns: string[] = ['codigoProducto', 'producto', 'stock', 'stockMin', 'stockMax', 'precioCompra', 'precioVenta', 'acciones'];
   dataSource = new MatTableDataSource<Producto>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -58,6 +58,7 @@ export class TablaProductoComponent implements OnInit, AfterViewInit {
   obtenerProductos() {
     this._productoServicio.getProductos().subscribe({
       next: (datos) => {
+        console.log(datos)
         this.productList = datos;
         this.dataSource.data = this.productList;
         console.log(this.productList);
@@ -65,27 +66,17 @@ export class TablaProductoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  enviarProducto(event: MouseEvent) {
-    let dataId = (event.target as HTMLButtonElement).getAttribute('data-id');
-    console.log('enviamos producto');
-    console.log(dataId);
-    if (dataId === null) {
-      return;
-    }
-    let id = parseInt(dataId);
-    const producto = this.productList.find((p) => p.id_producto === id);
+  enviarProducto(producto: Producto) {
     if (producto) {
       console.log(producto);
       this.editarService.seleccionarProducto(producto);
     }
   }
 
-  deleteProduct(id_producto: number) {
-    const datos = {
-      id_producto: id_producto,
-    };
-    this._productoServicio.deleteProduct({ datos }).subscribe({
+  deleteProduct(producto : Producto) {
+    this._productoServicio.deleteProduct(producto).subscribe({
       next: (result) => {
+        console.log(result);
         // Mensaje de éxito
         Swal.fire({
           title: 'Producto eliminado!',
@@ -95,7 +86,7 @@ export class TablaProductoComponent implements OnInit, AfterViewInit {
         this.obtenerProductos();
       },
       error: (error) => {
-        // Manejo del error
+        console.log(error)
         Swal.fire({
           title: 'Error al eliminar el producto',
           text: 'Hubo un problema al intentar eliminar el producto. Por favor, inténtalo nuevamente.',
