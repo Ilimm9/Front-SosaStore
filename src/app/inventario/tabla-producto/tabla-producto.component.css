@@ -1,48 +1,57 @@
-.dataTable-table tr {
-    border-bottom: 1px solid #e0e0e0;
-}
-.dataTable-table tr:hover {
-    background-color: #f7f7f7;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.dataTable-table .btn-editar {
-    background-color: #007bff;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-.dataTable-table .btn-editar:hover {
-    background-color: #0056b3;
-}
-
-.dataTable-table thead th {
-    background-color: #f1f1f1;
+table {
+    width: 100%;
+  }
+  
+  .mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .container {
+    max-width: 80%;
+    margin: 30px auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
     color: #333;
     font-weight: bold;
-    padding: 10px;
-    text-transform: uppercase;
-    border-bottom: 2px solid #e0e0e0;
-}
-
-.dataTable-pagination .dataTable-pagination-list a {
-    padding: 8px 12px;
-    margin: 0 5px;
-    background-color: #007bff;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table th {
+    background-color: #35877b;
     color: white;
-    border-radius: 4px;
-    text-decoration: none;
-}
-.dataTable-pagination .dataTable-pagination-list a:hover {
-    background-color: #0056b3;
-}
-
-
-.dataTable-table {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-    line-height: 1.5;
-}
+    font-weight: 400;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  table  td {
+    padding: 9px;
+    text-align: center;
+  }
+  
+  table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  table tr:hover {
+    background-color: #c9e7e2;
+  }
+  
+  .table-bordered td, .table-bordered th {
+    border: 1px solid #ddd;
+  }
+  
+  

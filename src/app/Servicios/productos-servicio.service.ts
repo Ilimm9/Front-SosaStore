@@ -11,8 +11,8 @@ export class ProductosServicioService {
 
   constructor(private _httpClient: HttpClient) {}
 
-  public getProductos() {
-    return this._httpClient.get(`${this.apiURL}selectProducto.php`);
+  public getProductos(): Observable<Producto[]>{
+    return this._httpClient.get<Producto[]>(`${this.apiURL}selectProducto.php`);
   }
 
   public getProductos2() {

@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Categoria } from '../models/categoria';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,8 @@ export class CategoriaService {
 
   constructor(private _httpClient: HttpClient) {}
 
-  public getCategorias() {
-    return this._httpClient.get(`${this.apiURL}selectCategoria.php`);
+  public getCategorias(): Observable<Categoria[]> {
+    return this._httpClient.get<Categoria[]>(`${this.apiURL}selectCategoria.php`);
   }
   insertarCategoria({
     datos,

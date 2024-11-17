@@ -1,24 +1,41 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Producto } from '../../models/producto';
 import { ProductosServicioService } from '../../Servicios/productos-servicio.service';
-import { DataTable } from 'simple-datatables';
 import { RouterLink } from '@angular/router';
 import { EditarService } from '../../Servicios/editar.service';
-import { MatIconModule } from '@angular/material/icon';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import Swal from 'sweetalert2';
 import { CategoriaService } from '../../Servicios/categoria.service';
 import { Categoria } from '../../models/categoria';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tabla-categoria',
   standalone: true,
-  imports: [RouterLink, MatIconModule],
+  imports: [
+    RouterLink, 
+    MatIconModule,
+    MatTableModule, 
+    MatPaginatorModule, 
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule
+  ],
   templateUrl: './tabla-categoria.component.html',
   styleUrl: './tabla-categoria.component.css'
 })
-export class TablaCategoriaComponent implements OnInit{
-  @ViewChild('datatablesSimple') datatablesSimple!: ElementRef;
-  categoriaList: Array<Categoria> = [];
+export class TablaCategoriaComponent implements OnInit, AfterViewInit{
+
+  categoriaList: Categoria[] = [];
+  displayedColumns: string[] = ['nombre', 'descripcion','acciones'];
+  dataSource = new  MatTableDataSource<Categoria>();
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private _productoServicio: ProductosServicioService,
@@ -27,50 +44,22 @@ export class TablaCategoriaComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.loadCategorias();
+    this.obtenerCategorias();
   }
 
-  loadCategorias() {
-    this.categoriaService.getCategorias().subscribe((result) => {
-      this.categoriaList = Object.values(result);
-      console.log(this.categoriaList);
-      // this.imprimirItems();
-      setTimeout(() => {
-        this.initDataTable(); // Inicializa la DataTable después de que el DOM se haya actualizado
-      }, 0);
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  obtenerCategorias() {
+    this.categoriaService.getCategorias().subscribe({
+      next: (datos) => {
+        this.categoriaList = datos;
+        this.dataSource.data = this.categoriaList;
+        console.log(this.categoriaList);
+      }
     });
-  }
-
-  // imprimirItems() {
-  //   console.log("Imprimimos items");
-  //   this.productList.forEach((item) => {
-  //     console.log('ID:', item.id_producto);
-  //     console.log('Nombre:', item.id_categoria);
-  //     console.log('Rol:', item.codigo);
-  //     console.log('Cuenta:', item.nombre);
-  //     console.log('Teléfono:', item.stock);
-  //     console.log('Fecha de Nacimiento:', item.stock_min);
-  //     console.log('Área:', item.stock_max);
-  //     console.log('Género:', item.precio_venta);
-  //     console.log('Género:', item.precio_compra);
-  //     console.log('---------------------------------');
-  //   });
-  // }
-
-  initDataTable() {
-    // Asegúrate de que hay datos en la tabla antes de inicializarla
-    if (this.datatablesSimple && this.categoriaList.length > 0) {
-      // Inicializa la DataTable
-      new DataTable(this.datatablesSimple.nativeElement, {
-        labels: {
-          placeholder: 'Buscar...',
-          perPage: 'registros por página',
-          noRows: 'No se encontraron registros',
-          info: 'Mostrando {start} a {end} de {rows} registros',
-          noResults: 'No se encontraron coincidencias',
-        },
-      });
-    }
   }
 
   enviarCategoria(event: MouseEvent) {
@@ -100,7 +89,7 @@ export class TablaCategoriaComponent implements OnInit{
           text: 'El producto se ha eliminado con éxito.',
           icon: 'success',
         });
-        this.loadCategorias();
+        this.obtenerCategorias();
       },
       error: (error) => {
         // Manejo del error
@@ -113,6 +102,16 @@ export class TablaCategoriaComponent implements OnInit{
       }
     });
     
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+
   }
 
 }
