@@ -11,7 +11,30 @@
       class="d-flex justify-content-evenly"
       >
 
+      
+
       <div class="derecho">
+
+        <div class="mb-3">
+          <label for="rfc" class="form-label">RFC <span class="required">*</span></label>
+          <input
+            type="text"
+            class="form-control"
+            id="rfc"
+            name="nomrfcbre"
+            [(ngModel)]="usuario.rfc"
+            placeholder="Ingrese el RFC del usuario"
+            required
+            #rfc="ngModel"
+          />
+          @if(mensajeErrorNombre){
+            <div class="mt-2 danger">
+              <small> Error</small>
+            </div>
+          }
+        </div>
+
+
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre <span class="required">*</span></label>
           <input
@@ -33,17 +56,17 @@
         </div>
   
         <div class="mb-3">
-          <label for="primerApellido" class="form-label">Primer Apellido <span class="required">*</span></label>
+          <label for="apellido1" class="form-label">Primer Apellido <span class="required">*</span></label>
           <input
             type="text"
             class="form-control"
-            id="primerApellido"
-            name="primerApellido"
-            [(ngModel)]="usuario.primerApellido"
+            id="apellido1"
+            name="apellido1"
+            [(ngModel)]="usuario.apellido1"
             placeholder="Ingrese el primer apellido del usuario"
             [disabled]="!nombre.valid"
             required
-            #primerApellido="ngModel"
+            #apellido1="ngModel"
             (keyup)="validarApellido()"
           />
           @if(mensajeErrorAp1){
@@ -54,21 +77,21 @@
         </div>
   
         <div class="mb-3">
-          <label for="segundoApellido" class="form-label">Segundo Apellido</label>
+          <label for="apellido2" class="form-label">Segundo Apellido</label>
           <input 
             type="text" 
             class="form-control" 
-            id="segundoApellido" 
-            name="segundoApellido" 
-            [(ngModel)]="usuario.segundoApellido"
+            id="apellido2" 
+            name="apellido2" 
+            [(ngModel)]="usuario.apellido2"
             [disabled]="!nombre.valid"
             placeholder="Ingrese el segundo apellido del usuario"
             pattern="^[a-zA-ZÀ-ÿ\s]+$"
-            #segundoApellido="ngModel"
+            #apellido2="ngModel"
           >
-          @if(segundoApellido.invalid && segundoApellido.touched){
+          @if(apellido2.invalid && apellido2.touched){
             <div class="danger mt-2">
-              @if (segundoApellido.errors?.['pattern']){
+              @if (apellido2.errors?.['pattern']){
                 <small>Solo se permiten letras y espacios</small>
               }
             </div>
@@ -86,7 +109,7 @@
             placeholder="Ingrese el telefono del usuario"
             required
             #telefono="ngModel"
-            [disabled]="!primerApellido.valid"
+            [disabled]="!apellido1.valid"
             (keyup)="validarTelefono()"
           />
           @if(errorTel){
@@ -96,6 +119,11 @@
           }
         </div>
   
+        
+        
+      </div>
+      <div class="izquierdo">
+
         <div class="mb-3">
           <label for="correo" class="form-label">Correo Electronico <span class="required">*</span></label>
           <input
@@ -117,8 +145,6 @@
           }
         </div>
         
-      </div>
-      <div class="izquierdo">
         <div class="mb-3">
           <label for="nombreUsuario" class="form-label">Usuario <span class="required">*</span></label>
           <input 
@@ -168,13 +194,13 @@
             id="rol"
             name="rol"
             class="form-control"
-            [(ngModel)]="usuario.id_Rol"
+            [(ngModel)]="usuario.idRol"
             required
             #rol="ngModel"
             [disabled]="!nombreusuario.valid"
             >
             @if(modoEdicion){
-              <option [ngValue]="usuario.id_Rol" disabled selected>{{usuario.id_Rol}}</option>
+              <option [ngValue]="usuario.idRol" disabled selected>{{usuario.idRol}}</option>
             } @else {
               <option value="" disabled selected>Seleccione un rol</option>
             }

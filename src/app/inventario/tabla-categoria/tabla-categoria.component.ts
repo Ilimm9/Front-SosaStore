@@ -38,7 +38,6 @@ export class TablaCategoriaComponent implements OnInit, AfterViewInit{
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    private _productoServicio: ProductosServicioService,
     private editarService: EditarService,
     private categoriaService: CategoriaService
   ) {}
@@ -62,27 +61,18 @@ export class TablaCategoriaComponent implements OnInit, AfterViewInit{
     });
   }
 
-  enviarCategoria(event: MouseEvent) {
-    let dataId = (event.target as HTMLButtonElement).getAttribute('data-id');
-    console.log('enviamos categoria');
-    console.log(dataId);
-    if (dataId === null) {
-      return;
-    }
-    let id = parseInt(dataId);
-    const categoria = this.categoriaList.find((c) => c.id_categoria === id);
-    if (categoria) {
-      console.log(categoria);
-      this.editarService.seleccionarCategoria(categoria);
+  enviarCategoria(cat: Categoria) {
+    if (cat) {
+      console.log(cat);
+      this.editarService.seleccionarCategoria(cat);
     }
   }
 
-  deleteCategoria(id_categoria: number) {
-    const datos = {
-      id_categoria: id_categoria,
-    };
-    this.categoriaService.deleteCategoria({ datos }).subscribe({
+  deleteCategoria(cat: Categoria) {
+    console.log(cat)
+    this.categoriaService.deleteCategoria(cat).subscribe({
       next: (result) => {
+        console.log(result)
         // Mensaje de éxito
         Swal.fire({
           title: 'Categoria eliminada!',

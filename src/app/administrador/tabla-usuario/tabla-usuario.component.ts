@@ -26,7 +26,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 export class TablaUsuarioComponent implements OnInit {
 
   usuarios: Usuario[] = [];
-  displayedColumns: string[] = ['nombre', 'cargo', 'correo', 'telefono', 'usuario', 'acciones'];
+  displayedColumns: string[] = ['rfc', 'nombre', 'cargo', 'correo', 'telefono', 'usuario', 'acciones'];
   dataSource = new  MatTableDataSource<Usuario>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -58,18 +58,10 @@ export class TablaUsuarioComponent implements OnInit {
     });
   }
 
-  enviarUsuario(event: MouseEvent) {
-    let dataId = (event.target as HTMLButtonElement).getAttribute('data-id');
-    console.log('enviamos a usuario');
-    console.log(dataId)
-    if (dataId === null) {
-      return;
-    }
-    let id = parseInt(dataId);
-    const usuario = this.usuarios.find(u => u.idUsuario === id);
-    if (usuario) {
-      console.log(usuario)
-      this.editarService.seleccionarUsuario(usuario)
+  enviarUsuario(user: Usuario) {
+    if (user) {
+      console.log(user)
+      this.editarService.seleccionarUsuario(user)
       this.router.navigate(['gestor/administrador/formulario-usuario'])
     }
   }

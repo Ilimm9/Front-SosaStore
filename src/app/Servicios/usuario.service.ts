@@ -10,57 +10,31 @@ import { RolService } from './rol.service';
 })
 export class UsuarioService {
 
-  // private apiUrl = "http://localhost:8000/";
   private apiUrl = "http://localhost/backend-punto_de_venta/";
 
-  constructor(private http: HttpClient,
-    private rolService: RolService
+  constructor(private http: HttpClient
   ) { }
 
-  login(username: string, password: string): Observable<any> {
+  login(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.apiUrl}login_check.php`, usuario);
+  }
+
+  recuperarContrasenia(email: string): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const body = JSON.stringify({ nombre_Usuario: username, contrasenia: password });
-
-    return this.http.post(`${this.apiUrl}login_check.php`, body, { headers });
+    const body = JSON.stringify({ email: email });
+    return this.http.post(`${this.apiUrl}recuperar_contrasenia.php`, body, { headers });
   }
 
-  insertarUsuario({
-    datos
-  }: {
-    datos: {
-      nombre: string,
-      apellido1: string,
-      apellido2: string,
-      telefono: string,
-      nombre_Usuario: string,
-      contrasenia: string,
-      id_Rol: number
-    };
-  }) {
-    return this.http.post(`${this.apiUrl}insertUser.php`, JSON.stringify(datos));
-
+  insertarUsuario(usuario: Usuario) : Observable<Object>{
+    return this.http.post(`${this.apiUrl}insertUser.php`, usuario);
   }
 
-  actualizarUsuario({
-    datos
-  }: {
-    datos: {
-      id_usuario: number
-      nombre: string,
-      apellido1: string,
-      apellido2: string,
-      telefono: string,
-      nombre_Usuario: string,
-      contrasenia: string,
-      id_Rol: number
-    };
-  }) {
-    return this.http.post(`${this.apiUrl}updateUser.php`, JSON.stringify(datos));
-
+  actualizarUsuario(usuario: Usuario): Observable<Object>{
+    return this.http.post(`${this.apiUrl}updateUser.php`, usuario);
   }
 
-  desactivarUsuario(dato: {id_usuario: number}){
-    return this.http.post(`${this.apiUrl}disableUser.php`, JSON.stringify(dato));
+  desactivarUsuario(usuario: Usuario): Observable<Object>{
+    return this.http.post(`${this.apiUrl}disableUser.php`, usuario);
   }
 
   getUsuarios(): Observable<Usuario[]>{

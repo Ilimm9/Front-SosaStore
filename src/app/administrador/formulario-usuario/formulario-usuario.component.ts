@@ -41,6 +41,7 @@ export class FormularioUsuarioComponent implements OnInit {
     this.editarService.usuarioSeleccionado$.subscribe((usuario) => {
       if (usuario) {
         this.usuario = usuario;
+        console.log(this.usuario)
         this.modoEdicion = true;
       }
     });
@@ -49,6 +50,10 @@ export class FormularioUsuarioComponent implements OnInit {
       this.roles = Object.values(result);
       console.log("Roles:", this.roles);
     });
+  }
+
+  ngOnDestroy() {
+    this.editarService.seleccionarUsuario(null);
   }
 
   validarNombre(): void {
@@ -74,8 +79,8 @@ export class FormularioUsuarioComponent implements OnInit {
   }
   validarApellido(): void {
     
-    const apellido = this.usuario.primerApellido;
-    this.usuarioForm.controls['primerApellido'].setErrors({Error: true})
+    const apellido = this.usuario.apellido1;
+    this.usuarioForm.controls['apellido1'].setErrors({Error: true})
     // Limpia el mensaje de error antes de validar
     this.mensajeErrorAp1 = '';
     // Validaciones
@@ -88,7 +93,7 @@ export class FormularioUsuarioComponent implements OnInit {
     } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(apellido)) {
       this.mensajeErrorAp1 = 'Solo se permiten letras y espacios';
     }else{
-      this.usuarioForm.controls['primerApellido'].setErrors(null)
+      this.usuarioForm.controls['apellido1'].setErrors(null)
     }
   }
   validarTelefono(): void {
@@ -168,28 +173,14 @@ export class FormularioUsuarioComponent implements OnInit {
 
   guardar() {
     console.log('metodo guardar');
+    console.log(this.usuario)
     if (this.usuarioForm.invalid) {
       this.usuarioForm.form.markAllAsTouched();
       return;
     }
-
     this.usuario.activo = this.usuario.activo ? 1 : 0; // 1 para true, 0 para false
 
-    const datos = {
-      nombre: this.usuario.nombre,
-      apellido1: this.usuario.primerApellido,
-      apellido2: this.usuario.segundoApellido,
-      telefono: this.usuario.telefono,
-      nombre_Usuario: this.usuario.nombreUsuario,
-      contrasenia: this.usuario.password,
-      correo: this.usuario.correo,
-      activo: this.usuario.activo,
-      id_Rol: this.usuario.id_Rol,
-    };
-    // console.log(this.usuario);
-    // console.log(datos);
-
-    this.usuarioService.insertarUsuario({ datos }).subscribe({
+    this.usuarioService.insertarUsuario(this.usuario).subscribe({
       next: (result) => {
         console.log(result);
         this.usuarioForm.resetForm();
@@ -200,6 +191,7 @@ export class FormularioUsuarioComponent implements OnInit {
         });
       },
       error: (errores) => {
+        console.log(errores);
         Swal.fire({
           title: 'Usuario No Insertado!',
           text: errores.toString(),
@@ -211,30 +203,15 @@ export class FormularioUsuarioComponent implements OnInit {
 
   actualizarUsuario() {
     console.log('editar usuario');
+
     if (this.usuarioForm.invalid) {
       this.usuarioForm.form.markAllAsTouched();
       return;
     }
-
     this.usuario.activo = this.usuario.activo ? 1 : 0; // 1 para true, 0 para false
 
-    const datos = {
-      id_usuario: this.usuario.idUsuario,
-      nombre: this.usuario.nombre,
-      apellido1: this.usuario.primerApellido,
-      apellido2: this.usuario.segundoApellido,
-      telefono: this.usuario.telefono,
-      nombre_Usuario: this.usuario.nombreUsuario,
-      contrasenia: this.usuario.password,
-      correo: this.usuario.correo,
-      activo: this.usuario.activo,
-      id_Rol: this.usuario.id_Rol,
-    };
-
-    console.log(this.usuario);
-    console.log(datos);
-
-    this.usuarioService.actualizarUsuario({ datos }).subscribe({
+    console.log(this.usuario)
+    this.usuarioService.actualizarUsuario(this.usuario).subscribe({
       next: (result) => {
         console.log(result);
         Swal.fire({
@@ -266,11 +243,8 @@ export class FormularioUsuarioComponent implements OnInit {
       this.usuarioForm.form.markAllAsTouched();
       return;
     }
-    const dato = {
-      id_usuario: this.usuario.idUsuario,
-    };
 
-    this.usuarioService.desactivarUsuario(dato).subscribe({
+    this.usuarioService.desactivarUsuario(this.usuario).subscribe({
       next: (result) => {
         this.usuario.activo = 0;
         console.log(result);

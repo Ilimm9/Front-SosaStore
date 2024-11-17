@@ -15,46 +15,17 @@ export class CategoriaService {
   public getCategorias(): Observable<Categoria[]> {
     return this._httpClient.get<Categoria[]>(`${this.apiURL}selectCategoria.php`);
   }
-  insertarCategoria({
-    datos,
-  }: {
-    datos: {
-      
-      nombre: string;
-      descripcion: string;
-    };
-  }) {
-    return this._httpClient.post(
-      `${this.apiURL}insertCategoria.php`,
-      JSON.stringify(datos)
-    );
-  }
-  updateCategoria({
-    datos,
-  }: {
-    datos: {
-      id_categoria:number;
-      nombre: string;
-      descripcion: string;
-    };
-  }) {
-    return this._httpClient.post(
-      `${this.apiURL}updateCategoria.php`,
-      JSON.stringify(datos)
-    );
+  
+  insertarCategoria(categoria: Categoria): Observable<Object> {
+    return this._httpClient.post(`${this.apiURL}insertCategoria.php`, categoria);
   }
 
-  deleteCategoria({
-    datos,
-  }: {
-    datos: {
-      id_categoria: number;
-    };
-  }) {
-    return this._httpClient.post(
-      `${this.apiURL}deleteCategoria.php`,
-      JSON.stringify(datos)
-    );
+  updateCategoria(categoria: Categoria) {
+    return this._httpClient.post(`${this.apiURL}updateCategoria.php`,categoria );
+  }
+
+  deleteCategoria(categoria: Categoria) : Observable<Object> {
+    return this._httpClient.post(`${this.apiURL}deleteCategoria.php`,categoria );
   }
   
 }

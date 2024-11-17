@@ -73,7 +73,7 @@ export class AgregarProductoComponent implements OnInit {
           this.producto = producto;
           this.modoEdicion = true;
           const categoriaSeleccionada = this.categorias.find(
-            (cat) => cat.id_categoria === producto.id_categoria
+            (cat) => cat.codigoCategoria === producto.id_categoria
           );
           this.categoriaControl.setValue(categoriaSeleccionada);
         }
@@ -109,13 +109,8 @@ guardarNuevaCategoria(){
     this.categoriaNForm.form.markAllAsTouched();
     return;
   }
-  const datos = {
-    
-    nombre: this.nuevaCategoria.nombre,
-    descripcion : this.nuevaCategoria.descripcion
-  };
 
-  this.categoriaService.insertarCategoria({ datos }).subscribe({
+  this.categoriaService.insertarCategoria(this.nuevaCategoria).subscribe({
     next: (result) => {
       console.log(result);
       this.iniciarCategorias();

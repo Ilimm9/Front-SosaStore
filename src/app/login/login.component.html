@@ -16,11 +16,11 @@
                             <input 
                             type="text" 
                             class="form-control" 
-                            id="usuario" 
+                            id="nombreUsuario" 
                             placeholder="Usuario" 
-                            name="usuario"
+                            name="nombreUsuario"
                             (input)="onInputChange()" 
-                            [(ngModel)]="usuario">
+                            [(ngModel)]="usuario.nombreUsuario">
                     </div> 
                                         
                       <div *ngIf="errorUsuario" class="text-danger">{{ errorUsuario }}</div> 
@@ -36,7 +36,7 @@
                       (input)="onInputChange()" 
                       placeholder="Contraseña" 
                       name="password" 
-                      [(ngModel)]="password">
+                      [(ngModel)]="usuario.password">
                       </div>
                       <div *ngIf="errorPassword" class="text-danger">{{ errorPassword }}</div> 
                   </div>
