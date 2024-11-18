@@ -1,12 +1,11 @@
 export class Producto {
-    id_producto:   number;
-    id_categoria:  number;
-    codigo:        string;
-    nombre:        string;
-    stock:         number;
-    stock_min:     number;
-    stock_max:     number;
-    precio_venta:  number;
-    precio_compra: number;
-    nombre_categoria:string;
+    codigoProducto: string;
+    nombre: string;
+    stock: number;
+    stockMin: number;
+    stockMax: number;
+    precioVenta: number;
+    precioCompra: number;
+    codigoCategoria: string;
+    nombreCategoria:string;
 }

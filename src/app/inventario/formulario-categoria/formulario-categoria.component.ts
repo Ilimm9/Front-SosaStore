@@ -32,13 +32,12 @@ export class FormularioCategoriaComponent implements OnInit {
   @ViewChild('categoriaForm') categoriaForm: NgForm;
   categoriaControl = new FormControl();
   modoEdicion: boolean = false;
-  categoria:Categoria = new Categoria();
+  categoria: Categoria = new Categoria();
   constructor(
     private editarService: EditarService,
-    private productoService: ProductosServicioService,
     private categoriaService: CategoriaService,
-    private router:Router
-  ) {}
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.editarService.categoriaSeleccionada$.subscribe((categoria) => {
@@ -47,7 +46,11 @@ export class FormularioCategoriaComponent implements OnInit {
         this.modoEdicion = true;
       }
     });
-}
+  }
+
+  ngOnDestroy() {
+    this.editarService.seleccionarCategoria(null);
+  }
 
   guardar() {
     console.log('metodo guardar');
@@ -56,15 +59,9 @@ export class FormularioCategoriaComponent implements OnInit {
       return;
     }
 
-
-    const datos = {
-      nombre: this.categoria.nombre,
-      descripcion: this.categoria.descripcion,
-    };
     console.log(this.categoria);
-    console.log(datos);
 
-    this.categoriaService.insertarCategoria({ datos }).subscribe({
+    this.categoriaService.insertarCategoria(this.categoria).subscribe({
       next: (result) => {
         console.log(result);
         this.categoriaForm.resetForm();
@@ -90,19 +87,9 @@ export class FormularioCategoriaComponent implements OnInit {
       this.categoriaForm.form.markAllAsTouched();
       return;
     }
-
-  
-
-    const datos = {
-      id_categoria: this.categoria.id_categoria,
-      nombre: this.categoria.nombre,
-      descripcion: this.categoria.descripcion,
-    };
-
     console.log(this.categoria);
-    console.log(datos);
 
-    this.categoriaService.updateCategoria({ datos }).subscribe({
+    this.categoriaService.updateCategoria(this.categoria).subscribe({
       next: (result) => {
         console.log(result);
         Swal.fire({
@@ -112,10 +99,6 @@ export class FormularioCategoriaComponent implements OnInit {
         });
         this.categoriaForm.reset();
         this.modoEdicion = false;
-        // setTimeout(() => {
-        //   this.
-        // });
-        
       },
       error: (errores) => {
         Swal.fire({
@@ -125,7 +108,7 @@ export class FormularioCategoriaComponent implements OnInit {
         });
       },
     });
-    
+
   }
-  
+
 }

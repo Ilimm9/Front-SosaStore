@@ -22,36 +22,22 @@ export class PerfilComponent implements OnInit{
     private router: Router
    ){}
 
-  //  ngOnInit(): void {
-  //   let usuario = this.usuariologgedService.getUsuario();
-  //   this.usuarioService.getUsuariosCompletos().subscribe((usuariosCompletos)=> {
-  //     for(let user of usuariosCompletos){
-  //       if(user.idUsuario === usuario.idUsuario){
-  //         this.usuario = user;
-  //         console.log(this.usuario)
-  //         break;
-  //       }
-  //     }
-  //   })
-  //   setTimeout(() => {},0)
-    
-  // }
-
   ngOnInit(): void {
     let usuario = this.usuariologgedService.getUsuario();
-    let usuarios: Array<Usuario> = [];
-    this.usuarioService.getUsuarios().subscribe((usuariosCompletos)=> {
-      usuarios = Object.values(usuariosCompletos);
-      for(let user of usuarios){
-        if(user.idUsuario === usuario.idUsuario){
-          this.usuario = user;
-          console.log(this.usuario)
-          break;
+    let usuarios: Usuario[] = [];
+    this.usuarioService.getUsuarios().subscribe({
+      next: (datos) => {
+        usuarios = datos;
+        for(let user of usuarios){
+          if(user.rfc === usuario.rfc){
+            this.usuario = user;
+            console.log(this.usuario)
+            break;
+          }
         }
-      }
-    })
-    setTimeout(() => {},0)
-    
+      }, 
+      error: (errores) => console.log(errores)
+    });
   }
   
   editar(){

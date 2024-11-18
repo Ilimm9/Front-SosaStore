@@ -1,6 +1,6 @@
 <div id="layoutSidenav_nav">
   <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-    @if(usuarioLogged.id_Rol === 3){
+    @if(usuarioLogged.idRol === 3){
     <div class="sb-sidenav-menu">
       <div class="nav">
         <div class="sb-sidenav-menu-heading">Home</div>
@@ -26,10 +26,10 @@
     </div>
     <div class="sb-sidenav-footer">
       <div class="small">Ingreso como:</div>
-      Menu
+      Administrador
     </div>
     }
-    @if(usuarioLogged.id_Rol === 2){
+    @if(usuarioLogged.idRol === 2){
       <div class="sb-sidenav-menu">
         <div class="nav">
           <div class="sb-sidenav-menu-heading">Home</div>

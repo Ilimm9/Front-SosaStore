@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from '../Servicios/login-service.service';
-
 import { CommonModule } from '@angular/common';
-
 import { UsuarioLoggedService } from '../Servicios/usuario-logged.service';
 import { Usuario } from '../models/usuario';
+import { UsuarioService } from '../Servicios/usuario.service';
 
 
 @Component({
@@ -18,8 +16,8 @@ import { Usuario } from '../models/usuario';
 })
 export class LoginComponent implements OnInit {
 
-  usuario: string = '';
-  password: string = '';
+  usuario: Usuario = new Usuario();
+
   errorMessage: string = '';
   errorUsuario: string = '';
   errorPassword: string = '';
@@ -28,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   usuarioLogged: Usuario = new Usuario();
 
-  constructor(private authService: LoginService,
+  constructor(private usuarioService: UsuarioService,
     private router: Router,
     private usuarioLoggedService: UsuarioLoggedService
   ) { }
@@ -36,7 +34,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.usuarioLoggedService.getIsLogin()) {
-      const rol = this.usuarioLoggedService.getUsuario().id_Rol;
+      const rol = this.usuarioLoggedService.getUsuario().idRol;
       if (rol === 1) {
         this.router.navigate(['gestor/cajero']);
 
@@ -51,45 +49,41 @@ export class LoginComponent implements OnInit {
 
   login() {
     console.log(this.usuario);
-    console.log(this.password);
 
-    // let isValid = true;
-    // if (!this.usuario) {
-    //   this.errorUsuario = 'El campo usuario no puede estar vacío.';
-    //   isValid = false;
-    // }
-    // if (!this.password) {
-    //   this.errorPassword = 'El campo contraseña no puede estar vacío.';
-    //   isValid = false;
-    // }
+    let isValid = true;
+    if (!this.usuario.nombreUsuario) {
+      this.errorUsuario = 'El campo usuario no puede estar vacío.';
+      isValid = false;
+    }
+    if (!this.usuario.password) {
+      this.errorPassword = 'El campo contraseña no puede estar vacío.';
+      isValid = false;
+    }
 
     // if (!isValid) {
     //   return;
     // }
 
-    this.authService.login(this.usuario, this.password).subscribe(
-      response => {
-        console.log('Servicio aplicado:', response);
-        console.log(response)
-        this.usuarioLogged.nombre = response.nombre;
-        this.usuarioLogged.idUsuario = response.id_usuario;
-        // this.usuarioLogged.rol = new Rol();
-        this.usuarioLogged.id_Rol = response.id_Rol;
+    this.usuarioService.login(this.usuario).subscribe( {
+      next : (response) => {
+        
+        this.usuario = response;
+        console.log(this.usuario)
 
         // Redirigir según el rol del usuario
 
-        const rol = response.id_Rol;
+        const rol = this.usuario.idRol;
 
         if (rol === 1) {
           this.router.navigate(['gestor/cajero']);
           console.log("administrador");
-          this.usuarioLoggedService.setUsuario(this.usuarioLogged)
+          this.usuarioLoggedService.setUsuario(this.usuario)
           this.usuarioLoggedService.setIsLogin(true);
 
         } else if (rol === 2) {
           this.router.navigate(['gestor/inventario']);
           console.log("inventario");
-          this.usuarioLoggedService.setUsuario(this.usuarioLogged)
+          this.usuarioLoggedService.setUsuario(this.usuario)
           this.usuarioLoggedService.setIsLogin(true);
 
         } else if (rol == 3) {
@@ -97,16 +91,20 @@ export class LoginComponent implements OnInit {
           console.log("administrador");
 
           console.log(this.usuarioLogged)
-          this.usuarioLoggedService.setUsuario(this.usuarioLogged)
+          this.usuarioLoggedService.setUsuario(this.usuario)
           this.usuarioLoggedService.setIsLogin(true);
 
         } else {
           this.errorMessage = 'Credenciales no validas.';
         }
       },
-      error => {
+      error: (errores) => {
+        console.log("eneramos al error")
+        console.log(errores)
         this.errorMessage = 'Usuario o contraseña incorrectos';
       }
+    }
+      
     );
   }
 
@@ -122,7 +120,7 @@ export class LoginComponent implements OnInit {
   }
 
   recuperarContrasenia() {
-    this.authService.recuperarContrasenia(this.emailRecuperacion).subscribe(
+    this.usuarioService.recuperarContrasenia(this.emailRecuperacion).subscribe(
       response => {
         console.log('Solicitud de recuperación enviada:', response);
         this.mostrarRecuperacion = false;

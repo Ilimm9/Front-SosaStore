@@ -4,6 +4,19 @@
         <h3 class="card-title text-center mb-4">Formulario para Categorías</h3>
         <hr class="divider" />
         <form #categoriaForm="ngForm" (ngSubmit)="guardar()" novalidate>
+
+          <div class="mb-3">
+            <label for="codigoCategoria" class="form-label">Codigo Categoria</label>
+            <input
+              type="text"
+              class="form-control"
+              id="codigoCategoria"
+              name="codigoCategoria"
+              [(ngModel)]="categoria.codigoCategoria"
+              #codigoCategoria="ngModel"
+            />
+          </div>
+
           <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
             <input

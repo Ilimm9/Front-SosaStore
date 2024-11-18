@@ -11,65 +11,19 @@ export class ProductosServicioService {
 
   constructor(private _httpClient: HttpClient) {}
 
-  public getProductos() {
-    return this._httpClient.get(`${this.apiURL}selectProducto.php`);
+  public getProductos(): Observable<Producto[]>{
+    return this._httpClient.get<Producto[]>(`${this.apiURL}selectProducto.php`);
   }
 
-  public getProductos2() {
-    return this._httpClient.get(`${this.apiURL}getProduct.php`);
+  insertarProducto(producto: Producto) {
+    return this._httpClient.post(`${this.apiURL}insertProduct.php`,producto);
   }
 
-  insertarProducto({
-    datos,
-  }: {
-    datos: {
-      id_categoria: number;
-      codigo: string;
-      nombre: string;
-      stock: number;
-      stock_min: number;
-      stock_max: number;
-      precio_venta: number;
-      precio_compra: number;
-    };
-  }) {
-    return this._httpClient.post(
-      `${this.apiURL}insertProduct.php`,
-      JSON.stringify(datos)
-    );
+  updateProduct(producto: Producto) {
+    return this._httpClient.post(`${this.apiURL}updateProduct.php`,producto);
   }
 
-  updateProduct({
-    datos,
-  }: {
-    datos: {
-      id_producto: number;
-      id_categoria: number;
-      codigo: string;
-      nombre: string;
-      stock: number;
-      stock_min: number;
-      stock_max: number;
-      precio_venta: number;
-      precio_compra: number;
-    };
-  }) {
-    return this._httpClient.post(
-      `${this.apiURL}updateProduct.php`,
-      JSON.stringify(datos)
-    );
-  }
-
-  deleteProduct({
-    datos,
-  }: {
-    datos: {
-      id_producto: number;
-    };
-  }) {
-    return this._httpClient.post(
-      `${this.apiURL}deleteProduct.php`,
-      JSON.stringify(datos)
-    );
+  deleteProduct(producto: Producto) {
+    return this._httpClient.post(`${this.apiURL}deleteProduct.php`,producto );
   }
 }

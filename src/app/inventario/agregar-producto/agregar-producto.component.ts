@@ -35,108 +35,126 @@ import { MatOptionModule } from '@angular/material/core';
   styleUrl: './agregar-producto.component.css',
 })
 export class AgregarProductoComponent implements OnInit {
+
   @ViewChild('productoForm') productoForm: NgForm;
-  @ViewChild('categoriaNForm')categoriaNForm:NgForm;
+  @ViewChild('categoriaNForm') categoriaNForm: NgForm;
+
   categoriaControl = new FormControl();
   filteredCategorias: Observable<any[]>;
   producto: Producto = new Producto();
-  categorias: Array<Categoria> = [];
-  productList: Array<Producto> = [];
+  categorias: Categoria[] = [];
+  productList: Producto[] = [];
   modoEdicion: boolean = false;
-  visibleModal: boolean=false;
-  nuevaCategoria:Categoria;
+  visibleModal: boolean = false;
+  nuevaCategoria: Categoria;
+
+  nombreCategoria: string = ""
+
   constructor(
     private editarService: EditarService,
     private productoService: ProductosServicioService,
     private categoriaService: CategoriaService
-  ) {}
+  ) { }
 
   ngOnInit() {
-   this.iniciarCategorias();
-    
-  }
-  iniciarCategorias(){
-    this.categoriaService.getCategorias().subscribe((result) => {
-      this.categorias = Object.values(result);
-      
-      this.filteredCategorias = this.categoriaControl.valueChanges.pipe(
-        startWith(''),
-        map((value) => {
-          const nombre =
-            typeof value === 'string' ? value : value?.nombre || '';
-          return nombre ? this._filter(nombre) : this.categorias.slice();
-        })
-      );
+    this.iniciarCategorias();
 
-      this.editarService.productSeleccionado$.subscribe((producto) => {
-        if (producto) {
-          this.producto = producto;
-          this.modoEdicion = true;
-          const categoriaSeleccionada = this.categorias.find(
-            (cat) => cat.id_categoria === producto.id_categoria
-          );
-          this.categoriaControl.setValue(categoriaSeleccionada);
-        }
-        //Aqui
-        if (!this.modoEdicion) {
-          this.productoService.getProductos().subscribe((result) => {
-            this.productList = Object.values(result);
+  }
+
+  ngOnDestroy() {
+    this.editarService.seleccionarProducto(null);
+  }
+
+  iniciarCategorias() {
+    this.categoriaService.getCategorias().subscribe({
+      next: (datos) => {
+        this.categorias = datos;
+
+        this.filteredCategorias = this.categoriaControl.valueChanges.pipe(
+          startWith(''),
+          map((value) => {
+            const nombre =
+              typeof value === 'string' ? value : value?.nombre || '';
+            return nombre ? this._filter(nombre) : this.categorias.slice();
+          })
+        );
+
+        this.editarService.productSeleccionado$.subscribe({
+          next: (producto) => {
+            if (producto) {
+              this.producto = producto;
+              this.modoEdicion = true;
+              for(let cat of this.categorias){
+                if(cat.codigoCategoria === this.producto.codigoCategoria){
+                  this.nombreCategoria = cat.nombre;
+                  console.log(this.nombreCategoria)
+                  break;
+                }
+              }
+              const categoriaSeleccionada = this.categorias.find(
+                (cat) => cat.codigoCategoria === producto.codigoCategoria
+              );
+              this.categoriaControl.setValue(categoriaSeleccionada);
+            }
             //Aqui
-            this.producto.codigo = `PRO${this.productList.length + 1}`;
-          });
-        }
-      });
+            if (!this.modoEdicion) {
+              this.productoService.getProductos().subscribe((result) => {
+                this.productList = Object.values(result);
+                //Aqui
+                this.producto.codigoProducto = `PRO${this.productList.length + 1}`;
+              });
+            }
+          }
+        });
+      }
     });
     //Aqui
     this.productoService.getProductos().subscribe((result) => {
-      this.productList = Object.values(result); 
-      if(!this.modoEdicion){//Aqui
-      this.producto.codigo = `PRO${this.productList.length + 1}`;}
+      this.productList = result;
+      if (!this.modoEdicion) {//Aqui
+        this.producto.codigoProducto = `PRO${this.productList.length + 1}`;
+      }
     });
   }
+
   abrirModal() {
     this.visibleModal = true;
     this.nuevaCategoria = new Categoria(); // Reinicia el formulario
-}
-
-cerrarModal() {
-    this.visibleModal = false;
-    
-} 
-
-guardarNuevaCategoria(){
-  if (this.categoriaNForm.invalid) {
-    this.categoriaNForm.form.markAllAsTouched();
-    return;
   }
-  const datos = {
-    
-    nombre: this.nuevaCategoria.nombre,
-    descripcion : this.nuevaCategoria.descripcion
-  };
 
-  this.categoriaService.insertarCategoria({ datos }).subscribe({
-    next: (result) => {
-      console.log(result);
-      this.iniciarCategorias();
-      Swal.fire({
-        title: 'Categoria Insertada!',
-        text: 'Registro Exitoso!',
-        icon: 'success',
-      });      
-      
-      // Cierra el modal y reinicia el formulario
-      this.cerrarModal();
-    },
-    error: (errores) => {
-      Swal.fire({
-        title: 'Categoria No Insertado!',
-        text: errores.toString(),
-        icon: 'error',
-      });
-    },
-  });
-}
+  cerrarModal() {
+    this.visibleModal = false;
+
+  }
+
+  guardarNuevaCategoria() {
+    if (this.categoriaNForm.invalid) {
+      this.categoriaNForm.form.markAllAsTouched();
+      return;
+    }
+
+    this.categoriaService.insertarCategoria(this.nuevaCategoria).subscribe({
+      next: (result) => {
+        console.log(result);
+        this.iniciarCategorias();
+        Swal.fire({
+          title: 'Categoria Insertada!',
+          text: 'Registro Exitoso!',
+          icon: 'success',
+        });
+
+        // Cierra el modal y reinicia el formulario
+        this.cerrarModal();
+      },
+      error: (errores) => {
+        Swal.fire({
+          title: 'Categoria No Insertado!',
+          text: errores.toString(),
+          icon: 'error',
+        });
+      },
+    });
+  }
 
 
   private _filter(value: string): any[] {
@@ -145,42 +163,27 @@ guardarNuevaCategoria(){
       categoria.nombre.toLowerCase().includes(filterValue)
     );
   }
-  displayCategoryName(categoria: any): string {
+
+  displayCategoryName(categoria: Categoria): string {
     return categoria ? categoria.nombre : '';
+  }
+
+  onCategorySelected(categoria: any): void {
+    this.producto.codigoCategoria = categoria.codigoCategoria;
   }
 
   guardar() {
     console.log('metodo guardar');
+
+    console.log(this.producto);
     if (this.productoForm.invalid) {
       this.productoForm.form.markAllAsTouched();
       return;
     }
 
-    // Obtiene la categoría seleccionada del control
-    const categoriaSeleccionada = this.categoriaControl.value;
-
-    // Asigna el id de la categoría a producto.id_categoria si existe una categoría seleccionada
-    if (categoriaSeleccionada && categoriaSeleccionada.id_categoria) {
-      this.producto.id_categoria = categoriaSeleccionada.id_categoria;
-    } else {
-      console.error('No se ha seleccionado una categoría válida');
-      return; // Opcional: evita guardar si la categoría no es válida
-    }
-
-    const datos = {
-      id_categoria: this.producto.id_categoria,
-      codigo: this.producto.codigo,
-      nombre: this.producto.nombre,
-      stock: this.producto.stock,
-      stock_min: this.producto.stock_min,
-      stock_max: this.producto.stock_max,
-      precio_venta: this.producto.precio_venta,
-      precio_compra: this.producto.precio_compra,
-    };
     console.log(this.producto);
-    console.log(datos);
 
-    this.productoService.insertarProducto({ datos }).subscribe({
+    this.productoService.insertarProducto(this.producto).subscribe({
       next: (result) => {
         console.log(result);
         this.productoForm.resetForm();
@@ -209,25 +212,12 @@ guardarNuevaCategoria(){
     }
 
     // Asigna la categoría seleccionada al producto antes de enviar la actualización
-    const categoriaSeleccionada = this.categoriaControl.value;
-    this.producto.id_categoria = categoriaSeleccionada.id_categoria;
-
-    const datos = {
-      id_producto: this.producto.id_producto,
-      id_categoria: this.producto.id_categoria,
-      codigo: this.producto.codigo,
-      nombre: this.producto.nombre,
-      stock: this.producto.stock,
-      stock_min: this.producto.stock_min,
-      stock_max: this.producto.stock_max,
-      precio_venta: this.producto.precio_venta,
-      precio_compra: this.producto.precio_compra,
-    };
+    // const categoriaSeleccionada = this.categoriaControl.value;
+    // this.producto.id_categoria = categoriaSeleccionada.id_categoria;
 
     console.log(this.producto);
-    console.log(datos);
 
-    this.productoService.updateProduct({ datos }).subscribe({
+    this.productoService.updateProduct(this.producto).subscribe({
       next: (result) => {
         console.log(result);
         Swal.fire({
