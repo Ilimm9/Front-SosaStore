@@ -240,7 +240,7 @@ export class AgregarProductoComponent implements OnInit {
     } else if (stockMax < 2) {
       this.mensajeErrorStockMax = 'Solo se permite un numero mayor a 2';
     } else if(stockMax<=stockMin){
-      this.mensajeErrorStockMax = 'El stock máximo no puede ser igual o mayor al stock mínimo';
+      this.mensajeErrorStockMax = 'No puede ser igual o mayor al stock mínimo';
     }else{
       this.productoForm.controls['stockMax'].setErrors(null)
     } 
@@ -361,6 +361,7 @@ export class AgregarProductoComponent implements OnInit {
           text: 'Registro Exitoso!',
           icon: 'success',
         });
+        this.router.navigate(['/gestor/inventario/tablaProducto']);
       },
       error: (errores) => {
         Swal.fire({
@@ -393,6 +394,7 @@ export class AgregarProductoComponent implements OnInit {
           text: 'Actualización Exitosa!',
           icon: 'success',
         });
+        this.router.navigate(['/gestor/inventario/tablaProducto']);
         this.productoForm.reset();
         this.categoriaControl.setValue('');
         this.modoEdicion = false;

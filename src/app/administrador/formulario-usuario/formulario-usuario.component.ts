@@ -8,6 +8,7 @@ import { RolService } from '../../Servicios/rol.service';
 import { map } from 'rxjs';
 import { UsuarioService } from '../../Servicios/usuario.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-formulario-usuario',
@@ -36,7 +37,8 @@ export class FormularioUsuarioComponent implements OnInit {
   constructor(
     private editarService: EditarService,
     private usuarioService: UsuarioService,
-    private rolService: RolService
+    private rolService: RolService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -237,6 +239,7 @@ export class FormularioUsuarioComponent implements OnInit {
           text: 'Registro Exitoso!',
           icon: 'success',
         });
+        this.router.navigate(['/gestor/administrador/tabla-usuario']);
       },
       error: (errores) => {
         console.log(errores);
@@ -268,6 +271,7 @@ export class FormularioUsuarioComponent implements OnInit {
           text: 'Actualizacion Exitosa!',
           icon: 'success',
         });
+        this.router.navigate(['/gestor/administrador/tabla-usuario']);
         // Limpiar el campo de contraseña en el modelo
         this.usuario.password = '';
         this.usuarioForm.reset();
