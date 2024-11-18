@@ -53,19 +53,19 @@ export class LoginComponent implements OnInit {
     console.log(this.usuario);
     console.log(this.password);
 
-    let isValid = true;
-    if (!this.usuario) {
-      this.errorUsuario = 'El campo usuario no puede estar vacío.';
-      isValid = false;
-    }
-    if (!this.password) {
-      this.errorPassword = 'El campo contraseña no puede estar vacío.';
-      isValid = false;
-    }
+    // let isValid = true;
+    // if (!this.usuario) {
+    //   this.errorUsuario = 'El campo usuario no puede estar vacío.';
+    //   isValid = false;
+    // }
+    // if (!this.password) {
+    //   this.errorPassword = 'El campo contraseña no puede estar vacío.';
+    //   isValid = false;
+    // }
 
-    if (!isValid) {
-      return;
-    }
+    // if (!isValid) {
+    //   return;
+    // }
 
     this.authService.login(this.usuario, this.password).subscribe(
       response => {
