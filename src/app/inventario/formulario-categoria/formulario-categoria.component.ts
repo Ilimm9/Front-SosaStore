@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Producto } from '../../models/producto';
 import { EditarService } from '../../Servicios/editar.service';
-import { ProductosServicioService } from '../../Servicios/productos-servicio.service';
 import {
   FormControl,
   FormsModule,
@@ -11,11 +9,8 @@ import {
 import { CategoriaService } from '../../Servicios/categoria.service';
 import { Categoria } from '../../models/categoria';
 import { CommonModule } from '@angular/common';
-import { map, startWith } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { Observable } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
-import { routes } from '../../app.routes';
 
 @Component({
   selector: 'app-formulario-categoria',
@@ -70,14 +65,15 @@ export class FormularioCategoriaComponent implements OnInit {
         console.log(result);
         this.categoriaForm.resetForm();
         Swal.fire({
-          title: 'Producto Insertado!',
+          title: 'Categoría Insertada!',
           text: 'Registro Exitoso!',
           icon: 'success',
         });
+        this.router.navigate(['/gestor/inventario/tablaCategoria']);
       },
       error: (errores) => {
         Swal.fire({
-          title: 'Producto No Insertado!',
+          title: 'Categoría No Insertada!',
           text: errores.toString(),
           icon: 'error',
         });
@@ -86,7 +82,7 @@ export class FormularioCategoriaComponent implements OnInit {
   }
 
   actualizarCategoria() {
-    console.log('editar producto');
+    console.log('editar categoria');
     if (this.categoriaForm.invalid) {
       this.categoriaForm.form.markAllAsTouched();
       return;
@@ -97,16 +93,17 @@ export class FormularioCategoriaComponent implements OnInit {
       next: (result) => {
         console.log(result);
         Swal.fire({
-          title: 'Categoría actualizado!',
+          title: 'Categoría actualizada!',
           text: 'Actualización Exitosa!',
           icon: 'success',
         });
         this.categoriaForm.reset();
         this.modoEdicion = false;
+        this.router.navigate(['/gestor/inventario/tablaCategoria']);
       },
       error: (errores) => {
         Swal.fire({
-          title: 'Producto No Actualizado!',
+          title: 'Categoría No Actualizada!',
           text: errores.toString(),
           icon: 'error',
         });

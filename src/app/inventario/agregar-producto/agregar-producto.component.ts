@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-agregar-producto',
@@ -29,7 +30,7 @@ import { MatOptionModule } from '@angular/material/core';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    MatOptionModule,
+    MatOptionModule
   ],
   templateUrl: './agregar-producto.component.html',
   styleUrl: './agregar-producto.component.css',
@@ -64,7 +65,8 @@ export class AgregarProductoComponent implements OnInit {
   constructor(
     private editarService: EditarService,
     private productoService: ProductosServicioService,
-    private categoriaService: CategoriaService
+    private categoriaService: CategoriaService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -128,44 +130,47 @@ export class AgregarProductoComponent implements OnInit {
     });
   }
 
-  abrirModal() {
-    this.visibleModal = true;
-    this.nuevaCategoria = new Categoria(); // Reinicia el formulario
+  abrirCategorias() {
+    this.router.navigate(['/gestor/inventario/formularioCategoria']);
+    // setTimeout(() => {
+    //   this.categoriaForm?.resetForm();
+    // });
+    // this.visibleModal = true;
+    // this.nuevaCategoria = new Categoria(); // Reinicia el formulario
   }
 
-  cerrarModal() {
-    this.visibleModal = false;
+  // cerrarModal() {
+  //   this.visibleModal = false;
+  // }
 
-  }
+  // guardarNuevaCategoria() {
+  //   if (this.categoriaForm.invalid) {
+  //     this.categoriaForm.form.markAllAsTouched();
+  //     return;
+  //   }
 
-  guardarNuevaCategoria() {
-    if (this.categoriaForm.invalid) {
-      this.categoriaForm.form.markAllAsTouched();
-      return;
-    }
+  //   this.categoriaService.insertarCategoria(this.nuevaCategoria).subscribe({
+  //     next: (result) => {
+  //       console.log(result);
+  //       this.iniciarCategorias();
+  //       Swal.fire({
+  //         title: 'Categoria Insertada!',
+  //         text: 'Registro Exitoso!',
+  //         icon: 'success',
+  //       });
 
-    this.categoriaService.insertarCategoria(this.nuevaCategoria).subscribe({
-      next: (result) => {
-        console.log(result);
-        this.iniciarCategorias();
-        Swal.fire({
-          title: 'Categoria Insertada!',
-          text: 'Registro Exitoso!',
-          icon: 'success',
-        });
-
-        // Cierra el modal y reinicia el formulario
-        this.cerrarModal();
-      },
-      error: (errores) => {
-        Swal.fire({
-          title: 'Categoria No Insertado!',
-          text: errores.toString(),
-          icon: 'error',
-        });
-      },
-    });
-  }
+  //       // Cierra el modal y reinicia el formulario
+  //       this.cerrarModal();
+  //     },
+  //     error: (errores) => {
+  //       Swal.fire({
+  //         title: 'Categoria No Insertado!',
+  //         text: errores.toString(),
+  //         icon: 'error',
+  //       });
+  //     },
+  //   });
+  // }
 
   validarNombreProducto(): void {
     const nombre = this.producto.nombre;   
@@ -275,14 +280,12 @@ export class AgregarProductoComponent implements OnInit {
   }
 
   validarNombreCategoria(): void {
-    const nombre = this.nuevaCategoria.nombre;   
-    this.categoriaForm.controls['nombre'].setErrors({Error: true})
-    // Limpia el mensaje de error antes de validar
+    const nombre = this.nuevaCategoria.nombre;
+    this.categoriaForm?.controls['nombre']?.setErrors({ Error: true });
+  
     this.mensajeErrorNombreCategoria = '';
-    
-    // Validaciones
+  
     if (!nombre || nombre.trim() === '') {
-      
       this.mensajeErrorNombreCategoria = 'Campo Requerido';
     } else if (nombre.length < 2) {
       this.mensajeErrorNombreCategoria = 'Longitud mínima: 2 caracteres';
@@ -290,20 +293,23 @@ export class AgregarProductoComponent implements OnInit {
       this.mensajeErrorNombreCategoria = 'No puede comenzar con un número';
     } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nombre)) {
       this.mensajeErrorNombreCategoria = 'Solo se permiten letras y espacios';
-    }else{
-      this.categoriaForm.controls['nombre'].setErrors(null)
-    } 
+    } else {
+      this.categoriaForm?.controls['nombre']?.setErrors(null);
+    }
+    console.log(nombre);
+    console.log(this.mensajeErrorNombreCategoria);
+    console.log(this.categoriaForm);
   }
+  
 
   validarDescripcionCategoria(): void {
     const descripcion = this.nuevaCategoria.descripcion;   
-    this.categoriaForm.controls['descripcion'].setErrors({Error: true})
+    this.categoriaForm?.controls['descripcion']?.setErrors({Error: true})
     // Limpia el mensaje de error antes de validar
     this.mensajeErrorDescripcionCategoria = '';
     
     // Validaciones
     if (!descripcion || descripcion.trim() === '') {
-      
       this.mensajeErrorDescripcionCategoria = 'Campo Requerido';
     } else if (descripcion.length < 10) {
       this.mensajeErrorDescripcionCategoria = 'Longitud mínima: 10 caracteres';
@@ -312,8 +318,11 @@ export class AgregarProductoComponent implements OnInit {
     } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(descripcion)) {
       this.mensajeErrorDescripcionCategoria = 'Solo se permiten letras y espacios';
     }else{
-      this.categoriaForm.controls['descripcion'].setErrors(null)
-    } 
+      this.categoriaForm?.controls['descripcion']?.setErrors(null)
+    }
+    console.log(descripcion);
+    console.log(this.mensajeErrorDescripcionCategoria);
+    console.log(this.categoriaForm);
   }
 
   private _filter(value: string): any[] {
@@ -400,4 +409,11 @@ export class AgregarProductoComponent implements OnInit {
       },
     });
   }
+
+  onModalShown() {
+    if (this.categoriaForm) {
+      this.categoriaForm.resetForm();
+    }
+  }
+  
 }

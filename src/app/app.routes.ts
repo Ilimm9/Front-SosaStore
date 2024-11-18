@@ -13,28 +13,30 @@ import { TablaProductoComponent } from './inventario/tabla-producto/tabla-produc
 import { AgregarProductoComponent } from './inventario/agregar-producto/agregar-producto.component';
 import { TablaCategoriaComponent } from './inventario/tabla-categoria/tabla-categoria.component';
 import { FormularioCategoriaComponent } from './inventario/formulario-categoria/formulario-categoria.component';
+import { AuthGuard } from './Servicios/auth.guard';
+import { RoleGuard } from './Servicios/role.guard';
 
 export const routes: Routes = [
     {path:'',component:LoginComponent},
     {path:'login',component:LoginComponent},
-    {path: 'gestor', component: GestorComponent, children: [
-        {path:'administrador',component:AdministradorComponent, children: [
+    {path: 'gestor', component: GestorComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [1,2,3] }, children: [
+        {path:'administrador',component:AdministradorComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }, children: [
             {path:'', redirectTo: 'home', pathMatch: 'full' },
-            {path: 'home', component: HomeAdminComponent},
-            {path: 'tabla-usuario', component: TablaUsuarioComponent},
-            {path: 'formulario-usuario', component: FormularioUsuarioComponent},
-            {path: 'perfil', component: PerfilComponent}
+            {path: 'home', component: HomeAdminComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
+            {path: 'tabla-usuario', component: TablaUsuarioComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
+            {path: 'formulario-usuario', component: FormularioUsuarioComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
+            {path: 'perfil', component: PerfilComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }}
         ]},
-        {path:'inventario',component:InventarioComponent,children:[
+        {path:'inventario',component:InventarioComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] },children:[
             {path:'',redirectTo: 'homeInventario', pathMatch: 'full'},
-            {path:'homeInventario',component:HomeInventarioComponent},
-            {path:'tablaProducto',component:TablaProductoComponent},
-            {path:'agregarProducto',component:AgregarProductoComponent},
-            {path: 'perfil', component: PerfilComponent},
-            {path: 'tablaCategoria',component:TablaCategoriaComponent},
-            {path: 'formularioCategoria',component:FormularioCategoriaComponent}
+            {path:'homeInventario',component:HomeInventarioComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] }},
+            {path:'tablaProducto',component:TablaProductoComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] }},
+            {path:'agregarProducto',component:AgregarProductoComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] }},
+            {path: 'perfil', component: PerfilComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] }},
+            {path: 'tablaCategoria',component:TablaCategoriaComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] }},
+            {path: 'formularioCategoria',component:FormularioCategoriaComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] }}
         ]},
-        {path:'cajero',component:CajeroComponent}
+        {path:'cajero',component:CajeroComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [1] }}
     ]},
 
 ];

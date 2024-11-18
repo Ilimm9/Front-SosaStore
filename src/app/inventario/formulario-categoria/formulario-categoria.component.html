@@ -45,6 +45,7 @@
               id="descripcion"
               name="descripcion"
               [(ngModel)]="categoria.descripcion"
+              [disabled]="!nombre.valid"
               #descripcion="ngModel"
               (keyup)="validarDescripcionCategoria()"
             />

@@ -1,9 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, switchMap } from 'rxjs';
-import { Rol } from '../models/rol';
 import { Usuario } from '../models/usuario';
-import { RolService } from './rol.service';
 
 @Injectable({
   providedIn: 'root'
