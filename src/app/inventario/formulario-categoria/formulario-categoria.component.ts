@@ -33,6 +33,10 @@ export class FormularioCategoriaComponent implements OnInit {
   categoriaControl = new FormControl();
   modoEdicion: boolean = false;
   categoria: Categoria = new Categoria();
+
+  mensajeErrorNombreCategoria: string = ''; 
+  mensajeErrorDescripcionCategoria: string = ''; 
+
   constructor(
     private editarService: EditarService,
     private categoriaService: CategoriaService,
@@ -109,6 +113,48 @@ export class FormularioCategoriaComponent implements OnInit {
       },
     });
 
+  }
+
+  validarNombreCategoria(): void {
+    const nombre = this.categoria.nombre;   
+    this.categoriaForm.controls['nombre'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorNombreCategoria = '';
+    
+    // Validaciones
+    if (!nombre || nombre.trim() === '') {
+      
+      this.mensajeErrorNombreCategoria = 'Campo Requerido';
+    } else if (nombre.length < 2) {
+      this.mensajeErrorNombreCategoria = 'Longitud mínima: 2 caracteres';
+    } else if (/^\d/.test(nombre)) {
+      this.mensajeErrorNombreCategoria = 'No puede comenzar con un número';
+    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nombre)) {
+      this.mensajeErrorNombreCategoria = 'Solo se permiten letras y espacios';
+    }else{
+      this.categoriaForm.controls['nombre'].setErrors(null)
+    } 
+  }
+
+  validarDescripcionCategoria(): void {
+    const descripcion = this.categoria.descripcion;   
+    this.categoriaForm.controls['descripcion'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorDescripcionCategoria = '';
+    
+    // Validaciones
+    if (!descripcion || descripcion.trim() === '') {
+      
+      this.mensajeErrorDescripcionCategoria = 'Campo Requerido';
+    } else if (descripcion.length < 10) {
+      this.mensajeErrorDescripcionCategoria = 'Longitud mínima: 10 caracteres';
+    } else if (/^\d/.test(descripcion)) {
+      this.mensajeErrorDescripcionCategoria = 'No puede comenzar con un número';
+    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(descripcion)) {
+      this.mensajeErrorDescripcionCategoria = 'Solo se permiten letras y espacios';
+    }else{
+      this.categoriaForm.controls['descripcion'].setErrors(null)
+    } 
   }
 
 }

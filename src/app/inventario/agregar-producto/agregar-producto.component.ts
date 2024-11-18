@@ -37,7 +37,7 @@ import { MatOptionModule } from '@angular/material/core';
 export class AgregarProductoComponent implements OnInit {
 
   @ViewChild('productoForm') productoForm: NgForm;
-  @ViewChild('categoriaNForm') categoriaNForm: NgForm;
+  @ViewChild('categoriaForm') categoriaForm: NgForm;
 
   categoriaControl = new FormControl();
   filteredCategorias: Observable<any[]>;
@@ -49,6 +49,17 @@ export class AgregarProductoComponent implements OnInit {
   nuevaCategoria: Categoria;
 
   nombreCategoria: string = ""
+
+  mensajeErrorNombreProducto: string = ''; 
+  mensajeErrorStock: string = ''; 
+  mensajeErrorStockMin: string = ''; 
+  mensajeErrorStockMax: string = '';
+  mensajeErrorPrecioCompra: string = '';
+  mensajeErrorPrecioVenta: string = '';
+  mensajeErrorCategoria: string = '';
+
+  mensajeErrorNombreCategoria: string = ''; 
+  mensajeErrorDescripcionCategoria: string = ''; 
 
   constructor(
     private editarService: EditarService,
@@ -128,8 +139,8 @@ export class AgregarProductoComponent implements OnInit {
   }
 
   guardarNuevaCategoria() {
-    if (this.categoriaNForm.invalid) {
-      this.categoriaNForm.form.markAllAsTouched();
+    if (this.categoriaForm.invalid) {
+      this.categoriaForm.form.markAllAsTouched();
       return;
     }
 
@@ -156,6 +167,154 @@ export class AgregarProductoComponent implements OnInit {
     });
   }
 
+  validarNombreProducto(): void {
+    const nombre = this.producto.nombre;   
+    this.productoForm.controls['nombre'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorNombreProducto = '';
+    
+    // Validaciones
+    if (!nombre || nombre.trim() === '') {
+      
+      this.mensajeErrorNombreProducto = 'Campo Requerido';
+    } else if (nombre.length < 3) {
+      this.mensajeErrorNombreProducto = 'Longitud mínima: 3 caracteres';
+    } else if (/^\d/.test(nombre)) {
+      this.mensajeErrorNombreProducto = 'No puede comenzar con un número';
+    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nombre)) {
+      this.mensajeErrorNombreProducto = 'Solo se permiten letras y espacios';
+    }else{
+      this.productoForm.controls['nombre'].setErrors(null)
+    } 
+  }
+
+  validarStock(): void {
+    const stock = this.producto.stock;   
+    const stockMin = this.producto.stockMin;   
+    const stockMax = this.producto.stockMax;   
+    this.productoForm.controls['stock'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorStock = '';
+    
+    // Validaciones
+    if (!stock) {
+      this.mensajeErrorStock = 'Campo requerido';
+    } else if(stock < stockMin || stock> stockMax){
+      this.mensajeErrorStock = 'Solo se permite un numero dentro del rango del stock mínimo y máximo';
+    }else{
+      this.productoForm.controls['stock'].setErrors(null)
+    } 
+  }
+
+  validarStockMin(): void {
+    const stockMin = this.producto.stockMin;   
+    this.productoForm.controls['stockMin'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorStockMin = '';
+    
+    // Validaciones
+    if (!stockMin){
+      this.mensajeErrorStockMin = 'Campo requerido';
+    }else if(stockMin < 1) {
+      this.mensajeErrorStockMin = 'Solo se permite un numero mayor a 1';
+    } else{
+      this.productoForm.controls['stockMin'].setErrors(null)
+    } 
+  }
+
+  validarStockMax(): void {
+    const stockMax = this.producto.stockMax;   
+    const stockMin = this.producto.stockMin;   
+    this.productoForm.controls['stockMax'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorStockMax = '';
+    
+    // Validaciones
+    if(!stockMax){
+      this.mensajeErrorStockMax = 'Campo requerido';
+    } else if (stockMax < 2) {
+      this.mensajeErrorStockMax = 'Solo se permite un numero mayor a 2';
+    } else if(stockMax<=stockMin){
+      this.mensajeErrorStockMax = 'El stock máximo no puede ser igual o mayor al stock mínimo';
+    }else{
+      this.productoForm.controls['stockMax'].setErrors(null)
+    } 
+  }
+
+  validarPrecioCompra(): void {
+    const precioCompra = this.producto.precioCompra;   
+    this.productoForm.controls['precioCompra'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorPrecioCompra = '';
+    
+    // Validaciones
+    if(!precioCompra){
+      this.mensajeErrorPrecioCompra = 'Campo requerido';
+    } else if (precioCompra < 0) {
+      this.mensajeErrorPrecioCompra = 'Solo se permite un numero mayor 0';
+    } else{
+      this.productoForm.controls['precioCompra'].setErrors(null)
+    } 
+  }
+
+  validarPrecioVenta(): void {
+    const precioVenta = this.producto.precioVenta;   
+    const precioCompra = this.producto.precioCompra;   
+    this.productoForm.controls['precioVenta'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorPrecioVenta = '';
+    
+    // Validaciones
+    if(!precioVenta){
+      this.mensajeErrorPrecioVenta = 'Campo requerido';
+    } else if (precioVenta <= precioCompra) {
+      this.mensajeErrorPrecioVenta = 'El precio de venta no puede ser menor o igual al precio de compra';
+    } else{
+      this.productoForm.controls['precioVenta'].setErrors(null)
+    } 
+  }
+
+  validarNombreCategoria(): void {
+    const nombre = this.nuevaCategoria.nombre;   
+    this.categoriaForm.controls['nombre'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorNombreCategoria = '';
+    
+    // Validaciones
+    if (!nombre || nombre.trim() === '') {
+      
+      this.mensajeErrorNombreCategoria = 'Campo Requerido';
+    } else if (nombre.length < 2) {
+      this.mensajeErrorNombreCategoria = 'Longitud mínima: 2 caracteres';
+    } else if (/^\d/.test(nombre)) {
+      this.mensajeErrorNombreCategoria = 'No puede comenzar con un número';
+    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nombre)) {
+      this.mensajeErrorNombreCategoria = 'Solo se permiten letras y espacios';
+    }else{
+      this.categoriaForm.controls['nombre'].setErrors(null)
+    } 
+  }
+
+  validarDescripcionCategoria(): void {
+    const descripcion = this.nuevaCategoria.descripcion;   
+    this.categoriaForm.controls['descripcion'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorDescripcionCategoria = '';
+    
+    // Validaciones
+    if (!descripcion || descripcion.trim() === '') {
+      
+      this.mensajeErrorDescripcionCategoria = 'Campo Requerido';
+    } else if (descripcion.length < 10) {
+      this.mensajeErrorDescripcionCategoria = 'Longitud mínima: 10 caracteres';
+    } else if (/^\d/.test(descripcion)) {
+      this.mensajeErrorDescripcionCategoria = 'No puede comenzar con un número';
+    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(descripcion)) {
+      this.mensajeErrorDescripcionCategoria = 'Solo se permiten letras y espacios';
+    }else{
+      this.categoriaForm.controls['descripcion'].setErrors(null)
+    } 
+  }
 
   private _filter(value: string): any[] {
     const filterValue = value.toLowerCase();

@@ -27,23 +27,13 @@
               [(ngModel)]="categoria.nombre"
               placeholder="Ingrese el nombre de la categoría"
               required
-              minlength="3"
-              pattern="^[a-zA-Z0-9\s-_]+$"
               #nombre="ngModel"
+              (keyup)="validarNombreCategoria()"
             />
-            @if(nombre.invalid && nombre.touched){
-            <div class="alert alert-danger mt-2 text-center">
-              @if(nombre.errors?.['required']){
-              <small>El nombre es requerido</small>
-              } @else if (nombre.errors?.['minlength']){
-              <small>Debe tener al menos 3 caracteres</small>
-              } @else if (nombre.errors?.['pattern']){
-              <small
-                >Solo se permiten letras ,numeros, espacios y los caracteres - y
-                _</small
-              >
-              }
-            </div>
+            @if(mensajeErrorNombreCategoria){
+              <div class="mt-2 danger">
+                <small>{{ mensajeErrorNombreCategoria }}</small>
+              </div>
             }
           </div>
   
@@ -56,17 +46,13 @@
               name="descripcion"
               [(ngModel)]="categoria.descripcion"
               #descripcion="ngModel"
+              (keyup)="validarDescripcionCategoria()"
             />
-            @if(descripcion.invalid && descripcion.touched){
-                <div class="alert alert-danger mt-2 text-center">
-                  @if (nombre.errors?.['pattern']){
-                  <small
-                    >Solo se permiten letras ,numeros, espacios y los caracteres - y
-                    _</small
-                  >
-                  }
-                </div>
-                }
+            @if(mensajeErrorDescripcionCategoria){
+              <div class="mt-2 danger">
+                <small>{{ mensajeErrorDescripcionCategoria }}</small>
+              </div>
+            }
           </div>
  
           <div class="d-flex justify-content-evenly">
@@ -81,7 +67,7 @@
             </button>
             <button type="button" class="btn btn-danger ms-2" routerLink="../tablaCategoria">Cancelar</button>
             } @else {
-            <button type="submit" class="btn btn-primary">Agregar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="categoriaForm.invalid">Agregar</button>
             }
           </div>
         </form>

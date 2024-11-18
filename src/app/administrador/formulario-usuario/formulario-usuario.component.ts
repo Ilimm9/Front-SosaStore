@@ -66,8 +66,8 @@ export class FormularioUsuarioComponent implements OnInit {
     if (!nombre || nombre.trim() === '') {
       
       this.mensajeErrorNombre = 'Campo Requerido';
-    } else if (nombre.length < 2) {
-      this.mensajeErrorNombre = 'Largo mínimo: 2 caracteres';
+    } else if (nombre.length < 3) {
+      this.mensajeErrorNombre = 'Longitud mínima: 3 caracteres';
     } else if (/^\d/.test(nombre)) {
       this.mensajeErrorNombre = 'No puede comenzar con un número';
     } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nombre)) {
