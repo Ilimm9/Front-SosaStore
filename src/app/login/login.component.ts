@@ -60,9 +60,9 @@ export class LoginComponent implements OnInit {
       isValid = false;
     }
 
-    if (!isValid) {
-      return;
-    }
+    // if (!isValid) {
+    //   return;
+    // }
 
     this.usuarioService.login(this.usuario).subscribe( {
       next : (response) => {

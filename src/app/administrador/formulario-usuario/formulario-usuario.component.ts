@@ -3,7 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Usuario } from '../../models/usuario';
 import { EditarService } from '../../Servicios/editar.service';
 import { Rol } from '../../models/rol';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NumberFormatStyle } from '@angular/common';
 import { RolService } from '../../Servicios/rol.service';
 import { map } from 'rxjs';
 import { UsuarioService } from '../../Servicios/usuario.service';
@@ -29,6 +29,8 @@ export class FormularioUsuarioComponent implements OnInit {
   mensajeErrorUsuario: string = '';
   mensajeErrorPassword: string = '';
   mensajeErrorRol: string = '';
+  mensajeErrorRfc: string = '';
+
 
 
   constructor(
@@ -56,6 +58,13 @@ export class FormularioUsuarioComponent implements OnInit {
     this.editarService.seleccionarUsuario(null);
   }
 
+  convertirMayusculas(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.toUpperCase(); // Convierte el texto a mayúsculas
+    this.usuarioForm.controls['rfcUsuario'].setValue(input.value); // Actualiza el valor en el formulario reactivo
+  }
+  
+
   validarNombre(): void {
     const nombre = this.usuario.nombre;   
     this.usuarioForm.controls['nombre'].setErrors({Error: true})
@@ -74,7 +83,6 @@ export class FormularioUsuarioComponent implements OnInit {
       this.mensajeErrorNombre = 'Solo se permiten letras y espacios';
     }else{
       this.usuarioForm.controls['nombre'].setErrors(null)
-
     } 
   }
   validarApellido(): void {
@@ -94,6 +102,43 @@ export class FormularioUsuarioComponent implements OnInit {
       this.mensajeErrorAp1 = 'Solo se permiten letras y espacios';
     }else{
       this.usuarioForm.controls['apellido1'].setErrors(null)
+    }
+  }
+
+  validarRfc(): void {
+    
+    const rfc = this.usuario.rfc;
+    this.usuarioForm.controls['rfc'].setErrors({Error: true})
+    this.mensajeErrorRfc = '';
+    if ( rfc.trim() === '') {
+      this.mensajeErrorRfc = 'Campo Requerido';
+    } else if (!/^[A-ZÑ&]{3,4}/.test(rfc)) {
+      this.mensajeErrorRfc = 'Debe iniciar con 3 o 4 letras';
+    } else if (rfc.length < 12 || rfc.length > 13) {
+      this.mensajeErrorRfc = 'El RFC debe tener 12 o 13 caracteres';
+    } else {
+      const fecha = rfc.slice(rfc.length === 12 ? 3 : 4, rfc.length === 12 ? 9 : 10); // Fecha según tipo de RFC
+  
+      if (!validarFechaRFC(fecha)) {
+        this.mensajeErrorRfc = 'Debe contener una fecha válida en formato AAMMDD';
+      } else if (!/[A-Z\d]{2}[A\d]$/.test(rfc.slice(rfc.length - 3))) {
+        this.mensajeErrorRfc = 'Formato de homoclave o dígito verificador incorrecto';
+      } else {
+        this.usuarioForm.controls['rfc'].setErrors(null)
+      }
+    }
+  
+    function validarFechaRFC(fecha: string): boolean {
+      if (fecha.length !== 6) return false;
+  
+      const año = parseInt(fecha.slice(0, 2), 10);
+      const mes = parseInt(fecha.slice(2, 4), 10);
+      const dia = parseInt(fecha.slice(4, 6), 10);
+  
+      if (mes < 1 || mes > 12) return false;
+  
+      const diasPorMes = [31, (año % 4 === 0 ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        return dia >= 1 && dia <= diasPorMes[mes - 1];
     }
   }
   validarTelefono(): void {
@@ -122,7 +167,7 @@ export class FormularioUsuarioComponent implements OnInit {
     if (correo.trim() === '') {
       this.mensajeErrorCorreo = 'Campo Requerido';
     } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(correo)) {
-      this.mensajeErrorCorreo = 'Correo incorrecto';
+      this.mensajeErrorCorreo = 'Formato incorrecto';
     }else{
       this.usuarioForm.controls['correo'].setErrors(null)
     }
@@ -151,11 +196,12 @@ export class FormularioUsuarioComponent implements OnInit {
     const contrasenia = this.usuario.password;
     this.usuarioForm.controls['password'].setErrors({Error: true})
     this.mensajeErrorPassword = '';
+
     // Validaciones
     if ( contrasenia.trim() === '') {
       this.mensajeErrorPassword = 'Campo Requerido';
-    } else if (contrasenia.length < 8) {
-      this.mensajeErrorPassword = 'Mínimo: 8 caracteres';
+    } else if (contrasenia.length < 8 || contrasenia.length >15) {
+      this.mensajeErrorPassword = 'La contraseña debe contener de 8 a 15 caracteres';
     }else if (!/[A-Z]/.test(contrasenia)) {
         this.mensajeErrorPassword = 'La contraseña debe contener al menos una letra mayúscula';
     }else if (!/[a-z]/.test(contrasenia)) {
@@ -170,6 +216,8 @@ export class FormularioUsuarioComponent implements OnInit {
       this.usuarioForm.controls['password'].setErrors(null)
   }
 }
+
+
 
   guardar() {
     console.log('metodo guardar');
@@ -201,6 +249,7 @@ export class FormularioUsuarioComponent implements OnInit {
     });
   }
 
+  
   actualizarUsuario() {
     console.log('editar usuario');
 
@@ -224,7 +273,7 @@ export class FormularioUsuarioComponent implements OnInit {
         this.usuarioForm.reset();
         this.modoEdicion = false;
         setTimeout(() => {
-          this.usuario.password = ''; // Refuerza que el campo de contraseña esté vacío
+          this.usuario.password = ''; 
         });
       },
       error: (errores) => {

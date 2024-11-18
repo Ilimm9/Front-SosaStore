@@ -14,26 +14,6 @@
       <div class="derecho">
 
         <div class="mb-3">
-          <label for="rfc" class="form-label">RFC <span class="required">*</span></label>
-          <input
-            type="text"
-            class="form-control"
-            id="rfc"
-            name="nomrfcbre"
-            [(ngModel)]="usuario.rfc"
-            placeholder="Ingrese el RFC del usuario"
-            required
-            #rfc="ngModel"
-          />
-          @if(mensajeErrorNombre){
-            <div class="mt-2 danger">
-              <small> Error</small>
-            </div>
-          }
-        </div>
-
-
-        <div class="mb-3">
           <label for="nombre" class="form-label">Nombre <span class="required">*</span></label>
           <input
             type="text"
@@ -62,9 +42,9 @@
             name="apellido1"
             [(ngModel)]="usuario.apellido1"
             placeholder="Ingrese el primer apellido del usuario"
-            [disabled]="!nombre.valid"
             required
             #apellido1="ngModel"
+            [disabled]="!nombre.valid"
             (keyup)="validarApellido()"
           />
           @if(mensajeErrorAp1){
@@ -95,7 +75,31 @@
             </div>
           }
       </div>
-  
+
+      @if(!modoEdicion){
+        <div class="mb-3">
+        <label for="rfc" class="form-label">RFC <span class="required">*</span></label>
+        <input
+          type="text"
+          class="form-control"
+          id="rfc"
+          name="rfc"
+          [(ngModel)]="usuario.rfc"
+          placeholder="Ingrese el RFC del usuario"
+          (input)="convertirMayusculas($event)" 
+          required
+          #rfc="ngModel"
+          [disabled]="!apellido1.valid"
+          (keyup)="validarRfc()"
+        />
+        @if(mensajeErrorRfc){
+          <div class="mt-2 danger">
+            <small>{{ mensajeErrorRfc}}</small>
+          </div>
+        }
+      </div>
+    }
+
         <div class="mb-3">
           <label for="telefono" class="form-label">Teléfono <span class="required">*</span></label>
           <input
@@ -116,8 +120,7 @@
             </div>
           }
         </div>
-  
-        
+         
         
       </div>
       <div class="izquierdo">
@@ -181,6 +184,14 @@
             @if(mensajeErrorPassword){
               <div class="danger mt-2">
                 <small>{{ mensajeErrorPassword }}</small>
+              </div>
+              <div class=" mt-2">
+                <small>
+                  La contraseña debe contener: <br>
+                  · 8 a 15 caracteres <br>
+                  ·Mayusculas y minusculas <br>
+                  · Agregar por lo menos un símbolo o número
+                </small>
               </div>
             }
           </div>
