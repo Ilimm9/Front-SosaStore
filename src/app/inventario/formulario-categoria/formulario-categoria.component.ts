@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Producto } from '../../models/producto';
 import { EditarService } from '../../Servicios/editar.service';
-import { ProductosServicioService } from '../../Servicios/productos-servicio.service';
 import {
   FormControl,
   FormsModule,
@@ -11,11 +9,8 @@ import {
 import { CategoriaService } from '../../Servicios/categoria.service';
 import { Categoria } from '../../models/categoria';
 import { CommonModule } from '@angular/common';
-import { map, startWith } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { Observable } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
-import { routes } from '../../app.routes';
 
 @Component({
   selector: 'app-formulario-categoria',
@@ -32,13 +27,16 @@ export class FormularioCategoriaComponent implements OnInit {
   @ViewChild('categoriaForm') categoriaForm: NgForm;
   categoriaControl = new FormControl();
   modoEdicion: boolean = false;
-  categoria:Categoria = new Categoria();
+  categoria: Categoria = new Categoria();
+
+  mensajeErrorNombreCategoria: string = ''; 
+  mensajeErrorDescripcionCategoria: string = ''; 
+
   constructor(
     private editarService: EditarService,
-    private productoService: ProductosServicioService,
     private categoriaService: CategoriaService,
-    private router:Router
-  ) {}
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.editarService.categoriaSeleccionada$.subscribe((categoria) => {
@@ -47,7 +45,11 @@ export class FormularioCategoriaComponent implements OnInit {
         this.modoEdicion = true;
       }
     });
-}
+  }
+
+  ngOnDestroy() {
+    this.editarService.seleccionarCategoria(null);
+  }
 
   guardar() {
     console.log('metodo guardar');
@@ -56,27 +58,22 @@ export class FormularioCategoriaComponent implements OnInit {
       return;
     }
 
-
-    const datos = {
-      nombre: this.categoria.nombre,
-      descripcion: this.categoria.descripcion,
-    };
     console.log(this.categoria);
-    console.log(datos);
 
-    this.categoriaService.insertarCategoria({ datos }).subscribe({
+    this.categoriaService.insertarCategoria(this.categoria).subscribe({
       next: (result) => {
         console.log(result);
         this.categoriaForm.resetForm();
         Swal.fire({
-          title: 'Producto Insertado!',
+          title: 'Categoría Insertada!',
           text: 'Registro Exitoso!',
           icon: 'success',
         });
+        this.router.navigate(['/gestor/inventario/tablaCategoria']);
       },
       error: (errores) => {
         Swal.fire({
-          title: 'Producto No Insertado!',
+          title: 'Categoría No Insertada!',
           text: errores.toString(),
           icon: 'error',
         });
@@ -85,28 +82,18 @@ export class FormularioCategoriaComponent implements OnInit {
   }
 
   actualizarCategoria() {
-    console.log('editar producto');
+    console.log('editar categoria');
     if (this.categoriaForm.invalid) {
       this.categoriaForm.form.markAllAsTouched();
       return;
     }
-
-  
-
-    const datos = {
-      id_categoria: this.categoria.id_categoria,
-      nombre: this.categoria.nombre,
-      descripcion: this.categoria.descripcion,
-    };
-
     console.log(this.categoria);
-    console.log(datos);
 
-    this.categoriaService.updateCategoria({ datos }).subscribe({
+    this.categoriaService.updateCategoria(this.categoria).subscribe({
       next: (result) => {
         console.log(result);
         Swal.fire({
-          title: 'Categoría actualizado!',
+          title: 'Categoría actualizada!',
           text: 'Actualización Exitosa!',
           icon: 'success',
         })
@@ -115,20 +102,59 @@ export class FormularioCategoriaComponent implements OnInit {
         
         this.categoriaForm.reset();
         this.modoEdicion = false;
-        // setTimeout(() => {
-        //   this.
-        // });
-        
+        this.router.navigate(['/gestor/inventario/tablaCategoria']);
       },
       error: (errores) => {
         Swal.fire({
-          title: 'Producto No Actualizado!',
+          title: 'Categoría No Actualizada!',
           text: errores.toString(),
           icon: 'error',
         });
       },
     });
-    
+
   }
-  
+
+  validarNombreCategoria(): void {
+    const nombre = this.categoria.nombre;   
+    this.categoriaForm.controls['nombre'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorNombreCategoria = '';
+    
+    // Validaciones
+    if (!nombre || nombre.trim() === '') {
+      
+      this.mensajeErrorNombreCategoria = 'Campo Requerido';
+    } else if (nombre.length < 2) {
+      this.mensajeErrorNombreCategoria = 'Longitud mínima: 2 caracteres';
+    } else if (/^\d/.test(nombre)) {
+      this.mensajeErrorNombreCategoria = 'No puede comenzar con un número';
+    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nombre)) {
+      this.mensajeErrorNombreCategoria = 'Solo se permiten letras y espacios';
+    }else{
+      this.categoriaForm.controls['nombre'].setErrors(null)
+    } 
+  }
+
+  validarDescripcionCategoria(): void {
+    const descripcion = this.categoria.descripcion;   
+    this.categoriaForm.controls['descripcion'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorDescripcionCategoria = '';
+    
+    // Validaciones
+    if (!descripcion || descripcion.trim() === '') {
+      
+      this.mensajeErrorDescripcionCategoria = 'Campo Requerido';
+    } else if (descripcion.length < 10) {
+      this.mensajeErrorDescripcionCategoria = 'Longitud mínima: 10 caracteres';
+    } else if (/^\d/.test(descripcion)) {
+      this.mensajeErrorDescripcionCategoria = 'No puede comenzar con un número';
+    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(descripcion)) {
+      this.mensajeErrorDescripcionCategoria = 'Solo se permiten letras y espacios';
+    }else{
+      this.categoriaForm.controls['descripcion'].setErrors(null)
+    } 
+  }
+
 }

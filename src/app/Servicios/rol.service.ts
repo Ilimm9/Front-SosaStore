@@ -12,7 +12,6 @@ export class RolService {
   constructor(private http: HttpClient) {}
 
   obtenerRoles() {
-    // const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get(`${this.apiUrl}select_rol.php`);
     
   }

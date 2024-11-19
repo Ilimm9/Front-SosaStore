@@ -83,6 +83,8 @@
   --bs-link-hover-color: #0a58ca;
   --bs-code-color: #d63384;
   --bs-highlight-bg: #fff3cd;
+  --color-fondo: #40a193
+
 }
 
 *,
@@ -11161,9 +11163,10 @@ body {
 .btn-primary {
   background: linear-gradient(135deg, #4CBEA4, #3fb9b9  );
   color: #fff;
-  padding: 10px;
+  padding: 8px;
   text-align: center;
   border: 1px solid #fff;
+  margin: 0 10px;
 }
 .btn-primary:hover{
   background: white;
@@ -11173,11 +11176,27 @@ body {
   border: 1px solid #297866;
 }
 
+.btn-danger{
+  padding: 8px;
+  margin: 0 10px;
+}
+
+.btn-danger:hover{
+  background: white;
+  color: #BB2D3B;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #BB2D3B;
+}
+
 body {
   background: linear-gradient(135deg, #f7f9fc, #e9eff5);
   background-attachment: fixed;
 
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 

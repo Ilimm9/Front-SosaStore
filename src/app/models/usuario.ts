@@ -1,15 +1,13 @@
-import { Rol } from "./rol"
-
 export class Usuario {
-  idUsuario: number
+  rfc: string
   nombre: string
-  primerApellido: string
-  segundoApellido: string
+  apellido1: string
+  apellido2: string
   telefono: string
   correo: string
   activo: number
   nombreUsuario: string
   password: string
-  id_Rol: number
+  idRol: number
   rol: string
 }

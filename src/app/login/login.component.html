@@ -2,30 +2,48 @@
   <div class="container-fluid">
       <div class="row">
           <!-- Fondo izquierdo -->
-          <div class="col-md-6 col-sm-12 fondo-izq">
-              <img src="../../assets/img/img.png" class="imagen-centrada" alt="Imagen centrada">
+          <div class="col-md-5 col-sm-12 fondo-izq">
+              <img src="../../assets/img/logo_white.png"  alt="Logo">
           </div>
           
-          <div class="col-md-6 col-sm-12 fondo-derecho">
-              <form *ngIf="!mostrarRecuperacion" (submit)="login()" class="form-contenedor w-100 p-4">
-                  <h3 class="text-center mb-4 text-white">Inicio de sesión</h3>
+          <div class="col-md-7 col-sm-12 fondo-derecho">
+              <form *ngIf="!mostrarRecuperacion" (submit)="login()" class="form-contenedor">
+                  <h3 class="texto mb-4 ">Inicio de sesión</h3>
                   
-                  <div class="mb-3">
-                      <label for="usuario" class="form-label text-label">Usuario</label>
-                      <input type="text" class="form-control" id="usuario" (input)="onInputChange()" placeholder="Ingrese su nombre de usuario" name="usuario" [(ngModel)]="usuario">
+                  <div class="mb-5">
+                      <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input 
+                            type="text" 
+                            class="form-control" 
+                            id="nombreUsuario" 
+                            placeholder="Usuario" 
+                            name="nombreUsuario"
+                            (input)="onInputChange()" 
+                            [(ngModel)]="usuario.nombreUsuario">
+                    </div> 
+                                        
                       <div *ngIf="errorUsuario" class="text-danger">{{ errorUsuario }}</div> 
                   </div>
 
                   <div class="mb-3">
-                      <label for="password" class="form-label text-label">Contraseña</label>
-                      <input type="password" class="form-control" id="password" (input)="onInputChange()" placeholder="Ingrese la contraseña" name="password" [(ngModel)]="password">
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-key"></i></span>
+                      <input 
+                      type="password" 
+                      class="form-control" 
+                      id="password" 
+                      (input)="onInputChange()" 
+                      placeholder="Contraseña" 
+                      name="password" 
+                      [(ngModel)]="usuario.password">
+                      </div>
                       <div *ngIf="errorPassword" class="text-danger">{{ errorPassword }}</div> 
                   </div>
                   
-                  <a class="dropdown-item mb-3 text-link" href="#" (click)="mostrarRecuperacionContrasenia()"><em>¿Olvidaste la contraseña?</em></a>
-                  
-                  <button type="submit" class="btn btn-log w-100">Ingresar</button>
+                  <!-- <a class="dropdown-item mb-3 text-link" href="#" (click)="mostrarRecuperacionContrasenia()"><em>¿Olvidaste la contraseña?</em></a> -->
                   <div *ngIf="errorMessage" class="text-danger mt-3">{{ errorMessage }}</div> 
+                  <button type="submit" class="btn btn-log">INGRESAR</button>
               </form>
 
               <!-- recuperación de contraseña -->

@@ -1,83 +1,79 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DataTable } from 'simple-datatables';
 import { Usuario } from '../../models/usuario';
 import { EditarService } from '../../Servicios/editar.service';
 import { UsuarioService } from '../../Servicios/usuario.service';
-import { MatIconModule } from '@angular/material/icon';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-tabla-usuario',
   standalone: true,
-  imports: [RouterLink, MatIconModule],
+  imports: [
+    MatTableModule, 
+    MatPaginatorModule, 
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule
+  ],
   templateUrl: './tabla-usuario.component.html',
   styleUrl: './tabla-usuario.component.css'
 })
 export class TablaUsuarioComponent implements OnInit {
 
-  @ViewChild('datatablesSimple') datatablesSimple!: ElementRef;
+  usuarios: Usuario[] = [];
+  displayedColumns: string[] = ['rfc', 'nombre', 'cargo', 'correo', 'telefono', 'usuario', 'acciones'];
+  dataSource = new  MatTableDataSource<Usuario>();
 
-  usuarios: Array<Usuario> = [];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private editarService: EditarService,
+  constructor(
     private usuarioService: UsuarioService,
+    private editarService: EditarService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    // this.consultarUsuarios();
-    this.loadUsers();
+    this.obtenerUsuarios();
   }
 
-  loadUsers(){
-    this.usuarioService.getUsuarios().subscribe((result) => {
-      this.usuarios = Object.values(result);
-      console.log("Usuarios completos con roles:", this.usuarios);
-      setTimeout(() => {
-        this.initDataTable(); // Inicializa la DataTable después de que el DOM se haya actualizado
-      }, 0);
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  obtenerUsuarios(){
+    this.usuarioService.getUsuarios().subscribe({
+      next: (datos) => {
+        this.usuarios = datos;
+        this.dataSource.data = this.usuarios;
+        console.log(this.usuarios);
+      },
+      error: (errores) => console.log(errores)
     });
   }
 
-  // consultarUsuarios() {
-  //   this.usuarioService.getUsuariosCompletos().subscribe((usuariosCompletos) => {
-  //     console.log("Usuarios completos con roles:", usuariosCompletos);
-  //     this.usuarios = usuariosCompletos;
-  //     setTimeout(() => {
-  //       this.initDataTable(); // Inicializa la DataTable después de que el DOM se haya actualizado
-  //     }, 0);
-  //   });
-  // }
-
-  initDataTable() {
-    // Asegúrate de que hay datos en la tabla antes de inicializarla
-    if (this.datatablesSimple && this.usuarios.length > 0) {
-      // Inicializa la DataTable
-      new DataTable(this.datatablesSimple.nativeElement, {
-        labels: {
-          placeholder: "Buscar...",
-          perPage: "registros por página",
-          noRows: "No se encontraron registros",
-          info: "Mostrando {start} a {end} de {rows} registros",
-          noResults: "No se encontraron coincidencias"
-      }
-      });
-    
+  enviarUsuario(user: Usuario) {
+    if (user) {
+      console.log(user)
+      this.editarService.seleccionarUsuario(user)
+      this.router.navigate(['gestor/administrador/formulario-usuario'])
     }
   }
 
-  enviarUsuario(event: MouseEvent) {
-    let dataId = (event.target as HTMLButtonElement).getAttribute('data-id');
-    console.log('enviamos a usuario');
-    console.log(dataId)
-    if (dataId === null) {
-      return;
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
-    let id = parseInt(dataId);
-    const usuario = this.usuarios.find(u => u.idUsuario === id);
-    if (usuario) {
-      console.log(usuario)
-      this.editarService.seleccionarUsuario(usuario)
-    }
+
   }
 
 }
