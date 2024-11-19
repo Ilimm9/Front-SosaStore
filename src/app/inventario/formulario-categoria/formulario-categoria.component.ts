@@ -32,6 +32,8 @@ export class FormularioCategoriaComponent implements OnInit {
   mensajeErrorNombreCategoria: string = ''; 
   mensajeErrorDescripcionCategoria: string = ''; 
 
+  cantCategorias: number;
+
   constructor(
     private editarService: EditarService,
     private categoriaService: CategoriaService,
@@ -45,10 +47,20 @@ export class FormularioCategoriaComponent implements OnInit {
         this.modoEdicion = true;
       }
     });
+    this.contarCategorias();
   }
 
   ngOnDestroy() {
     this.editarService.seleccionarCategoria(null);
+  }
+
+  contarCategorias(){
+    this.categoriaService.countCategories().subscribe({
+      next: (result) => {
+        this.cantCategorias = Number(result.cantCategories);
+        console.log(this.cantCategorias);
+      }
+    });
   }
 
   guardar() {
@@ -58,7 +70,9 @@ export class FormularioCategoriaComponent implements OnInit {
       return;
     }
 
-    console.log(this.categoria);
+    // `${this.producto.nombre.slice(0,3).toUpperCase()}-${this.producto.nombreCategoria.slice(0,3).toUpperCase()}-${this.cantProductos+1}`;
+    this.categoria.codigoCategoria = `${this.categoria.nombre.slice(0,3).toUpperCase()}-${this.categoria.descripcion.slice(0,3).toUpperCase()}-${this.cantCategorias+1}`;
+    console.log('esto se va a guardar ',this.categoria);
 
     this.categoriaService.insertarCategoria(this.categoria).subscribe({
       next: (result) => {

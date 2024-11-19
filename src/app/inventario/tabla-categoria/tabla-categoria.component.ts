@@ -31,7 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class TablaCategoriaComponent implements OnInit, AfterViewInit{
 
   categoriaList: Categoria[] = [];
-  displayedColumns: string[] = ['nombre', 'descripcion','acciones'];
+  displayedColumns: string[] = ['codigo','nombre', 'descripcion','acciones'];
   dataSource = new  MatTableDataSource<Categoria>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

@@ -26,4 +26,8 @@ export class ProductosServicioService {
   deleteProduct(producto: Producto) {
     return this._httpClient.post(`${this.apiURL}deleteProduct.php`,producto );
   }
+
+  countProducts(){
+    return this._httpClient.get<any>(`${this.apiURL}countProducts.php`);
+  }
 }

@@ -44,7 +44,7 @@ export class AgregarProductoComponent implements OnInit {
   filteredCategorias: Observable<any[]>;
   producto: Producto = new Producto();
   categorias: Categoria[] = [];
-  productList: Producto[] = [];
+  // productList: Producto[] = [];
   modoEdicion: boolean = false;
   visibleModal: boolean = false;
   nuevaCategoria: Categoria;
@@ -62,6 +62,8 @@ export class AgregarProductoComponent implements OnInit {
   mensajeErrorNombreCategoria: string = ''; 
   mensajeErrorDescripcionCategoria: string = ''; 
 
+  cantProductos: number;
+
   constructor(
     private editarService: EditarService,
     private productoService: ProductosServicioService,
@@ -71,11 +73,19 @@ export class AgregarProductoComponent implements OnInit {
 
   ngOnInit() {
     this.iniciarCategorias();
-
+    this.contarProductos();
   }
 
   ngOnDestroy() {
     this.editarService.seleccionarProducto(null);
+  }
+
+  contarProductos(){
+    this.productoService.countProducts().subscribe({
+      next: (result) => {
+        this.cantProductos = Number(result.cantProductos);
+      }
+    });
   }
 
   iniciarCategorias() {
@@ -110,24 +120,24 @@ export class AgregarProductoComponent implements OnInit {
               this.categoriaControl.setValue(categoriaSeleccionada);
             }
             //Aqui
-            if (!this.modoEdicion) {
-              this.productoService.getProductos().subscribe((result) => {
-                this.productList = Object.values(result);
-                //Aqui
-                this.producto.codigoProducto = `PRO${this.productList.length + 1}`;
-              });
-            }
+            // if (!this.modoEdicion) {
+            //   this.productoService.getProductos().subscribe((result) => {
+            //     this.productList = Object.values(result);
+            //     //Aqui
+            //     // this.producto.codigoProducto = `PRO${this.productList.length + 1}`;
+            //   });
+            // }
           }
         });
       }
     });
     //Aqui
-    this.productoService.getProductos().subscribe((result) => {
-      this.productList = result;
-      if (!this.modoEdicion) {//Aqui
-        this.producto.codigoProducto = `PRO${this.productList.length + 1}`;
-      }
-    });
+    // this.productoService.getProductos().subscribe((result) => {
+    //   this.productList = result;
+    //   if (!this.modoEdicion) {//Aqui
+    //     // this.producto.codigoProducto = `PRO${this.productList.length + 1}`;
+    //   }
+    // });
   }
 
   abrirCategorias() {
@@ -341,7 +351,6 @@ export class AgregarProductoComponent implements OnInit {
   }
 
   guardar() {
-    console.log('metodo guardar');
 
     console.log(this.producto);
     if (this.productoForm.invalid) {
@@ -349,7 +358,23 @@ export class AgregarProductoComponent implements OnInit {
       return;
     }
 
-    console.log(this.producto);
+    const codCategoria = this.producto.codigoCategoria;
+
+    //sacamos el nombre de la categoria para concatenar los 3 primeros caracteres al codigo del producto
+    this.filteredCategorias.pipe(
+      map(categorias =>
+        categorias.find(categoria => categoria.codigoCategoria == codCategoria))
+      ).subscribe(filteredCategorias => {
+        if(filteredCategorias){
+          console.log('Elemento encontrado: ',filteredCategorias);
+          this.producto.nombreCategoria=filteredCategorias.nombre;
+        }else{
+          console.log('Elemento no encontrado');
+        }
+      });
+
+    this.producto.codigoProducto = `${this.producto.nombre.slice(0,3).toUpperCase()}-${this.producto.nombreCategoria.slice(0,3).toUpperCase()}-${this.cantProductos+1}`;
+    console.log('esto se va a guardar ',this.producto);
 
     this.productoService.insertarProducto(this.producto).subscribe({
       next: (result) => {

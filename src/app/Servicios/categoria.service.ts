@@ -27,5 +27,9 @@ export class CategoriaService {
   deleteCategoria(categoria: Categoria) : Observable<Object> {
     return this._httpClient.post(`${this.apiURL}deleteCategoria.php`,categoria );
   }
+
+  countCategories(){
+    return this._httpClient.get<any>(`${this.apiURL}countCategories.php`);
+  }
   
 }
