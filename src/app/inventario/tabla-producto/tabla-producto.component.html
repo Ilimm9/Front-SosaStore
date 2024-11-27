@@ -1,5 +1,13 @@
 <div class="container">
   <h2>Lista de Productos</h2>
+  <div class="mb-3">
+    <button mat-raised-button color="primary" (click)="exportarExcel()">
+      Exportar a Excel
+    </button>
+    <button mat-raised-button color="accent" (click)="exportarPDF()">
+      Exportar a PDF
+    </button>
+  </div>  
   <mat-form-field>
     <mat-label>Filtro</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="¿Que desea buscar?" #input>
