@@ -15,6 +15,7 @@ import { TablaCategoriaComponent } from './inventario/tabla-categoria/tabla-cate
 import { FormularioCategoriaComponent } from './inventario/formulario-categoria/formulario-categoria.component';
 import { AuthGuard } from './Servicios/auth.guard';
 import { RoleGuard } from './Servicios/role.guard';
+import { ReportesComponent } from './administrador/reportes/reportes.component';
 
 export const routes: Routes = [
     {path:'',component:LoginComponent},
@@ -25,7 +26,8 @@ export const routes: Routes = [
             {path: 'home', component: HomeAdminComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
             {path: 'tabla-usuario', component: TablaUsuarioComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
             {path: 'formulario-usuario', component: FormularioUsuarioComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
-            {path: 'perfil', component: PerfilComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }}
+            {path: 'perfil', component: PerfilComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
+            {path: 'reportes', component: ReportesComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
         ]},
         {path:'inventario',component:InventarioComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] },children:[
             {path:'',redirectTo: 'homeInventario', pathMatch: 'full'},

@@ -1,1 +1,77 @@
-<p>reportes works!</p>
+<div class="contenedor">
+  <mat-card class="example-card contenedor_grafico" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Ventas por Categoria</mat-card-title>
+      <mat-card-subtitle>Totales</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas id="chartTotalCategoria">{{ chartTotalCategoria }}</canvas>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card contenedor_grafico" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Ventas por Categoria</mat-card-title>
+      <mat-card-subtitle>Por Periodo </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="controles">
+        <mat-form-field class="input">
+          <mat-label>Año</mat-label>
+          <mat-select (selectionChange)="onYearChange($event)">
+            @for (anio of categoria_anio; track anio) {
+            <mat-option [value]="anio">{{ anio }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Mes</mat-label>
+          <mat-select (selectionChange)="onMonthChange($event)">
+            @for (mes of categoria_mes; track mes) {
+            <mat-option [value]="mes">{{ meses[mes - 1] }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <canvas id="chartCategoriaMes">{{ chartCategoriaMes }}</canvas>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card contenedor_grafico" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Ventas por Categoria</mat-card-title>
+      <mat-card-subtitle>Por Año </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="controles">
+        <mat-form-field>
+          <mat-label>Año</mat-label>
+          <mat-select (selectionChange)="onYearChange2($event)">
+            @for (anio of categoriaAnio_grafico3; track anio) {
+            <mat-option [value]="anio">{{ anio }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <canvas id="chartCategoriaAnio">{{ chartCategoriaAnio }}</canvas>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card contenedor_grafico" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Productos Mas Vendidos</mat-card-title>
+      <mat-card-subtitle>total</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas id="chartMasVendidos">{{ chartMasVendidos }}</canvas>
+    </mat-card-content>
+  </mat-card>
+
+</div>
