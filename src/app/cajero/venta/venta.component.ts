@@ -196,6 +196,21 @@ import { ProductoVenta } from '../../models/producto-venta';
             });
             this.insertarProductos(result.idVenta);
              this.confirmarVenta();
+             const modalElement = document.getElementById('ventaModal');
+             if (modalElement) {
+               const modalInstance = bootstrap.Modal.getInstance(modalElement);
+               if (modalInstance) {
+                 modalInstance.hide(); // Cierra el modal sin oscurecer la pantalla
+               }
+             }
+            //  const modalElement = document.getElementById('ventaModal');
+            //  if (modalElement) {
+            //    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            //    if (modalInstance) {
+            //      modalInstance.hide(); // Solo cierra el modal
+            //    }
+            //  }
+
             // this.cancelarVenta();
 
             // this.productTable.forEach(element => {

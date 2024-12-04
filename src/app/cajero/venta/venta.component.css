@@ -108,4 +108,33 @@ table {
   .modal-content {
     padding: 20px;
   }
+  .mat-mdc-form-field {
+    font-size: 12px;
+    width: auto; /* Cambiado de 100% a auto */
+    flex-grow: 1; /* Permite que el filtro ocupe el espacio disponible */
+  }
+  
+  .text-end {
+    text-align: right;
+  }
+
+  .containertotales {
+    text-align: right;
+    max-width: 80%;
+    margin: 30px auto;
+    background-color: #fdfdfd; /* Color más claro */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra más suave */
+    gap: 10px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Estilo para los textos */
+  .containertotales p {
+    font-size: 16px;
+    margin: 5px 0;
+    font-weight: bold;
+    color: #2c3e50; /* Color más oscuro */
+  }
   

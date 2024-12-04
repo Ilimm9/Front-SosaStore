@@ -73,17 +73,21 @@
     
 
 <!-- Funciones finales  -->
-<div class="container">
+<div *ngIf="dataSource.data.length > 0" class="containertotales">
 
-<div class="total-container">
+<div style="margin-right: 30px; ">
   <p>Total de productos: {{ sumaTotalProductos }}</p>
   <p>Total de la compra: {{ totalCompra | currency }}</p>
 </div>
 
 <div class="botones-container">
-  <button mat-raised-button color="warn" (click)="cancelarVenta()">Cancelar Venta</button>
+  <button mat-raised-button 
+  class="btn btn-danger"
+  (click)="cancelarVenta()">Cancelar Venta</button>
   <!-- <button mat-raised-button color="primary" (click)="cobrar()">Cobrar</button> -->
-  <button mat-raised-button color="primary" data-bs-toggle="modal" data-bs-target="#ventaModal">Cobrar</button>
+  <button mat-raised-button 
+  class="btn btn-primary"
+ data-bs-toggle="modal" data-bs-target="#ventaModal">Cobrar</button>
 
 </div>
 </div>
@@ -102,11 +106,11 @@
           <p>Fecha: {{ fechaActual | date:'dd/MM/yyyy' }}</p>
           <p>Hora: {{ fechaHoraActual | date:'HH:mm:ss' }}</p>
           <hr>
-          <!-- Encabezados -->
-          <div class="d-flex justify-content-between">
+          <!-- Totales -->
+          <div class="d-flex justify-content-between ">
             <span><strong>Cantidad</strong></span>
             <span><strong>Producto</strong></span>
-            <span><strong>Precio Total</strong></span>
+            <span ><strong>Precio Total</strong></span>
             <br>
           </div>  
           <div *ngFor="let product of dataSource.data" class="d-flex justify-content-between">
