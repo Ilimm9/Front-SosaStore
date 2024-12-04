@@ -1,2 +1,9 @@
 # Ignorar todos los archivos en la carpeta Servicios
 src/app/Servicios/
+src/app/Servicios/categoria.service.ts
+src/app/Servicios/producto-venta.service.ts
+src/app/Servicios/productos-servicio.service.ts
+src/app/Servicios/reporte.service.ts
+src/app/Servicios/rol.service.ts
+src/app/Servicios/usuario.service.ts
+src/app/Servicios/venta.service.ts
