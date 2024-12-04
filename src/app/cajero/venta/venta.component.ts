@@ -116,7 +116,7 @@ import { ProductoVenta } from '../../models/producto-venta';
     productoAgregado(event:any){
       const nombreProducto = event.option.value;
       this.productoSeleccionado = this.productList.find(p=>p.nombre===nombreProducto)||null;
-      this.filteredOptions = of(this.productList.map(p => p.nombre)); // Actualiza  opciones después de seleccionar
+      // this.filteredOptions = of(this.productList.map(p => p.nombre)); // Actualiza  opciones después de seleccionar
     //   this.filteredOptions.subscribe(); // Forzar actualización
     }
 
@@ -146,7 +146,7 @@ import { ProductoVenta } from '../../models/producto-venta';
             this.calcularTotales();
         }
         this.dataSource._updateChangeSubscription();
-        this.myControl.reset();
+        this.myControl.setValue('');
         this.productoSeleccionado = null;
       }
 
