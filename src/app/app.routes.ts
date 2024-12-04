@@ -18,6 +18,8 @@ import { RoleGuard } from './Servicios/role.guard';
 import { HomeCajeroComponent } from './cajero/home-cajero/home-cajero.component';
 import { VentaComponent } from './cajero/venta/venta.component';
 import { HistorialComponent } from './cajero/historial/historial.component';
+import { ReportesComponent } from './administrador/reportes/reportes.component';
+
 
 export const routes: Routes = [
     {path:'',component:LoginComponent},
@@ -28,7 +30,8 @@ export const routes: Routes = [
             {path: 'home', component: HomeAdminComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
             {path: 'tabla-usuario', component: TablaUsuarioComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
             {path: 'formulario-usuario', component: FormularioUsuarioComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
-            {path: 'perfil', component: PerfilComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }}
+            {path: 'perfil', component: PerfilComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
+            {path: 'reportes', component: ReportesComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
         ]},
         {path:'inventario',component:InventarioComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] },children:[
             {path:'',redirectTo: 'homeInventario', pathMatch: 'full'},
