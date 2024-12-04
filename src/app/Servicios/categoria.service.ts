@@ -7,8 +7,9 @@ import { Categoria } from '../models/categoria';
   providedIn: 'root'
 })
 export class CategoriaService {
-  private apiURL =
-    "http://localhost/backend-punto_de_venta/";
+  // private apiURL =  "http://localhost/backend-punto_de_venta/";
+    private apiURL = "http://localhost:8000/";
+
 
   constructor(private _httpClient: HttpClient) {}
 
