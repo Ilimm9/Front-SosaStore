@@ -15,6 +15,11 @@ import { TablaCategoriaComponent } from './inventario/tabla-categoria/tabla-cate
 import { FormularioCategoriaComponent } from './inventario/formulario-categoria/formulario-categoria.component';
 import { AuthGuard } from './Servicios/auth.guard';
 import { RoleGuard } from './Servicios/role.guard';
+import { HomeCajeroComponent } from './cajero/home-cajero/home-cajero.component';
+import { VentaComponent } from './cajero/venta/venta.component';
+import { HistorialComponent } from './cajero/historial/historial.component';
+import { ReportesComponent } from './administrador/reportes/reportes.component';
+
 
 export const routes: Routes = [
     {path:'',component:LoginComponent},
@@ -25,7 +30,8 @@ export const routes: Routes = [
             {path: 'home', component: HomeAdminComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
             {path: 'tabla-usuario', component: TablaUsuarioComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
             {path: 'formulario-usuario', component: FormularioUsuarioComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
-            {path: 'perfil', component: PerfilComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }}
+            {path: 'perfil', component: PerfilComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
+            {path: 'reportes', component: ReportesComponent,  canActivate: [AuthGuard, RoleGuard], data: { roles: [3] }},
         ]},
         {path:'inventario',component:InventarioComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] },children:[
             {path:'',redirectTo: 'homeInventario', pathMatch: 'full'},
@@ -36,7 +42,12 @@ export const routes: Routes = [
             {path: 'tablaCategoria',component:TablaCategoriaComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] }},
             {path: 'formularioCategoria',component:FormularioCategoriaComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [2] }}
         ]},
-        {path:'cajero',component:CajeroComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [1] }}
+        {path:'cajero',component:CajeroComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [1] },children:[
+            {path:'',redirectTo: 'homeCajero', pathMatch: 'full'},
+            {path:'homeCajero',component:HomeCajeroComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [1] }},
+            {path:'historialCajero',component: HistorialComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [1] }},
+            {path:'ventaCajero',component:VentaComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [1] }},
+        ]}
     ]},
 
 ];

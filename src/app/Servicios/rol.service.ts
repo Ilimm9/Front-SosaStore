@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 export class RolService {
 
   private apiUrl = "http://localhost/backend-punto_de_venta/";
+  // private apiUrl = "http://localhost:8000/";
+
 
   constructor(private http: HttpClient) {}
 

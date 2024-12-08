@@ -1,7 +1,7 @@
-export class Categoria {
-    id_venta: string;
-    iva: number;
-    subtotal : number;
+export class Venta {
+    id_venta: number;   
     total : number;
-    fecha : number;
+    fecha : Date;
+  detallesProductos: any;
+  totalVenta: any;
 }
