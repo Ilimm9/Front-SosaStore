@@ -18,14 +18,6 @@ export class ProductoVentaService {
     return this._httpClient.post(`${this.apiURL}insertarVentaProducto.php`,productoVenta);
   }
 
-  // obtenerDetallesVenta(idVenta: number): Observable<ProductoVenta[]> {
-  //   return this._httpClient.get<ProductoVenta[]>(`api/productos-venta/${idVenta}`);
-  // }
-
-  // obtenerDetallesVenta(idVenta: number): Observable<ProductoVenta[]> { 
-  //   return this._httpClient.get<ProductoVenta[]>(`${this.apiURL}getVentaProducto/${idVenta}`);
-  //  }
-
   getVentaDetalles(idVenta: number): Observable<any> {
      return this._httpClient.get(`${this.apiURL}getventaProducto.php?id_venta=${idVenta}`); }
   

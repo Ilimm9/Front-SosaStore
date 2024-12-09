@@ -78,7 +78,7 @@ export class HistorialComponent implements OnInit, AfterViewInit {
   cargarDetallesVenta(idVenta: number): void {
     this.productoVentaService.getVentaDetalles(idVenta).subscribe((data) => {
       this.venta = {
-        id_venta: idVenta,
+        idVenta: idVenta,
         fecha: data.fecha,
         total: data.total_venta,
         detallesProductos: data.productos,
@@ -91,7 +91,7 @@ export class HistorialComponent implements OnInit, AfterViewInit {
         total: producto.total_producto,
         cantidad: producto.cantidad,
         precio: producto.precio,
-        nombre_producto: producto.nombre_producto,
+        nombreProducto: producto.nombre_producto,
       }));
     });
   }
