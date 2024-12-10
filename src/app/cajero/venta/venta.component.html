@@ -51,7 +51,7 @@
       </ng-container>
 
       <ng-container matColumnDef="restante">
-        <th mat-header-cell *matHeaderCellDef >Restante</th>
+        <th mat-header-cell *matHeaderCellDef>Restante</th>
         <td mat-cell *matCellDef="let element">{{ element.restante }}</td>
       </ng-container>
 
@@ -135,10 +135,69 @@
       mat-raised-button
       class="btn btn-primary"
       data-bs-toggle="modal"
-      data-bs-target="#ventaModal"
+      data-bs-target="#paymentModal"
     >
       Cobrar
     </button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="paymentModal"
+  tabindex="-1"
+  aria-labelledby="paymentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="paymentModalLabel"
+          style="font-size: 2rem; color: blue"
+        >
+          Cobrar
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="paidAmount" class="form-label">Pagó con:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="paidAmount"
+            placeholder="$0.00"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="changeAmount" class="form-label">Su cambio:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="changeAmount"
+            placeholder="$0.00"
+            readonly
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-success"
+          onclick="calculateChange()"
+        >
+          Cobrar
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 

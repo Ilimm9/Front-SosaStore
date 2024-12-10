@@ -5,7 +5,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Producto } from '../../models/producto';
-import { Router } from '@angular/router';
 import { ProductosServicioService } from '../../Servicios/productos-servicio.service';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -13,13 +12,12 @@ import { map, startWith } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
-import { of } from 'rxjs';
 import { Venta } from '../../models/venta';
 import { VentaService } from '../../Servicios/venta.service';
 import Swal from 'sweetalert2';
-import * as bootstrap from 'bootstrap';
 import { ProductoVentaService } from '../../Servicios/producto-venta.service';
 import { ProductoVenta } from '../../models/producto-venta';
+import { ModeloTablaVenta } from '../../models/modelo-tabla-venta';
 
 @Component({
 
@@ -45,7 +43,7 @@ import { ProductoVenta } from '../../models/producto-venta';
 export class VentaComponent implements OnInit {
 
   productList: Producto[] = [];
-  productTable: Producto[] = [];
+  productTable: any[] = [];
 
   venta: Venta = new Venta();
   ventaRegistrada = false;
@@ -58,8 +56,8 @@ export class VentaComponent implements OnInit {
     'precioTotal',
     'acciones',
   ];
-  // dataSource = new MatTableDataSource<Producto>();
-  dataSource = new MatTableDataSource<{ producto: Producto; cantidad: number; restante: number; precioTotal: number }>();
+  
+  dataSource = new MatTableDataSource<ModeloTablaVenta>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -75,7 +73,6 @@ export class VentaComponent implements OnInit {
 
   constructor(
     private _productoServicio: ProductosServicioService,
-    private router: Router,
     private _ventaServicio: VentaService,
     private _productoVentaService: ProductoVentaService
   ) { }
@@ -106,7 +103,6 @@ export class VentaComponent implements OnInit {
   obtenerProductos() {
     this._productoServicio.getProductos().subscribe({
       next: (datos) => {
-        console.log(datos)
         this.productList = datos;
       }
     });
@@ -119,39 +115,42 @@ export class VentaComponent implements OnInit {
 
   agregarProducto() {
     if (this.productoSeleccionado) {
-      const productoenTabla = this.dataSource.data.find(p => p.producto.nombre === this.productoSeleccionado!.nombre);
-      if (productoenTabla) {
+      let datosTabla: ModeloTablaVenta | undefined = this.dataSource.data.find(p => p.producto.nombre === this.productoSeleccionado!.nombre);
+
+      if (datosTabla) {
         if (this.limiteAgotadoProducto(this.productoSeleccionado)) return;
-        productoenTabla.cantidad++;
-        productoenTabla.restante--;
-        this.productoSeleccionado.stock--;
-        console.log(this.productoSeleccionado.stock);
-        productoenTabla.precioTotal += this.productoSeleccionado.precioVenta;
-        this.productTable.push(productoenTabla.producto);
-        console.log(this.productTable);
+        this.productTable = this.productTable.filter(producto => producto.codigoProducto !== datosTabla.producto.codigoProducto);
+        datosTabla.cantidad++;
+        datosTabla.restante--;
+        datosTabla.producto.stock--;
+        datosTabla.precioTotal += this.productoSeleccionado.precioVenta;
+        this.productTable.push(datosTabla.producto);
 
       } else {
+        console.log('es producto nuevo')
         this.productoSeleccionado.stock--;
-        const nuevoProducto = {
-          producto: this.productoSeleccionado,
-          cantidad: 1,
-          precioTotal: this.productoSeleccionado.precioVenta,
-          restante: this.productoSeleccionado.stock
-        };
-        console.log(this.productoSeleccionado.stock);
+
+        let nuevoProducto: ModeloTablaVenta = new ModeloTablaVenta()
+        nuevoProducto.producto = this.productoSeleccionado;
+        nuevoProducto.cantidad = 1;
+        nuevoProducto.precioTotal = this.productoSeleccionado.precioVenta;
+        nuevoProducto.restante = this.productoSeleccionado.stock
+
         this.dataSource.data = [...this.dataSource.data, nuevoProducto];
         this.productTable.push(nuevoProducto.producto);
-        console.log(this.productTable);
+        //console.log(this.productTable);
       }
       this.calcularTotales();
     }
-    this.dataSource._updateChangeSubscription();
+    // this.dataSource._updateChangeSubscription();
     this.myControl.setValue('');
     this.productoSeleccionado = null;
+    console.log(this.productTable);
+    console.log(this.productList);
   }
 
-  eliminarProducto(productoAEliminar: { producto: Producto; cantidad: number; precioTotal: number }) {
-    const index = this.productTable.findIndex(producto => producto.codigoProducto === productoAEliminar.producto.codigoProducto);
+  eliminarProducto(modelo: ModeloTablaVenta) {
+    const index = this.productTable.findIndex(producto => producto.codigoProducto === modelo.producto.codigoProducto);
     if (index !== -1) {
       this.productTable.splice(index, 1);
     } else {
@@ -160,10 +159,10 @@ export class VentaComponent implements OnInit {
         text: 'No hay productos disponibles para la venta.',
         icon: 'warning',
       });
-      console.log(this.productTable);
+      //console.log(this.productTable);
     }
-    this.obtenerProductos();
-    this.dataSource.data = this.dataSource.data.filter(producto => producto !== productoAEliminar);
+    // this.obtenerProductos();
+    this.dataSource.data = this.dataSource.data.filter(producto => producto !== modelo);
     this.calcularTotales();
   }
 
@@ -179,24 +178,27 @@ export class VentaComponent implements OnInit {
     return false;
   }
 
-  incrementar(product: { producto: Producto; cantidad: number; precioTotal: number; restante: number }) {
-    const productoenTabla = this.dataSource.data.find(p => p.producto.nombre === product.producto!.nombre);
 
-    if (productoenTabla === null || productoenTabla === undefined) return;
+
+  incrementar(product: ModeloTablaVenta) {
+    if (product === null) return;
     if (this.limiteAgotadoProducto(product.producto)) return;
-    productoenTabla.cantidad++;
+    product.cantidad++;
     product.producto.stock--;
-    productoenTabla.restante = product.producto.stock;
+    product.restante = product.producto.stock;
+    product.precioTotal += product.producto.precioVenta;
 
-    productoenTabla.precioTotal += product.producto.precioVenta;
-    this.productTable.push(productoenTabla.producto);
+    this.productTable = this.productTable.filter(producto => producto.codigoProducto !== product.producto.codigoProducto);
 
+
+    this.productTable.push(product.producto);
     this.dataSource._updateChangeSubscription();
     this.calcularTotales();
+    // console.log(this.productTable)
 
   }
 
-  decrementar(product: { producto: Producto; cantidad: number; precioTotal: number; restante: number }) {
+  decrementar(product: ModeloTablaVenta) {
     if (product === null) return;
     product.cantidad--;
 
@@ -220,7 +222,12 @@ export class VentaComponent implements OnInit {
     } else {
       product.producto.stock++;
       product.restante = product.producto.stock;
+      product.precioTotal -= product.producto.precioVenta;
+      this.productTable = this.productTable.filter(producto => producto.codigoProducto !== product.producto.codigoProducto);
+      this.productTable.push(product.producto);
+      this.dataSource._updateChangeSubscription();
       this.calcularTotales();
+      console.log(this.productTable)
     }
 
   }
@@ -232,9 +239,11 @@ export class VentaComponent implements OnInit {
   }
 
   cobrar() {
+    console.log("entramos a cobrar")
+    console.log(this.productTable)
     this._ventaServicio.insertarVenta(this.venta).subscribe({
       next: (result: any) => {
-        console.log(result);
+        //console.log(result);
         Swal.fire({
           title: 'Venta Registrada!',
           text: 'Registro Exitoso!',
@@ -242,9 +251,19 @@ export class VentaComponent implements OnInit {
         });
         this.insertarProductos(result.idVenta);
         this.confirmarVenta();
+
+        this.productTable.forEach(element => {
+          //console.log(element)
+          this._productoServicio.updateProduct(element).subscribe({
+            next: (datos) => {
+              console.log(datos);
+            },
+            error: (errores) => console.log(errores)
+          })
+        });
       },
       error: (errores) => {
-        console.log(errores);
+        //console.log(errores);
         Swal.fire({
           title: 'Venta No Registrada!',
           text: errores.toString(),
@@ -257,21 +276,21 @@ export class VentaComponent implements OnInit {
   insertarProductos(idVenta: number) {
     this.dataSource.data.forEach(product => {
       let productoVenta: ProductoVenta = new ProductoVenta();
-      productoVenta.idProducto = product.producto.codigoProducto,
-        productoVenta.idVenta = idVenta,
-        productoVenta.total = product.precioTotal,
-        productoVenta.cantidad = product.cantidad,
-        productoVenta.precio = product.producto.precioVenta,
+      productoVenta.idProducto = product.producto.codigoProducto;
+        productoVenta.idVenta = idVenta;
+        productoVenta.total = product.precioTotal;
+        productoVenta.cantidad = product.cantidad;
+        productoVenta.precio = product.producto.precioVenta;
 
-        console.log(productoVenta);
-      this._productoVentaService.insertarProductoVenta(productoVenta).subscribe({
-        next: (result) => {
-          console.log(result);
-        },
-        error: (errores) => {
-          console.log(errores);
-        },
-      })
+        //console.log(productoVenta);
+        this._productoVentaService.insertarProductoVenta(productoVenta).subscribe({
+          next: (result) => {
+            console.log(result);
+          },
+          error: (errores) => {
+            console.log(errores);
+          },
+        })
     });
   }
   cancelar() {

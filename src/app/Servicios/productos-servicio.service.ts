@@ -21,6 +21,7 @@ export class ProductosServicioService {
   }
 
   updateProduct(producto: Producto) {
+    console.log(producto);
     return this._httpClient.post(`${this.apiURL}updateProduct.php`,producto);
   }
 
