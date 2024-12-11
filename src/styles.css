@@ -11177,11 +11177,15 @@ body {
 }
 
 .btn-danger{
+  border-radius: 0px;
   padding: 8px;
+  text-align: center;
+  border: 1px solid #fff;
   margin: 0 10px;
 }
 
 .btn-danger:hover{
+  border-radius: 0px;
   background: white;
   color: #BB2D3B;
   padding: 10px;

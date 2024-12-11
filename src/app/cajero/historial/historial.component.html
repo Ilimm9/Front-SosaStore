@@ -43,7 +43,7 @@
 
       <ng-container matColumnDef="idVenta">
         <th mat-header-cell *matHeaderCellDef>Id</th>
-        <td mat-cell *matCellDef="let element">{{ element.id_venta }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.idVenta }}</td>
       </ng-container>
 
       <ng-container matColumnDef="fecha">
@@ -65,7 +65,7 @@
             class="btn btn-primary"
             data-bs-toggle="modal"
             data-bs-target="#detallesModal"
-            (click)="cargarDetallesVenta(element.id_venta)"
+            (click)="cargarDetallesVenta(element)"
           >
             Detalles
           </button>
@@ -93,8 +93,82 @@
   </mat-paginator>
 </div>
 
+
+  <!-- Modal -->
+  <div class="modal fade" id="detallesModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered col-4">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ticketModalLabel">Ticket de Venta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="ticket">
+            <h3 class="text-center">SOSA STORE</h3>
+            <div style="text-align: left">
+              <p>
+                <span class="bold">Fecha:</span>
+                {{ venta.fecha| date : "dd/MM/yyyy" }}
+              </p>
+              <p>
+                <span class="bold"> Atendio:</span> {{ venta.cajero }}
+              </p>
+              <!-- <p>Hora: {{ fechaHoraActual | date:'HH:mm:ss' }}</p> -->
+            </div>
+
+            <hr />
+            <div class="d-flex justify-content-between">
+              <span><strong>Cantidad</strong></span>
+              <span><strong>Producto</strong></span>
+              <span><strong>Precio</strong></span>
+              <span><strong>Importe</strong></span>
+            </div>
+            <br />
+            <div
+              *ngFor="let product of ventaDetalles"
+              class="d-flex justify-content-between mb-2"
+            >
+              <span>{{ product.cantidad }}</span>
+              <span>{{ product.nombreProducto }}</span>
+              <span>{{ product.precio | currency }}</span>
+              <span>{{ product.total | currency }}</span>
+            </div>
+            <hr />
+
+            <div style="text-align: right;">
+              <p>
+                <strong>Total de la Compra:</strong> {{ venta.total | currency }}
+              </p>
+              <p><span class="bold"> Efectivo:</span> {{ venta.efectivo | currency }}</p>
+              <p><span class="bold"> Cambio:</span> {{ venta.cambio | currency }}</p>
+            </div>
+            <hr />
+            <div class="text-center">
+              <p>¡Gracias por su preferencia!</p>
+              <p><strong>Sosa Store</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            mat-raised-button
+            color="primary"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
 <!-- Modal de detalles de venta -->
-<div
+<!-- <div
   class="modal fade"
   id="detallesModal"
   tabindex="-1"
@@ -115,7 +189,6 @@
       <div class="modal-body">
         <div class="ticket">
           <p>Fecha: {{ venta.fecha | date : "dd/MM/yyyy" }}</p>
-          <!-- <p>Hora: {{ venta.fecha | date : "HH:mm:ss" }}</p> -->
           <hr />
 
           <div class="d-flex justify-content-between">
@@ -141,4 +214,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

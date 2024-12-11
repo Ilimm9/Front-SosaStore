@@ -5,6 +5,7 @@ export class ProductoVenta {
     total: number;
     cantidad: number;
     precio: number;
+
     nombreProducto: string;
 
 }
