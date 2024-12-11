@@ -140,3 +140,20 @@ table tr:hover {
   padding: 5px 30px;
   font-size: large;
 }
+
+.bg-verde{
+  background-color: #35877b;
+}
+
+.danger {
+  color: #f12626;
+}
+
+.required {
+  color: #f12626;
+  font-weight: bold;
+}
+
+.bold {
+  font-weight: bold;
+}

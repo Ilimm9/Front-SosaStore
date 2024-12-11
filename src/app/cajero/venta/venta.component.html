@@ -1,4 +1,72 @@
 <!-- Seleccion de productos  -->
+@if(ticket){
+<div class="container">
+  <div class="card shadow mb-4 col-6" style="margin: 0 auto">
+    <div class="card-header py-3">
+      <h5 class="card-title" id="ticketCardLabel">Ticket de Venta</h5>
+    </div>
+    <div class="card-body">
+      <div class="ticket">
+        <h3 class="text-center">SOSA STORE</h3>
+        <div style="text-align: left">
+          <p>
+            <span class="bold">Fecha:</span>
+            {{ fechaActual | date : "dd/MM/yyyy" }}
+          </p>
+          <p>
+            <span class="bold"> Atendio:</span> {{ usuario.nombre }}
+            {{ usuario.apellido1 }} {{ usuario.apellido2 }}
+          </p>
+          <!-- <p>Hora: {{ fechaHoraActual | date:'HH:mm:ss' }}</p> -->
+        </div>
+
+        <hr />
+        <div class="d-flex justify-content-between">
+          <span><strong>Cantidad</strong></span>
+          <span><strong>Producto</strong></span>
+          <span><strong>Precio</strong></span>
+          <span><strong>Importe</strong></span>
+        </div>
+        <br />
+        <div
+          *ngFor="let product of dataSource.data"
+          class="d-flex justify-content-between mb-2"
+        >
+          <span>{{ product.cantidad }}</span>
+          <span>{{ product.producto.nombre }}</span>
+          <span>{{ product.producto.precioVenta | currency }}</span>
+          <span>{{ product.precioTotal | currency }}</span>
+        </div>
+        <hr />
+
+        
+        <div style="text-align: right;">
+          <p>
+            <strong>Total de la Compra:</strong> {{ venta.total | currency }}
+          </p>
+          <p><span class="bold"> Efectivo:</span> {{ cliente.ingresado | currency }}</p>
+          <p><span class="bold"> Cambio:</span> {{ cliente.cambio | currency }}</p>
+        </div>
+        <hr />
+        <div class="text-center">
+          <p>¡Gracias por su preferencia!</p>
+          <p><strong>Sosa Store</strong></p>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-end">
+      <button
+        mat-raised-button
+        color="primary"
+        class="btn btn-primary"
+        (click)="terminarVenta()"
+      >
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
+}@else {
 <div class="container">
   <mat-form-field appearance="fill">
     <mat-label>Código o Nombre del Producto</mat-label>
@@ -136,11 +204,14 @@
       class="btn btn-primary"
       data-bs-toggle="modal"
       data-bs-target="#paymentModal"
+      (click)="actualizarIngresado()"
     >
       Cobrar
     </button>
   </div>
 </div>
+
+}
 
 <!-- Modal -->
 <div
@@ -152,11 +223,11 @@
 >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header bg-verde">
         <h5
           class="modal-title"
           id="paymentModalLabel"
-          style="font-size: 2rem; color: blue"
+          style="font-size: 1rem; color: white"
         >
           Cobrar
         </h5>
@@ -169,93 +240,131 @@
       </div>
       <div class="modal-body">
         <div class="mb-3">
-          <label for="paidAmount" class="form-label">Pagó con:</label>
+          <label for="changeAmount" class="form-label">Ingrese el monto:</label>
           <input
             type="number"
+            id="ingresado"
+            name="ingresado"
             class="form-control"
-            id="paidAmount"
-            placeholder="$0.00"
+            [(ngModel)]="cliente.ingresado"
+            (ngModelChange)="calcularCambio()"
+            placeholder="Ingrese el monto"
           />
+          @if(msgError){
+          <div class="danger mt-2" style="color: rgb(190, 41, 41)">
+            <p>{{ msgError }}</p>
+          </div>
+          }
         </div>
+
         <div class="mb-3">
-          <label for="changeAmount" class="form-label">Su cambio:</label>
-          <input
-            type="text"
-            class="form-control"
-            id="changeAmount"
-            placeholder="$0.00"
-            readonly
-          />
+          <label id="cambio" class="form-label">Cambio:</label>
+          <span class="form-control" style="background: #f8f9fa"
+            >$ {{ cliente.cambio | number : "1.2-2" }}</span
+          >
         </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-success"
-          onclick="calculateChange()"
-        >
-          Cobrar
-        </button>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-sm btn-danger"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          @if(cliente.ingresado >= totalCompra){
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="cobrar()"
+            class="btn-primary"
+            data-bs-dismiss="modal"
+          >
+            Cobrar
+          </button>
+          }
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Modal  -->
-<div
-  class="modal fade"
-  id="ventaModal"
-  tabindex="-1"
-  aria-labelledby="ventaModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="ventaModalLabel">Ticket de Venta</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="ticket">
-          <h3>SOSA STORE</h3>
-          <p>Fecha: {{ fechaActual | date : "dd/MM/yyyy" }}</p>
-          <!-- <p>Hora: {{ fechaHoraActual | date:'HH:mm:ss' }}</p> -->
-          <hr />
-          <div class="d-flex justify-content-between">
-            <span><strong>Cantidad</strong></span>
-            <span><strong>Producto</strong></span>
-            <span><strong>Precio Total</strong></span>
-            <br />
+<!-- <div
+    class="modal fade"
+    id="ventaModal"
+    tabindex="-1"
+    aria-labelledby="ventaModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ventaModalLabel">Ticket de Venta</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="ticket">
+            <h3>SOSA STORE</h3>
+            <p>Fecha: {{ fechaActual | date : "dd/MM/yyyy" }}</p>
+            <hr />
+            <div class="d-flex justify-content-between">
+              <span><strong>Cantidad</strong></span>
+              <span><strong>Producto</strong></span>
+              <span><strong>Precio Total</strong></span>
+              <br />
+            </div>
+            <div
+              *ngFor="let product of dataSource.data"
+              class="d-flex justify-content-between"
+            >
+              <span>{{ product.cantidad }}</span>
+              <span>{{ product.producto.nombre }}</span>
+              <span>{{ product.precioTotal | currency }}</span>
+            </div>
+            <hr />
+            <p>
+              <strong>Total de la Compra:</strong> {{ venta.total | currency }}
+            </p>
           </div>
-          <div
-            *ngFor="let product of dataSource.data"
-            class="d-flex justify-content-between"
+        </div>
+        <div class="modal-footer">
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-primary"
+            data-bs-dismiss="modal"
           >
-            <span>{{ product.cantidad }}</span>
-            <span>{{ product.producto.nombre }}</span>
-            <span>{{ product.precioTotal | currency }}</span>
-          </div>
-          <hr />
-          <p>
-            <strong>Total de la Compra:</strong> {{ venta.total | currency }}
-          </p>
+            Cerrar
+          </button>
         </div>
       </div>
-      <div class="modal-footer">
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="cobrar()"
-          class="btn-primary"
-        >
-          Cobrar
-        </button>
-      </div>
     </div>
-  </div>
-</div>
+  </div> -->
+
+
+  <!-- <div class="table-responsive">
+          <table class="table table-borderless text-center">
+            <thead>
+              <tr>
+                <th><strong>Cantidad</strong></th>
+                <th><strong>Producto</strong></th>
+                <th><strong>Precio</strong></th>
+                <th><strong>Importe</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of dataSource.data">
+                <td>{{ product.cantidad }}</td>
+                <td>{{ product.producto.nombre }}</td>
+                <td>{{ product.producto.precioVenta | currency }}</td>
+                <td>{{ product.precioTotal | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <hr /> -->

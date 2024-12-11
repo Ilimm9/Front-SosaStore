@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +18,8 @@ import Swal from 'sweetalert2';
 import { ProductoVentaService } from '../../Servicios/producto-venta.service';
 import { ProductoVenta } from '../../models/producto-venta';
 import { ModeloTablaVenta } from '../../models/modelo-tabla-venta';
+import { UsuarioLoggedService } from '../../Servicios/usuario-logged.service';
+import { Usuario } from '../../models/usuario';
 
 @Component({
 
@@ -48,6 +50,14 @@ export class VentaComponent implements OnInit {
   venta: Venta = new Venta();
   ventaRegistrada = false;
 
+  cliente = {
+    ingresado: 0,
+    cambio: 0,
+  }
+  msgError: string = '';
+  ticket: boolean = false;
+  usuario: Usuario = new Usuario();
+
   displayedColumns: string[] = [
     'cantidad',
     'restante',
@@ -56,7 +66,7 @@ export class VentaComponent implements OnInit {
     'precioTotal',
     'acciones',
   ];
-  
+
   dataSource = new MatTableDataSource<ModeloTablaVenta>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -74,16 +84,34 @@ export class VentaComponent implements OnInit {
   constructor(
     private _productoServicio: ProductosServicioService,
     private _ventaServicio: VentaService,
-    private _productoVentaService: ProductoVentaService
+    private _productoVentaService: ProductoVentaService,
+    private usuarioLogged: UsuarioLoggedService
   ) { }
 
   ngOnInit(): void {
+    this.usuario = this.usuarioLogged.getUsuario();
     this.fechaActual = new Date();
     this.fechaHoraActual = new Date();
     this.obtenerProductos();
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value)));
+      map(value =>{
+        const filtered = this._filter(value)
+        if (filtered.length === 0 && value !== '') {
+          this.showErrorMessage(); 
+        }
+        return filtered;
+      }));
+  }
+
+  showErrorMessage() {
+    Swal.fire({
+      icon: "error",
+      title: "No se encontraron Coincidencias",
+      text: "El producto no esta registrado",
+      footer: 'Notifica al jefe de inventario'
+    });
+    this.myControl.setValue('');
   }
 
   private _filter(value: string): string[] {
@@ -113,8 +141,37 @@ export class VentaComponent implements OnInit {
     this.productoSeleccionado = this.productList.find(p => p.nombre === nombreProducto) || null;
   }
 
+  calcularCambio(): void {
+    this.msgError = '';
+    if (this.cliente.ingresado >= this.totalCompra) {
+      this.cliente.cambio = this.cliente.ingresado - this.totalCompra;
+    } else if (this.cliente.ingresado < 0) {
+      this.msgError = "No se aceptan numeros negativos";
+      this.cliente.cambio = 0;
+    } else if (this.cliente.ingresado < this.totalCompra) {
+      this.msgError = "El monto es menor a la compra";
+      this.cliente.cambio = 0;
+    }
+  }
+
+  actualizarIngresado() {
+    this.cliente.ingresado = this.totalCompra;
+  }
+
+
+
   agregarProducto() {
     if (this.productoSeleccionado) {
+
+      if(this.productoSeleccionado.stock == 0){
+        Swal.fire({
+          icon: "error",
+          title: "Producto Agotado",
+          text: "Por el momento el producto esta agotado",
+          footer: 'Notifica al jefe de inventario'
+        });
+        return;
+      }
       let datosTabla: ModeloTablaVenta | undefined = this.dataSource.data.find(p => p.producto.nombre === this.productoSeleccionado!.nombre);
 
       if (datosTabla) {
@@ -238,9 +295,18 @@ export class VentaComponent implements OnInit {
     this.venta.total = this.totalCompra;
   }
 
+  terminarVenta() {
+    this.ticket = false;
+    this.confirmarVenta();
+  }
+
   cobrar() {
     console.log("entramos a cobrar")
     console.log(this.productTable)
+    this.venta.cambio = this.cliente.cambio;
+    this.venta.efectivo = this.cliente.ingresado;
+    this.venta.rfc = this.usuario.rfc;
+    console.log(this.venta);
     this._ventaServicio.insertarVenta(this.venta).subscribe({
       next: (result: any) => {
         //console.log(result);
@@ -248,22 +314,14 @@ export class VentaComponent implements OnInit {
           title: 'Venta Registrada!',
           text: 'Registro Exitoso!',
           icon: 'success',
-        });
-        this.insertarProductos(result.idVenta);
-        this.confirmarVenta();
-
-        this.productTable.forEach(element => {
-          //console.log(element)
-          this._productoServicio.updateProduct(element).subscribe({
-            next: (datos) => {
-              console.log(datos);
-            },
-            error: (errores) => console.log(errores)
-          })
+        }).then(() => {
+          this.ticket = true;
+          this.insertarProductoVenta(result.idVenta);
+          this.actualizarStockProductos();
         });
       },
       error: (errores) => {
-        //console.log(errores);
+        console.log(errores);
         Swal.fire({
           title: 'Venta No Registrada!',
           text: errores.toString(),
@@ -273,26 +331,41 @@ export class VentaComponent implements OnInit {
     });
   }
 
-  insertarProductos(idVenta: number) {
+  insertarProductoVenta(idVenta: number) {
     this.dataSource.data.forEach(product => {
       let productoVenta: ProductoVenta = new ProductoVenta();
       productoVenta.idProducto = product.producto.codigoProducto;
-        productoVenta.idVenta = idVenta;
-        productoVenta.total = product.precioTotal;
-        productoVenta.cantidad = product.cantidad;
-        productoVenta.precio = product.producto.precioVenta;
+      productoVenta.idVenta = idVenta;
+      productoVenta.total = product.precioTotal;
+      productoVenta.cantidad = product.cantidad;
+      productoVenta.precio = product.producto.precioVenta;
 
-        //console.log(productoVenta);
-        this._productoVentaService.insertarProductoVenta(productoVenta).subscribe({
-          next: (result) => {
-            console.log(result);
-          },
-          error: (errores) => {
-            console.log(errores);
-          },
-        })
+      //console.log(productoVenta);
+      this._productoVentaService.insertarProductoVenta(productoVenta).subscribe({
+        next: (result) => {
+          console.log(result);
+        },
+        error: (errores) => {
+          console.log(errores);
+        },
+      })
     });
   }
+
+  actualizarStockProductos(){
+    console.log(this.productTable);
+    //actualizar productos en base de datos stock
+        this.productTable.forEach(element => {
+          console.log(element)
+          this._productoServicio.updateProduct(element).subscribe({
+            next: (datos) => {
+              console.log(datos);
+            },
+            error: (errores) => console.log(errores)
+          })
+        });
+  }
+
   cancelar() {
     this.myControl.reset();
     this.productoSeleccionado = null;
@@ -311,6 +384,7 @@ export class VentaComponent implements OnInit {
   }
 
   confirmarVenta() {
+    this.obtenerProductos();
     this.dataSource.data.forEach(item => {
       item.producto.stock += item.cantidad;
     });
@@ -318,6 +392,10 @@ export class VentaComponent implements OnInit {
     this.calcularTotales();
     this.myControl.reset();
     this.productoSeleccionado = null;
+    this.cliente = {
+      ingresado: 0,
+      cambio: 0
+    }
   }
 
 }

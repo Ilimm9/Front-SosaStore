@@ -75,24 +75,29 @@ export class HistorialComponent implements OnInit, AfterViewInit {
     });
   }
 
-  cargarDetallesVenta(idVenta: number): void {
-    this.productoVentaService.getVentaDetalles(idVenta).subscribe((data) => {
-      this.venta = {
-        idVenta: idVenta,
-        fecha: data.fecha,
-        total: data.total_venta,
-        detallesProductos: data.productos,
-        totalVenta: data.total_venta,
-      };
+  limpiarDatos(){
+    this.venta = new Venta();
+    this.ventaDetalles = [];
+  }
+
+  cargarDetallesVenta(venta: Venta): void {
+    this.productoVentaService.getVentaDetalles(venta.idVenta).subscribe((data) => {
+      console.log(data);
+      this.venta = venta;
+      this.venta.detallesProductos = data.productos;
+      this.venta.cajero = data.productos[0]?.cajero;
+      
+      console.log(this.venta)
+
       this.ventaDetalles = data.productos.map((producto: any) => ({
-        idProductoVenta: producto.id_producto_venta,
-        idProducto: producto.id_producto,
-        idVenta: idVenta,
+        idVenta: venta.idVenta,
         total: producto.total_producto,
         cantidad: producto.cantidad,
         precio: producto.precio,
         nombreProducto: producto.nombre_producto,
       }));
+      console.log(this.ventaDetalles);
+
     });
   }
 
