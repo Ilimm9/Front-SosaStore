@@ -8,8 +8,7 @@ import { Producto } from '../models/producto';
 })
 export class ProductosServicioService {
   private apiURL = 'http://localhost/backend-punto_de_venta/';
-  // private apiURL = "http://localhost:8000/";
-
+  //private apiURL = "http://localhost:8000/";
 
   constructor(private _httpClient: HttpClient) {}
 
@@ -22,6 +21,7 @@ export class ProductosServicioService {
   }
 
   updateProduct(producto: Producto) {
+    console.log(producto);
     return this._httpClient.post(`${this.apiURL}updateProduct.php`,producto);
   }
 

@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class VentaService {
-  private apiURL = 'http://localhost/backend-punto_de_venta/';
+  
+  private apiURL = "http://localhost/backend-punto_de_venta/";
   // private apiURL = "http://localhost:8000/";
 
 

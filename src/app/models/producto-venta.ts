@@ -1,10 +1,10 @@
 export class ProductoVenta {
-    idProductoVenta?: number;
+    idProductoVenta: number;
     idProducto: string;
     idVenta: number;
-    total : number;
+    total: number;
     cantidad: number;
     precio: number;
-nombre_producto?: any;
+    nombreProducto: string;
 
 }

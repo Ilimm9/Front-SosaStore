@@ -115,7 +115,7 @@
       <div class="modal-body">
         <div class="ticket">
           <p>Fecha: {{ venta.fecha | date : "dd/MM/yyyy" }}</p>
-          <p>Hora: {{ venta.fecha | date : "HH:mm:ss" }}</p>
+          <!-- <p>Hora: {{ venta.fecha | date : "HH:mm:ss" }}</p> -->
           <hr />
 
           <div class="d-flex justify-content-between">
@@ -129,7 +129,7 @@
             class="d-flex justify-content-between"
           >
             <span>{{ product.cantidad }}</span>
-            <span>{{ product.nombre_producto }}</span>
+            <span>{{ product.nombreProducto }}</span>
             <span>{{ product.total | currency }}</span>
           </div>
 
