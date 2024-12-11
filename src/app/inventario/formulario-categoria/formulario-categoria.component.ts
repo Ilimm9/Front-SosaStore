@@ -110,7 +110,10 @@ export class FormularioCategoriaComponent implements OnInit {
           title: 'Categoría actualizada!',
           text: 'Actualización Exitosa!',
           icon: 'success',
-        });
+        })
+          // Navegar a la ruta después de que el usuario cierre la alerta
+          
+        
         this.categoriaForm.reset();
         this.modoEdicion = false;
         this.router.navigate(['/gestor/inventario/tablaCategoria']);

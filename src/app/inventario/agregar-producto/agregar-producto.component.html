@@ -33,6 +33,30 @@
             }
           </div>
 
+          
+            <div class="mb-3">
+              <label for="descripcion" class="form-label"
+                >Descripcion <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="descripcion"
+                name="descripcion"
+                [(ngModel)]="producto.descripcion"
+                placeholder="Ingrese la descripción"
+                [disabled]="!nombre.valid"
+                required
+                #descripcion="ngModel"
+                (keyup)="validarDescripcionProducto()"
+              />
+              @if(mensajeErrorDescripcion){
+              <div class="mt-2 danger">
+                <small>{{ mensajeErrorDescripcion }}</small>
+              </div>
+              }
+            </div>
+
           <!-- <div class="mb-3">
             <label for="codigoProducto" class="form-label"
               >Código <span class="required">*</span></label
@@ -62,7 +86,7 @@
               name="stockMin"
               [(ngModel)]="producto.stockMin"
               placeholder="Ingrese el stock minimo requerido"
-              [disabled]="!nombre.valid"
+              [disabled]="!descripcion.valid"
               required
               #stockMin="ngModel"
               (keyup)="validarStockMin()"
