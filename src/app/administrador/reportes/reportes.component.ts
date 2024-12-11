@@ -185,7 +185,7 @@ export class ReportesComponent implements OnInit {
     const data = {
       labels: labels,
       datasets: [{
-        label: 'ventas por categoria',
+        label: '',
         data: dataValues,
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -195,7 +195,7 @@ export class ReportesComponent implements OnInit {
           'rgba(54, 162, 235, 0.2)',
           'rgba(153, 102, 255, 0.2)',
           'rgba(201, 203, 207, 0.2)'
-        ],
+        ].slice(0, labels.length),
         borderColor: [
           'rgb(255, 99, 132)',
           'rgb(255, 159, 64)',
@@ -204,7 +204,7 @@ export class ReportesComponent implements OnInit {
           'rgb(54, 162, 235)',
           'rgb(153, 102, 255)',
           'rgb(201, 203, 207)'
-        ],
+        ].slice(0, labels.length),
         borderWidth: 1
       }]
     };
