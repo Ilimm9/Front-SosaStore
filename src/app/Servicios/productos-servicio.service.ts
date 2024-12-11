@@ -29,7 +29,8 @@ export class ProductosServicioService {
     return this._httpClient.post(`${this.apiURL}deleteProduct.php`,producto );
   }
 
-  countProducts(){
-    return this._httpClient.get<any>(`${this.apiURL}countProducts.php`);
-  }
+  countProducts(nombre: string) {
+    console.log('Enviando nombre:', nombre); // Verifica el dato enviado
+    return this._httpClient.post<any>(`${this.apiURL}countProducts.php`, { nombre });
+  }  
 }

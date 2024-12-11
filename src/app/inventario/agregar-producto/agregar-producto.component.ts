@@ -73,7 +73,6 @@ export class AgregarProductoComponent implements OnInit {
 
   ngOnInit() {
     this.iniciarCategorias();
-    this.contarProductos();
     this.iniciarProductos();
   }
 
@@ -82,11 +81,16 @@ export class AgregarProductoComponent implements OnInit {
   }
 
   contarProductos(){
-    this.productoService.countProducts().subscribe({
-      next: (result) => {
-        this.cantProductos = Number(result.cantProductos);
-      }
-    });
+    // this.productoService.countProducts(this.producto.nombre).subscribe({
+    //   next: (result) => {
+    //     this.cantProductos = Number(result.cantProductos);
+    //     console.log('resultadooo ',this.cantProductos);
+    //   }
+    // });
+
+    this.cantProductos = this.productList.filter(
+      product => product.nombre.toLowerCase() === this.producto.nombre.toLowerCase()
+    ).length;  
   }
   iniciarProductos(){
     this.productoService.getProductos().subscribe({
@@ -390,7 +394,7 @@ export class AgregarProductoComponent implements OnInit {
   }
 
   guardar() {
-    
+    this.contarProductos();
     console.log(this.producto);
     if (this.productoForm.invalid) {
       this.productoForm.form.markAllAsTouched();
