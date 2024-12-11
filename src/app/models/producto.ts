@@ -1,6 +1,7 @@
 export class Producto {
     codigoProducto: string;
     nombre: string;
+    descripcion:string;
     stock: number;
     stockMin: number;
     stockMax: number;
