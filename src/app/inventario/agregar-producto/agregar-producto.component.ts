@@ -44,7 +44,7 @@ export class AgregarProductoComponent implements OnInit {
   filteredCategorias: Observable<any[]>;
   producto: Producto = new Producto();
   categorias: Categoria[] = [];
-  // productList: Producto[] = [];
+  productList: Producto[] = [];
   modoEdicion: boolean = false;
   visibleModal: boolean = false;
   nuevaCategoria: Categoria;
@@ -58,7 +58,7 @@ export class AgregarProductoComponent implements OnInit {
   mensajeErrorPrecioCompra: string = '';
   mensajeErrorPrecioVenta: string = '';
   mensajeErrorCategoria: string = '';
-
+  mensajeErrorDescripcion: string = ''; 
   mensajeErrorNombreCategoria: string = ''; 
   mensajeErrorDescripcionCategoria: string = ''; 
 
@@ -73,7 +73,7 @@ export class AgregarProductoComponent implements OnInit {
 
   ngOnInit() {
     this.iniciarCategorias();
-    this.contarProductos();
+    this.iniciarProductos();
   }
 
   ngOnDestroy() {
@@ -81,13 +81,24 @@ export class AgregarProductoComponent implements OnInit {
   }
 
   contarProductos(){
-    this.productoService.countProducts().subscribe({
-      next: (result) => {
-        this.cantProductos = Number(result.cantProductos);
-      }
-    });
-  }
+    // this.productoService.countProducts(this.producto.nombre).subscribe({
+    //   next: (result) => {
+    //     this.cantProductos = Number(result.cantProductos);
+    //     console.log('resultadooo ',this.cantProductos);
+    //   }
+    // });
 
+    this.cantProductos = this.productList.filter(
+      product => product.nombre.toLowerCase() === this.producto.nombre.toLowerCase()
+    ).length;  
+  }
+  iniciarProductos(){
+    this.productoService.getProductos().subscribe({
+      next:(datos)=>{
+        this.productList = datos;
+      }
+    })
+  }
   iniciarCategorias() {
     this.categoriaService.getCategorias().subscribe({
       next: (datos) => {
@@ -196,10 +207,29 @@ export class AgregarProductoComponent implements OnInit {
       this.mensajeErrorNombreProducto = 'Longitud mínima: 3 caracteres';
     } else if (/^\d/.test(nombre)) {
       this.mensajeErrorNombreProducto = 'No puede comenzar con un número';
-    } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nombre)) {
-      this.mensajeErrorNombreProducto = 'Solo se permiten letras y espacios';
+    } else if (!/^[a-zA-ZÀ-ÿ\s0-9]+$/.test(nombre)) {
+      this.mensajeErrorNombreProducto = 'Solo se permiten letras , espacios y números';
     }else{
       this.productoForm.controls['nombre'].setErrors(null)
+    } 
+  }
+
+  validarDescripcionProducto(): void {
+    const descripcion = this.producto.descripcion;   
+    this.productoForm.controls['descripcion'].setErrors({Error: true})
+    // Limpia el mensaje de error antes de validar
+    this.mensajeErrorDescripcion = '';
+    
+    // Validaciones
+    if (!descripcion || descripcion.trim() === '') {
+      
+      this.mensajeErrorDescripcion = 'Campo Requerido';
+    } else if (descripcion.length < 10) {
+      this.mensajeErrorDescripcion = 'Longitud mínima: 10 caracteres';
+    } else if (!/^[a-zA-ZÀ-ÿ\s0-9#@\$,\.\-\+\*_]+$/.test(descripcion)) {
+      this.mensajeErrorDescripcion = 'Solo se permiten letras , espacios , números y los símbolos: # @ $ , . - + * _';
+    }else{
+      this.productoForm.controls['descripcion'].setErrors(null)
     } 
   }
 
@@ -219,6 +249,19 @@ export class AgregarProductoComponent implements OnInit {
     }else{
       this.productoForm.controls['stock'].setErrors(null)
     } 
+  }
+
+  buscarProducto(nombre:String):boolean{
+    const nombreProducto = this.productList.find(
+      product => product.nombre === nombre
+    );
+    return nombreProducto?true:false;
+  }
+  buscarDescripcion(descripcion:String):boolean{
+    const descripcionProducto = this.productList.find(
+      product => product.descripcion === descripcion
+    );
+    return descripcionProducto?true:false;
   }
 
   validarStockMin(): void {
@@ -351,13 +394,24 @@ export class AgregarProductoComponent implements OnInit {
   }
 
   guardar() {
-
+    this.contarProductos();
     console.log(this.producto);
     if (this.productoForm.invalid) {
       this.productoForm.form.markAllAsTouched();
       return;
     }
-
+    
+    if(this.buscarProducto(this.producto.nombre)){
+      
+      if(this.buscarDescripcion(this.producto.descripcion)){
+        Swal.fire({
+          title: 'Producto No Insertado!',
+          text: 'El producto que intentas registrar ya existe en el inventario',
+          icon: 'error',
+        });
+        return;
+      }
+    }
     const codCategoria = this.producto.codigoCategoria;
 
     //sacamos el nombre de la categoria para concatenar los 3 primeros caracteres al codigo del producto
@@ -410,7 +464,17 @@ export class AgregarProductoComponent implements OnInit {
     // this.producto.id_categoria = categoriaSeleccionada.id_categoria;
 
     console.log(this.producto);
-
+    if(this.buscarProducto(this.producto.nombre)){
+      
+      if(this.buscarDescripcion(this.producto.descripcion)){
+        Swal.fire({
+          title: 'Producto No Actualizado!',
+          text: 'Nombre y Descripción coindicen con uno existente',
+          icon: 'error',
+        });
+        return;
+      }
+    }
     this.productoService.updateProduct(this.producto).subscribe({
       next: (result) => {
         console.log(result);
