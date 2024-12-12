@@ -89,6 +89,9 @@
     </mat-autocomplete>
   </mat-form-field>
   <div *ngIf="productoSeleccionado">
+    <input class="form-control" style="width: 90px;" type="number" [(ngModel)]="cantidadProducto" placeholder="Cantidad" >
+  </div>
+  <div *ngIf="productoSeleccionado">
     <button
       mat-raised-button
       class="btn btn-primary"
