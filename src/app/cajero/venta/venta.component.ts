@@ -49,6 +49,7 @@ export class VentaComponent implements OnInit {
 
   venta: Venta = new Venta();
   ventaRegistrada = false;
+  cantidadProducto = 1;
 
   cliente = {
     ingresado: 0,
@@ -158,9 +159,35 @@ export class VentaComponent implements OnInit {
     this.cliente.ingresado = this.totalCompra;
   }
 
+  validar(){
+    if (this.productoSeleccionado) {
+      if(this.cantidadProducto> 0 && this.cantidadProducto<=this.productoSeleccionado?.stock){
+        return true;
+      }
+      if(this.cantidadProducto<1){
+        Swal.fire({
+          icon: "error",
+          title: "Verifíca la cantidad",
+          text: "Debes ingresar al menos 1 producto",
+          footer: 'Notifica al jefe de inventario'
+        });    
+      }else {
+        Swal.fire({
+          icon: "error",
+          title: "Verifíca la cantidad",
+          text: "Excedes el stock disponible",
+          footer: 'Aumenta la cantidad'
+        });
+      }
+    }
+    return false;
+  }
 
 
   agregarProducto() {
+    if(!this.validar()){
+      return;
+    }
     if (this.productoSeleccionado) {
 
       if(this.productoSeleccionado.stock == 0){
@@ -173,37 +200,37 @@ export class VentaComponent implements OnInit {
         return;
       }
       let datosTabla: ModeloTablaVenta | undefined = this.dataSource.data.find(p => p.producto.nombre === this.productoSeleccionado!.nombre);
-
+      
       if (datosTabla) {
         if (this.limiteAgotadoProducto(this.productoSeleccionado)) return;
         this.productTable = this.productTable.filter(producto => producto.codigoProducto !== datosTabla.producto.codigoProducto);
-        datosTabla.cantidad++;
-        datosTabla.restante--;
-        datosTabla.producto.stock--;
-        datosTabla.precioTotal += this.productoSeleccionado.precioVenta;
+        datosTabla.cantidad = datosTabla.cantidad+this.cantidadProducto;
+        datosTabla.restante = this.productoSeleccionado.stock-this.cantidadProducto;
+        datosTabla.producto.stock = this.productoSeleccionado.stock-this.cantidadProducto;
+        datosTabla.precioTotal = this.productoSeleccionado.precioVenta * datosTabla.cantidad;
         this.productTable.push(datosTabla.producto);
 
       } else {
         console.log('es producto nuevo')
-        this.productoSeleccionado.stock--;
+        this.productoSeleccionado.stock = this.productoSeleccionado.stock - this.cantidadProducto;
 
         let nuevoProducto: ModeloTablaVenta = new ModeloTablaVenta()
         nuevoProducto.producto = this.productoSeleccionado;
-        nuevoProducto.cantidad = 1;
-        nuevoProducto.precioTotal = this.productoSeleccionado.precioVenta;
-        nuevoProducto.restante = this.productoSeleccionado.stock
+        nuevoProducto.cantidad = this.cantidadProducto;
+        nuevoProducto.precioTotal = this.productoSeleccionado.precioVenta*this.cantidadProducto;
+        nuevoProducto.restante = this.productoSeleccionado.stock;
 
         this.dataSource.data = [...this.dataSource.data, nuevoProducto];
         this.productTable.push(nuevoProducto.producto);
-        //console.log(this.productTable);
       }
       this.calcularTotales();
     }
-    // this.dataSource._updateChangeSubscription();
+    
     this.myControl.setValue('');
     this.productoSeleccionado = null;
     console.log(this.productTable);
     console.log(this.productList);
+    this.cantidadProducto = 1;
   }
 
   eliminarProducto(modelo: ModeloTablaVenta) {
