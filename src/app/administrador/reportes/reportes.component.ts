@@ -30,6 +30,9 @@ export class ReportesComponent implements OnInit {
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
   ];
 
+  public chartVentaDia: any;
+
+
   // Atributo que almacena los datos del chart
   public chartTotalCategoria: any;
   ventasPorCategoria: any[];
@@ -53,12 +56,24 @@ export class ReportesComponent implements OnInit {
   constructor(private reporteService: ReporteService) { }
 
   ngOnInit(): void {
+    this.graficoVentaDia();
     this.obtenerVentaCategoriaTotal();
     this.obtenerVentaCategoriaMes();
     this.obtenerVentaCategoriaAnio();
     this.obtenerMasVendidos();
     // this.graficoVentaCategoriaMes();
 
+  }
+
+  obtenerDatosGeneral(query: string, contenedor: any){
+    this.reporteService.generarQuery(query).subscribe({
+      next: (datos) => {
+        contenedor = datos;
+      },
+      error: (errores) => {
+        console.log(errores);
+      }
+    });
   }
 
   obtenerVentaCategoriaTotal() {
@@ -110,6 +125,62 @@ export class ReportesComponent implements OnInit {
         this.graficoMasVendidos();
       }
     });
+  }
+
+  graficoVentaDia() {
+    let query : string = "SELECT c.nombre AS categoria, YEAR(v.fecha) AS anio, MONTH(v.fecha) AS mes, SUM(pv.total) AS total_ventas, SUM((p.precio_venta - p.precio_compra) * pv.cantidad) AS ganancia FROM producto_venta pv JOIN producto p ON pv.id_producto = p.codigo_producto JOIN categoria c ON p.codigo_categoria = c.codigo_categoria JOIN venta v ON pv.id_venta = v.id_venta WHERE DATE(v.fecha) = CURDATE() GROUP BY c.nombre, YEAR(v.fecha), MONTH(v.fecha) ORDER BY anio DESC, mes DESC, total_ventas DESC;"
+;
+    // this.generarQuery(query, )
+    // const labels = this.ventasPorCategoriaMes.filter(venta => venta.anio === this.selectedYear && venta.mes === this.selectedMonth).map(venta => venta.categoria); // Extrae las categorías
+    // console.log(labels)
+    // const dataValues = this.ventasPorCategoriaMes.filter(venta => venta.anio === this.selectedYear && venta.mes === this.selectedMonth).map(venta => venta.total_ventas); // Extrae los valores
+    // console.log(dataValues)
+
+    // // datos
+    // const data = {
+    //   labels: labels,
+    //   datasets: [{
+    //     label: '',
+    //     data: dataValues,
+    //     backgroundColor: [
+    //       'rgba(255, 99, 132, 0.2)',
+    //       'rgba(255, 159, 64, 0.2)',
+    //       'rgba(255, 205, 86, 0.2)',
+    //       'rgba(75, 192, 192, 0.2)',
+    //       'rgba(54, 162, 235, 0.2)',
+    //       'rgba(153, 102, 255, 0.2)',
+    //       'rgba(201, 203, 207, 0.2)'
+    //     ].slice(0, labels.length),
+    //     borderColor: [
+    //       'rgb(255, 99, 132)',
+    //       'rgb(255, 159, 64)',
+    //       'rgb(255, 205, 86)',
+    //       'rgb(75, 192, 192)',
+    //       'rgb(54, 162, 235)',
+    //       'rgb(153, 102, 255)',
+    //       'rgb(201, 203, 207)'
+    //     ].slice(0, labels.length),
+    //     borderWidth: 1
+    //   }]
+    // };
+
+    // // Verificamos si el gráfico ya existe y lo destruimos si es necesario
+    // if (this.chartCategoriaMes) {
+    //   this.chartCategoriaMes.destroy();
+    // }
+
+    // // Creamos la gráfica
+    // this.chartCategoriaMes = new Chart("chartCategoriaMes", {
+    //   type: 'bar' as ChartType, // tipo de la gráfica 
+    //   data: data, // datos 
+    //   options: { // opciones de la gráfica 
+    //     scales: {
+    //       y: {
+    //         beginAtZero: true
+    //       }
+    //     }
+    //   },
+    // });
   }
 
   graficoVentaCategoriaTotal() {
