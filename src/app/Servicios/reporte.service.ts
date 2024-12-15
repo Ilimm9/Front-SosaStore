@@ -30,7 +30,7 @@ export class ReporteService {
 
   public generarQuery(query: string): Observable<any> {
     const body = { query };
-    return this.httpClient.post<any>(this.apiURL, body);
+    return this.httpClient.post<any>(`${this.apiURL}consultaGeneral.php`, body);
   }
 
 
