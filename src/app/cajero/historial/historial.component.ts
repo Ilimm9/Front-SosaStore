@@ -4,8 +4,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { VentaService } from '../../Servicios/venta.service';
 import { Venta } from '../../models/venta';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { Producto } from '../../models/producto';
 import { CommonModule } from '@angular/common';
 import { ProductoVentaService } from '../../Servicios/producto-venta.service';
 import { ProductoVenta } from '../../models/producto-venta';
@@ -131,5 +129,4 @@ export class HistorialComponent implements OnInit, AfterViewInit {
     this.cargarVentas(); // Recarga las ventas sin filtrar
   }
   
-
 }

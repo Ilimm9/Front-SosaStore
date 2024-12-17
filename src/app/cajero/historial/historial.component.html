@@ -113,7 +113,6 @@
               <p>
                 <span class="bold"> Atendio:</span> {{ venta.cajero }}
               </p>
-              <!-- <p>Hora: {{ fechaHoraActual | date:'HH:mm:ss' }}</p> -->
             </div>
 
             <hr />
@@ -163,55 +162,3 @@
       </div>
     </div>
   </div>
-
-
-
-
-<!-- Modal de detalles de venta -->
-<!-- <div
-  class="modal fade"
-  id="detallesModal"
-  tabindex="-1"
-  aria-labelledby="detallesModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="detallesModalLabel">Detalles de Venta</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="ticket">
-          <p>Fecha: {{ venta.fecha | date : "dd/MM/yyyy" }}</p>
-          <hr />
-
-          <div class="d-flex justify-content-between">
-            <span><strong>Cantidad</strong></span>
-            <span><strong>Producto</strong></span>
-            <span><strong>Precio Total</strong></span>
-          </div>
-
-          <div
-            *ngFor="let product of ventaDetalles"
-            class="d-flex justify-content-between"
-          >
-            <span>{{ product.cantidad }}</span>
-            <span>{{ product.nombreProducto }}</span>
-            <span>{{ product.total | currency }}</span>
-          </div>
-
-          <hr />
-          <p class="total-compra">
-            <strong>Total de la Compra:</strong> {{ venta.total | currency }}
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
