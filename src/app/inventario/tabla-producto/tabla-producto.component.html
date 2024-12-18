@@ -17,7 +17,7 @@
     <table mat-table [dataSource]="dataSource" class="table-striped table-bordered " matSort>
       <!-- Position Column -->
       <ng-container matColumnDef="codigoProducto">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Codigo</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
         <td mat-cell *matCellDef="let producto">{{ producto.codigoProducto }} </td>
       </ng-container>
 
@@ -35,13 +35,13 @@
 
       <!-- Symbol Column -->
       <ng-container matColumnDef="stockMin">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock Minimo</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock Mínimo</th>
         <td mat-cell *matCellDef="let producto">{{ producto.stockMin}}</td>
       </ng-container>
 
       <!-- Symbol Column -->
       <ng-container matColumnDef="stockMax">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock Maximo</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock Máximo</th>
         <td mat-cell *matCellDef="let producto">{{ producto['stockMax'] }}</td>
       </ng-container>
 

@@ -28,5 +28,10 @@ export class ReporteService {
     return this.httpClient.get<any[]>(`${this.apiURL}consultaMasVendidos.php`);
   }
 
+  public generarQuery(query: string): Observable<any> {
+    const body = { query };
+    return this.httpClient.post<any>(`${this.apiURL}consultaGeneral.php`, body);
+  }
+
 
 }

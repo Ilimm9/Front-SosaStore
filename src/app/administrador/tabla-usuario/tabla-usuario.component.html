@@ -10,7 +10,7 @@
   </div>  
   <mat-form-field>
     <mat-label>Filtro</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="¿Que desea buscar?" #input>
+    <input matInput (keyup)="applyFilter($event)" placeholder="¿Qué desea buscar?" #input>
   </mat-form-field>
 
   <div class="mat-elevation-z8">
@@ -42,7 +42,7 @@
 
       <!-- Symbol Column -->
       <ng-container matColumnDef="telefono">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Telefono</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</th>
         <td mat-cell *matCellDef="let usuario">{{ usuario.telefono }}</td>
       </ng-container>
 

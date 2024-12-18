@@ -9,6 +9,7 @@
       <div class="ticket">
         <h3 class="text-center">SOSA STORE</h3>
         <div style="text-align: left">
+          <p><span class="bold">Dirección:</span> Calle Guerrero 109B, San Lucas , Cuilapam de Guerrero, Oaxaca. CP:71404.</p>
           <p>
             <span class="bold">Fecha:</span>
             {{ fechaActual | date : "dd/MM/yyyy" }}
@@ -138,13 +139,13 @@
           Precio Unitario
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.producto.precioVenta }}
+          ${{ element.producto.precioVenta }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="precioTotal">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
-        <td mat-cell *matCellDef="let element">{{ element.precioTotal }}</td>
+        <td mat-cell *matCellDef="let element">${{ element.precioTotal }}</td>
       </ng-container>
 
       <!-- Symbol Column -->
@@ -164,7 +165,7 @@
             class="btn btn-sm btn-primary amplio"
             (click)="incrementar(producto)"
           >
-            +
+            Sumar
           </button>
 
           <button
@@ -172,7 +173,7 @@
             class="btn btn-sm btn-primary amplio"
             (click)="decrementar(producto)"
           >
-            -
+            Restar
           </button>
         </td></ng-container
       >

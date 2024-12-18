@@ -1,5 +1,307 @@
 <div class="contenedor">
+  <!-- GRAFICO PARA LAS VENTAS DEL DIA -->
   <mat-card class="example-card contenedor_grafico" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Ventas Del Día</mat-card-title>
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if(contenedorDia && contenedorDia.length > 0){
+      <table class="table table-borderless text-center">
+        <thead>
+          <tr>
+            <th><strong>Categoria</strong></th>
+            <th><strong>Ventas Totales</strong></th>
+            <th><strong>Ganancias Totales</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dato of contenedorDia">
+            <td>{{ dato.categoria }}</td>
+            <td>{{ dato.total_ventas | number : "1.2-2" }}</td>
+            <td>{{ dato.ganancia | currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="datos_generales">
+        <p>
+          <span class="negrita"> Ventas Totales del Día: </span
+          >{{ totalVentaDia | currency }}
+        </p>
+        <p>
+          <span class="negrita">Ganancias Totales del Día:</span>
+          {{ gananciaVentaDia | currency }}
+        </p>
+      </div>
+      } @else {
+      <p>No se han realizado ventas aún</p>
+      }
+
+      <div>
+        <canvas id="ventasChart"></canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- GRAFICO PARA VENTAS ANIO MES DIA  -->
+  <mat-card class="example-card contenedor_grafico" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Seleccione una Fecha (Año - Mes - Día)</mat-card-title>
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="controles">
+        <mat-form-field class="input">
+          <mat-label>Año</mat-label>
+          <mat-select (selectionChange)="cambioAnio1($event)">
+            @for (anio of categoriaAnio1; track anio) {
+            <mat-option [value]="anio">{{ anio }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Mes</mat-label>
+          <mat-select (selectionChange)="cambioMes1($event)">
+            @for (mes of categoriaMes1; track mes) {
+            <mat-option [value]="mes">{{ meses[mes - 1] }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Dia</mat-label>
+          <mat-select (selectionChange)="cambioDia1($event)">
+            @for (dia of categoriaDia1; track dia) {
+            <mat-option [value]="dia">{{ dia }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if(seleccionadoAnio1 && seleccionadoMes1 && seleccionadoDia1){
+        @if(contenedorDiaMesSeleccionado && contenedorDiaMesSeleccionado.length > 0){
+          <table class="table table-borderless text-center">
+            <thead>
+              <tr>
+                <th><strong>Categoria</strong></th>
+                <th><strong>Ventas Totales</strong></th>
+                <th><strong>Ganancias Totales</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let dato of contenedorDiaMesSeleccionado">
+                <td>{{ dato.categoria }}</td>
+                <td>{{ dato.total_ventas | number : "1.2-2" }}</td>
+                <td>{{ dato.ganancia | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="datos_generales">
+            <p>
+              <span class="negrita"> Ventas Totales del Día: </span
+              >{{ totalVentaDiaMes | currency }}
+            </p>
+            <p>
+              <span class="negrita">Ganancias Totales del Día:</span>
+              {{ gananciaVentaDiaMes | currency }}
+            </p>
+          </div>
+          } @else {
+          <p>No se encontraron registros para esta fecha</p>
+          }
+      } @else {
+        <p>Debe escoger unan fecha por favor</p>
+      }
+      <div>
+        <canvas id="ventaDiaMes"></canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- GRAFICO PARA VENTAS ANIO MES  -->
+  <mat-card class="example-card contenedor_grafico" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Seleccione una Fecha (Año - Mes)</mat-card-title>
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="controles">
+        <mat-form-field class="input">
+          <mat-label>Año</mat-label>
+          <mat-select (selectionChange)="cambioAnio2($event)">
+            @for (anio of categoriaAnio2; track anio) {
+            <mat-option [value]="anio">{{ anio }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Mes</mat-label>
+          <mat-select (selectionChange)="cambioMes2($event)">
+            @for (mes of categoriaMes2; track mes) {
+            <mat-option [value]="mes">{{ meses[mes - 1] }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if(seleccionadoAnio2 && seleccionadoMes2){
+        @if(contenedorMesAnioSeleccionado && contenedorMesAnioSeleccionado.length > 0){
+          <table class="table table-borderless text-center">
+            <thead>
+              <tr>
+                <th><strong>Categoria</strong></th>
+                <th><strong>Ventas Totales</strong></th>
+                <th><strong>Ganancias Totales</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let dato of contenedorMesAnioSeleccionado">
+                <td>{{ dato.categoria }}</td>
+                <td>{{ dato.total_ventas | number : "1.2-2" }}</td>
+                <td>{{ dato.ganancia | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="datos_generales">
+            <p>
+              <span class="negrita"> Ventas Totales del Mes: </span
+              >{{ totalVentaMesAnio | currency }}
+            </p>
+            <p>
+              <span class="negrita">Ganancias Totales del Mes:</span>
+              {{ gananciaVentaMesAnio | currency }}
+            </p>
+          </div>
+          } @else {
+          <p>No se encontraron registros para esta fecha</p>
+          }
+      } @else {
+        <p>Debe escoger unan fecha por favor</p>
+      }
+      <div>
+        <canvas id="ventaMesAnio"></canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+  <!-- GRAFICO PARA VENTAS ANIO   -->
+  <mat-card class="example-card contenedor_grafico" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Seleccione una Fecha (Año)</mat-card-title>
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="controles">
+        <mat-form-field class="input">
+          <mat-label>Año</mat-label>
+          <mat-select (selectionChange)="cambioAnio3($event)">
+            @for (anio of categoriaAnio3; track anio) {
+            <mat-option [value]="anio">{{ anio }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if(seleccionadoAnio3){
+        @if(contenedorAnioSeleccionado && contenedorAnioSeleccionado.length > 0){
+          <table class="table table-borderless text-center">
+            <thead>
+              <tr>
+                <th><strong>Categoria</strong></th>
+                <th><strong>Ventas Totales</strong></th>
+                <th><strong>Ganancias Totales</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let dato of contenedorAnioSeleccionado">
+                <td>{{ dato.categoria }}</td>
+                <td>{{ dato.total_ventas | number : "1.2-2" }}</td>
+                <td>{{ dato.ganancia | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="datos_generales">
+            <p>
+              <span class="negrita"> Ventas Totales del Año: </span
+              >{{ totalVentaAnio | currency }}
+            </p>
+            <p>
+              <span class="negrita">Ganancias Totales del Año:</span>
+              {{ gananciaVentaAnio | currency }}
+            </p>
+          </div>
+          } @else {
+          <p>No se encontraron registros para esta fecha</p>
+          }
+      } @else {
+        <p>Debe escoger unan fecha por favor</p>
+      }
+      <div>
+        <canvas id="ventaAnio"></canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+  <!-- Para la venta general  -->
+  <mat-card class="example-card contenedor_grafico" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Ventas Generales</mat-card-title>
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if(contenedorGeneral && contenedorGeneral.length > 0){
+      <table class="table table-borderless text-center">
+        <thead>
+          <tr>
+            <th><strong>Categoria</strong></th>
+            <th><strong>Ventas Totales</strong></th>
+            <th><strong>Ganancias Totales</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dato of contenedorGeneral">
+            <td>{{ dato.categoria }}</td>
+            <td>{{ dato.total_ventas | number : "1.2-2" }}</td>
+            <td>{{ dato.ganancia | currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="datos_generales">
+        <p>
+          <span class="negrita"> Ventas Totales: </span
+          >{{ totalVentaGeneral | currency }}
+        </p>
+        <p>
+          <span class="negrita">Ganancias Totales:</span>
+          {{ gananciaVentaGeneral | currency }}
+        </p>
+      </div>
+      } @else {
+      <p>No se encontraron registros</p>
+      }
+
+      <div>
+        <canvas id="ventaGeneral"></canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+ 
+
+
+
+</div>
+
+
+ <!-- <mat-card class="example-card contenedor_grafico" appearance="outlined">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>Ventas por Categoria</mat-card-title>
@@ -72,6 +374,4 @@
     <mat-card-content>
       <canvas id="chartMasVendidos">{{ chartMasVendidos }}</canvas>
     </mat-card-content>
-  </mat-card>
-
-</div>
+  </mat-card> -->
